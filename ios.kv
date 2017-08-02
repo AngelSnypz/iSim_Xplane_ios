@@ -1,0 +1,952 @@
+
+<RootWidget>:
+	TabbedPanel:
+		id: tab_panel
+		do_default_tab: False
+		tab_pos: 'bottom_left'
+		tab_width: self.size[0]/len(self.tab_list)
+		tab_height:60
+
+		TabbedPanelItem:
+			id:tab_position
+			text:'Position'
+
+			TabbedPanel:
+				id:tab_panel_position
+				do_default_tab: False
+				tab_pos: 'bottom_left'
+				tab_width: self.size[0]/len(self.tab_list)
+				tab_height:60
+
+				TabbedPanelItem:
+					id:tab_position_quickstart
+					text:'Quick Start'
+
+
+				TabbedPanelItem:
+					id:tab_position_set
+					text:'Set'
+
+
+					BoxLayout:
+						orientation:'vertical'
+						BoxLayout:
+
+							BoxLayout
+								orientation:'vertical'
+								ScrollView:
+
+									BoxLayout:
+										orientation:'vertical'
+										size_hint_y:None
+										height: self.minimum_height
+										id:results_scrollview
+
+
+								TextInput:
+									id:search_input
+									hint_text:'search..'
+									size_hint:(1,0.2)
+									font_size:search_input.height-search_input.height/3
+
+
+						BoxLayout:
+							orientation:'vertical'
+							BoxLayout:
+								id:keyboard_numrow
+								Button:
+									text:'1'
+									on_press:root.keypress('1')
+								Button:
+									text:'2'
+									on_press:root.keypress('2')
+								Button:
+									text:'3'
+									on_press:root.keypress('3')
+								Button:
+									text:'4'
+									on_press:root.keypress('4')
+								Button:
+									text:'5'
+									on_press:root.keypress('5')
+								Button:
+									text:'6'
+									on_press:root.keypress('6')
+								Button:
+									text:'7'
+									on_press:root.keypress('7')
+								Button:
+									text:'8'
+									on_press:root.keypress('8')
+								Button:
+									text:'9'
+									on_press:root.keypress('9')
+								Button:
+									text:'0'
+									on_press:root.keypress('0')
+								Button:
+									text:'Backspace'
+									size_hint:(1.5,1)
+									on_press:root.keypress('backspace')
+
+
+
+							BoxLayout:
+								id:keyboard_topletters
+
+								Button:
+									text:'Q'
+									on_press:root.keypress('Q')
+								Button:
+									text:'W'
+									on_press:root.keypress('W')
+								Button:
+									text:'E'
+									on_press:root.keypress('E')
+								Button:
+									text:'R'
+									on_press:root.keypress('R')
+								Button:
+									text:'T'
+									on_press:root.keypress('T')
+								Button:
+									text:'Y'
+									on_press:root.keypress('Y')
+								Button:
+									text:'U'
+									on_press:root.keypress('U')
+								Button:
+									text:'I'
+									on_press:root.keypress('I')
+								Button:
+									text:'O'
+									on_press:root.keypress('O')
+								Button:
+									text:'P'
+									on_press:root.keypress('P')
+
+
+							BoxLayout:
+								id:keyboard_midletters
+
+								Button:
+									text:'A'
+									on_press:root.keypress('A')
+								Button:
+									text:'S'
+									on_press:root.keypress('S')
+								Button:
+									text:'D'
+									on_press:root.keypress('D')
+								Button:
+									text:'F'
+									on_press:root.keypress('F')
+								Button:
+									text:'G'
+									on_press:root.keypress('G')
+								Button:
+									text:'H'
+									on_press:root.keypress('H')
+								Button:
+									text:'J'
+									on_press:root.keypress('J')
+								Button:
+									text:'K'
+									on_press:root.keypress('K')
+								Button:
+									text:'L'
+									on_press:root.keypress('L')
+								#Button:
+								#	text:'Submit'
+								#	size_hint:(1.5,1)
+								#	on_press:root.searchAirports(search_input.text)
+
+
+
+							BoxLayout:
+								id:keyboard_botletters
+								Widget:
+								Button:
+									text:'Z'
+									on_press:root.keypress('Z')
+								Button:
+									text:'X'
+									on_press:root.keypress('X')
+								Button:
+									text:'C'
+									on_press:root.keypress('C')
+								Button:
+									text:'V'
+									on_press:root.keypress('V')
+								Button:
+									text:'B'
+									on_press:root.keypress('B')
+								Button:
+									text:'N'
+									on_press:root.keypress('N')
+								Button:
+									text:'M'
+									on_press:root.keypress('M')
+								Widget:
+
+
+
+
+
+
+				TabbedPanelItem:
+					id:tab_position_apron
+					text:'Apron'
+					BoxLayout:
+						Label:
+							text:'is this needed?'
+
+				TabbedPanelItem:
+					id:tab_position_to
+					text:'T/O'
+					BoxLayout:
+						Label:
+							text:'is this needed?'
+
+				TabbedPanelItem:
+					id:tab_position_downwind
+					text:'Downwind'
+					BoxLayout:
+						Label:
+							text:'is this needed?'
+
+				TabbedPanelItem:
+					id:tab_position_final1nm
+					text:'Final 1 NM'
+					BoxLayout:
+						Label:
+							text:'is this needed?'
+
+
+				TabbedPanelItem:
+					id:tab_position_final4nm
+					text:'Final 4 NM'
+					BoxLayout:
+						Label:
+							text:'is this needed?'
+
+				TabbedPanelItem:
+					id:tab_position_situation
+					text:'Situation'
+					BoxLayout:
+						Label:
+							text:'is this needed?'
+
+
+
+
+		TabbedPanelItem
+			id:tab_weather
+			text:'Weather'
+
+			TabbedPanel:
+				id:tab_panel_weather
+				do_default_tab: False
+				tab_pos: 'bottom_left'
+				tab_width: self.size[0]/len(self.tab_list)
+				tab_height:60
+
+
+				TabbedPanelItem
+					id:tab_weather_cloud
+					text:'Cloud'
+
+					BoxLayout:
+						orientation:'vertical'
+
+						BoxLayout:
+
+							BoxLayout:
+								orientation:'vertical'
+								Widget:
+								Label:
+									text:'Base of Cloud Layer 1: ' +str(int(clouds_slider_1.value)) + ' feet'
+									font_size:25
+								Slider:
+									id:clouds_slider_1
+									min:0
+									max:clouds_slider_1_top.value-4000
+								Label:
+									text:'Top of Cloud Layer 1: ' +str(int(clouds_slider_1_top.value)) + ' feet'
+									font_size:25
+								Slider:
+									id:clouds_slider_1_top
+									min:clouds_slider_1.value+4000
+									max:40000
+							BoxLayout:
+								orientation:'vertical'
+								Label:
+									text:'Cloud Layer 1'
+								BoxLayout:
+									ToggleButton:
+										text:'None'
+										group:'1'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
+										state:'down'
+									ToggleButton:
+										text:'Cirrus'
+										group:'1'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
+									ToggleButton:
+										text:'Scattered'
+										group:'1'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
+									ToggleButton:
+										text:'Broken'
+										group:'1'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
+									ToggleButton:
+										text:'Overcast'
+										group:'1'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
+
+						BoxLayout:
+							BoxLayout:
+								orientation:'vertical'
+								Widget:
+								Label:
+									text:'Base of Cloud Layer 2: ' +str(int(clouds_slider_2.value)) + ' feet'
+									font_size:25
+								Slider:
+									id:clouds_slider_2
+									min:0
+									max:clouds_slider_2_top.value-4000
+								Label:
+									text:'Top of Cloud Layer 2: ' +str(int(clouds_slider_2_top.value)) + ' feet'
+									font_size:25
+								Slider:
+									id:clouds_slider_2_top
+									min:clouds_slider_2.value+4000
+									max:40000
+							BoxLayout:
+								orientation:'vertical'
+								Label:
+									text:'Cloud Layer 2'
+								BoxLayout:
+									ToggleButton:
+										text:'None'
+										group:'2'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
+										state:'down'
+									ToggleButton:
+										text:'Cirrus'
+										group:'2'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
+									ToggleButton:
+										text:'Scattered'
+										group:'2'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
+									ToggleButton:
+										text:'Broken'
+										group:'2'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
+									ToggleButton:
+										text:'Overcast'
+										group:'2'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
+
+
+						BoxLayout:
+							BoxLayout:
+								orientation:'vertical'
+								Widget:
+								Label:
+									text:'Base of Cloud Layer 3: ' +str(int(clouds_slider_3.value)) + ' feet'
+									font_size:25
+								Slider:
+									id:clouds_slider_3
+									min:0
+									max:clouds_slider_3_top.value-4000
+								Label:
+									text:'Top of Cloud Layer 3: ' +str(int(clouds_slider_3_top.value)) + ' feet'
+									font_size:25
+								Slider:
+									id:clouds_slider_3_top
+									min:clouds_slider_3.value+4000
+									max:40000
+							BoxLayout:
+								orientation:'vertical'
+								Label:
+									text:'Cloud Layer 3'
+								BoxLayout:
+									ToggleButton:
+										id:clouds_none_3
+										text:'None'
+										group:'3'
+										allow_no_selection:False
+										state:'down'
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_3.value),int(clouds_slider_3_top.value))
+									ToggleButton:
+										text:'Cirrus'
+										group:'3'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_3.value),int(clouds_slider_3_top.value))
+									ToggleButton:
+										text:'Scattered'
+										group:'3'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_3.value),int(clouds_slider_3_top.value))
+									ToggleButton:
+										text:'Broken'
+										group:'3'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_3.value),int(clouds_slider_3_top.value))
+									ToggleButton:
+										text:'Overcast'
+										group:'3'
+										allow_no_selection:False
+										font_size:25
+										on_state:root.setClouds(self,int(clouds_slider_3.value),int(clouds_slider_3_top.value))
+
+
+
+
+				TabbedPanelItem
+					id:tab_weather_wind
+					text:'Wind'
+					BoxLayout:
+						orientation:'vertical'
+						Widget:
+							size_hint:(0.1,0.1)
+						BoxLayout:
+							orientation:'vertical'
+							BoxLayout:
+
+								Slider:
+									id:winds_slider_altitude_1
+									min:0
+									max:40000
+									size_hint:(2,1)
+
+								Label:
+									text: 'Wind 1 Altitude: ' + str(int(winds_slider_altitude_1.value))
+									font_size:25
+
+							BoxLayout:
+								Slider:
+									id:winds_slider_direction_1
+									min:0
+									max:359
+									size_hint:(2,1)
+								Label:
+									text: 'Wind 1 Direction from North: ' + str(int(winds_slider_direction_1.value))
+									font_size:25
+
+							BoxLayout:
+								Slider:
+									id:winds_slider_speed_1
+									min:0
+									max:200
+									size_hint:(2,1)
+								Label:
+									text: 'Wind 1 Speed: ' + str(int(winds_slider_speed_1.value))
+									font_size:25
+
+							BoxLayout:
+								Slider:
+									id:winds_slider_sheardirection_1
+									min:0
+									max:359
+									size_hint:(2,1)
+								Label:
+									text: 'Wind Shear 1 Direction from North: ' + str(int(winds_slider_sheardirection_1.value))
+									font_size:25
+							BoxLayout:
+								Slider:
+									id:winds_slider_shearspeed_1
+									min:0
+									max:200
+									size_hint:(2,1)
+								Label:
+									text: 'Wind 1 Speed: ' + str(int(winds_slider_shearspeed_1.value))
+									font_size:25
+							BoxLayout:
+								Slider:
+									id:winds_slider_turbulence_1
+									min:0
+									max:200
+									size_hint:(2,1)
+								Label:
+									text: 'Wind 1 Turbulence: ' + str(int(winds_slider_turbulence_1.value))
+									font_size:25
+
+
+
+
+						Label:
+							text: 'Wind 2 Settings'
+						Label:
+							text: 'Wind 3 Settings'
+
+				TabbedPanelItem:
+					id:tab_weather_ambient
+					text:'Ambience'
+					BoxLayout:
+						orientation:'vertical'
+						BoxLayout:
+							Slider:
+								id:slider_temp
+								min:-10
+								max:40
+								step:1
+								on_value:root.sliderSystem('sim/weather/temperature_sealevel_c',slider_temp.value)
+							Label:
+								text: 'Temperature at sea level : ' + str(int(slider_temp.value)) + ' Degrees C'
+								font_size:25
+
+						BoxLayout:
+							Slider:
+								id:slider_baro
+								min:27
+								max:34
+								step:0.1
+								on_value:root.sliderSystem('sim/weather/barometer_sealevel_inhg',slider_baro.value)
+							Label:
+								text: 'Barometer at sea level :' + str(float(slider_baro.value)) + ' hg'
+								font_size:25
+
+						BoxLayout:
+							Slider:
+								id:slider_turbulence
+								min:0
+								max:1
+								step:0.01
+								on_value:root.sliderSystem('sim/weather/wind_turbulence_percent',slider_turbulence.value)
+							Label:
+								text: 'Turbluence % :' + str(float(slider_turbulence.value)*100)
+								font_size:25
+
+						BoxLayout:
+							Slider:
+								id:slider_rain
+								min:0
+								max:1
+								step:0.01
+								on_value:root.sliderSystem('sim/weather/rain_percent',slider_rain.value)
+							Label:
+								text: 'Rain % : ' + str(float(slider_rain.value)*100)
+								font_size:25
+
+						BoxLayout:
+							Slider:
+								id:slider_storm
+								min:0
+								max:1
+								step:0.01
+								on_value:root.sliderSystem('sim/weather/thunderstorm_percent',slider_storm.value)
+							Label:
+								text: 'Storm % : ' + str(float(slider_storm.value)*100)
+								font_size:25
+
+
+				TabbedPanelItem:
+					id:tab_weather_time
+					text:'Time'
+					BoxLayout:
+						orientation:'vertical'
+						BoxLayout:
+							Slider:
+								id:time_hours
+								min:0000
+								max:2359
+								step:1
+								on_value:root.setTime('sim/cockpit2/clock_timer/local_time_hours','%04d'%(int(time_hours.value),))
+							Label:
+								text:' Time : %04d' % (int(time_hours.value),) + ' Hours'
+								font_size:25
+
+				TabbedPanelItem:
+					id:tab_weather_preset
+					text:'Preset'
+
+
+
+
+		TabbedPanelItem:
+			id:tab_weight
+			text:'Weight'
+			BoxLayout:
+				orientation:'vertical'
+				BoxLayout:
+					Slider:
+						id:slider_fuel
+						min:0
+						max:420
+						on_value:root.sliderSystem('sim/flightmodel/weight/m_fuel1',slider_fuel.value)
+					Label:
+						font_size:25
+						text:'Fuel Weight: ' + str(int(slider_fuel.value))
+				BoxLayout:
+					Slider:
+						id:slider_cg
+						min:-0.9
+						max:0.18
+						step:0.01
+						on_value:root.sliderSystem('sim/flightmodel/misc/cgz_ref_to_default',slider_cg.value)
+
+					Label:
+						font_size:25
+						text:'Center of Gravity: ' + str(float(slider_cg.value))
+				BoxLayout:
+					Slider:
+						id:slider_payload_weight
+						min:0
+						max:5400
+						on_value:root.sliderSystem('sim/flightmodel/weight/m_fixed',slider_payload_weight.value)
+					Label:
+						font_size:25
+						text:'Payload Weight:' + str(int(slider_payload_weight.value))
+				BoxLayout:
+					Slider:
+						id:slider_zfw
+						min:0
+						max:5000
+						value:4000
+						on_value:root.sliderSystem('sim/aircraft/weight/acf_m_empty',slider_zfw.value)
+					Label:
+						font_size:25
+						text:'ZFW: '+ str(int(slider_zfw.value))
+
+
+		TabbedPanelItem:
+			id:tab_failure
+			text:'Failures'
+			TabbedPanel:
+				id:tab_panel_failure
+				do_default_tab: False
+				tab_pos: 'bottom_left'
+				tab_width: self.size[0]/len(self.tab_list)
+				tab_height:60
+
+				TabbedPanelItem:
+					id:tab_failure_aircraft
+					text:'Aircraft'
+
+
+					TabbedPanel:
+						id:tab_aircraft_failures
+						do_default_tab:False
+						tab_pos:'bottom_left'
+						tab_width: self.size[0]/len(self.tab_list)
+						tab_height:60
+
+						TabbedPanelItem:
+							id:tab_aircraft_failures_electrical
+							text:'Electrical'
+						TabbedPanelItem:
+							id:tab_aircraft_failures_lights
+							text:'Lights'
+						TabbedPanelItem:
+							id:tab_aircraft_failures_controls
+							text:'Controls'
+						TabbedPanelItem:
+							id:tab_aircraft_failures_Landinggear
+							text:'Landing Gear'
+						TabbedPanelItem:
+							id:tab_aircraft_failures_deice
+							text:'De Ice'
+						TabbedPanelItem:
+							id:tab_aircraft_failures_equipment
+							text:'Equipment'
+
+				TabbedPanelItem:
+					id:tab_failure_instruments
+					text:'Instruments'
+
+				TabbedPanelItem:
+					id:tab_failure_engines
+					text:'Engine'
+
+
+
+
+
+				TabbedPanelItem
+					id:tab_failure_world
+					text:'World'
+					BoxLayout:
+						id:world_failures
+						BoxLayout:
+							orientation:'vertical'
+							BoxLayout:
+								orientation:'vertical'
+								BoxLayout:
+									Label:
+										text:'Smoke in Cockpit'
+									Switch:
+										id:fail_smoke_cockpit_switch
+										text:'sim/operation/failures/rel_smoke_cpit'
+										on_active:root.failSystem2(self)
+
+								Spinner:
+									id:fail_smoke_cockpit_spinner
+									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_smoke_cockpit_switch)
+
+
+							Widget:
+								size_hint:(0.1,0.1)
+
+							BoxLayout:
+								orientation:'vertical'
+								BoxLayout:
+									Label:
+										text:'Door Open'
+									Switch:
+										id:fail_door_open_switch
+										text:'sim/operation/failures/rel_door_open'
+										on_active:root.failSystem2(self)
+
+								Spinner:
+									id:fail_door_open_spinner
+									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_door_open_switch)
+
+							Widget:
+								size_hint:(0.1,0.1)
+							BoxLayout:
+								orientation:'vertical'
+								BoxLayout:
+									Label:
+										text:'External Power'
+									Switch:
+										id:fail_external_power_switch
+										text:'sim/operation/failures/rel_ex_power_on'
+										on_active:root.failSystem2(self)
+
+								Spinner:
+									id:fail_door_open_spinner
+									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_external_power_switch)
+
+							Widget:
+								size_hint:(0.1,0.1)
+
+							BoxLayout:
+								orientation:'vertical'
+								BoxLayout:
+									Label:
+										text:'Passenger 02'
+									Switch:
+										id:fail_passenger02_switch
+										text:'sim/operation/failures/rel_pass_o2_on'
+										on_active:root.failSystem2(self)
+
+								Spinner:
+									id:fail_door_open_spinner
+									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_passenger02_switch)
+
+							Widget:
+								size_hint:(0.1,0.1)
+
+							BoxLayout:
+								orientation:'vertical'
+								BoxLayout:
+									Label:
+										text:'Wind Shear/MicroBurst'
+									Switch:
+										id:fail_microburst_switch
+										text:'sim/operation/failures/rel_wind_shear'
+										on_active:root.failSystem2(self)
+
+								Spinner:
+									id:fail_door_open_spinner
+									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_microburst_switch)
+
+						Widget:
+							size_hint:(0.1,0.1)
+						BoxLayout:
+							orientation:'vertical'
+							ToggleButton:
+								text:'Pilot Vertigo'
+								id:fail_pilot_vertigo_button
+								on_state:root.failSystem(self,'sim/operation/failures/rel_make_vertigo')
+							Widget:
+								size_hint:(0.1,0.1)
+							ToggleButton:
+								text:'Fuel Cap Left Off'
+								id:fail_fuel_cap_button
+								on_state:root.failSystem(self,'sim/operation/failures/rel_fuelcap')
+							Widget:
+								size_hint:(0.1,0.1)
+							ToggleButton:
+								text:'Water in fuel'
+								id:fail_water_fuel_button
+								on_state:root.failSystem(self,'sim/operation/failures/rel_fuel_water')
+
+							Widget:
+								size_hint:(0.1,0.1)
+							ToggleButton:
+								text:'Wrong Fuel Type'
+								id:fail_wrong_fuel_button
+								on_state:root.failSystem(self,'sim/operation/failures/rel_fuel_type')
+						Widget:
+							size_hint:(0.1,0.1)
+						BoxLayout:
+							orientation:'vertical'
+							ToggleButton:
+								text:'Fuel Tank Filter Block'
+								id:fail_fuel_filter_button
+								on_state:root.failSystem(self,'sim/operation/failures/rel_fuel_block0')
+							Widget:
+								size_hint:(0.1,0.1)
+							ToggleButton:
+								text:'VASI inoperative'
+								id:fail_vasi_button
+								on_state:root.failSystem(self,'sim/operation/failures/rel_vasi')
+							Widget:
+								size_hint:(0.1,0.1)
+							ToggleButton:
+								text:'Runway Lights Out'
+								id:fail_runway_lights_button
+								on_state:root.failSystem(self,'sim/operation/failures/rel_rwy_lites')
+
+							Widget:
+								size_hint:(0.1,0.1)
+							ToggleButton:
+								text:'Bird Strike'
+								id:fail_bird_strike_button
+								on_state:root.failSystem(self,'sim/operation/failures/rel_bird_strike')
+							Widget:
+								size_hint:(0.1,0.1)
+							ToggleButton:
+								text:'Brown Out'
+								id:fail_brownout_button
+								on_state:root.failSystem(self,'sim/operation/failures/rel_brown_out')
+
+				TabbedPanelItem
+					id:tab_failure_repairall
+					text:'Repair All'
+					on_press:root.fixAllSystems()
+					BoxLayout:
+						Label:
+							text:'All Systems Repaired'
+
+
+		TabbedPanelItem
+			id:tab_sim_rate
+			text:'Sim Rate'
+			BoxLayout:
+				orientation:'vertical'
+				Widget:
+
+				Label:
+					text:'Sim Rate'
+					font_size:25
+					size:(50,50)
+				Label:
+					id:slider_val_label
+					text:str(sim_rate_slider.value)+'x'
+					size:(50,50)
+					font_size:25
+
+				Slider:
+					id:sim_rate_slider
+					text:'Sim Rate'
+					min:1
+					max:4
+					step:1
+				Button:
+					id:sim_rate_update
+					text:'Apply Speed Change'
+					font_size:25
+					on_press:root.applySpeed(sim_rate_slider.value)
+
+
+
+				Widget:
+
+
+		TabbedPanelItem
+			id:tab_traffic
+			text:'Traffic'
+			BoxLayout:
+				Label:
+					text: 'Traffic Content Area'
+
+		TabbedPanelItem
+			id:tab_print
+			text:'Print'
+			BoxLayout:
+				Label:
+					text: 'Print Content Area'
+
+		TabbedPanelItem
+			id:tab_view
+			text:'View'
+			TabbedPanel:
+				id:tab_panel_view
+				do_default_tab: False
+				tab_pos: 'bottom_left'
+				tab_width: self.size[0]/len(self.tab_list)
+				tab_height:60
+
+				TabbedPanelItem
+					id:tab_view_approach
+					text:'Approach'
+
+				TabbedPanelItem
+					id:tab_view_alt
+					text:'ALT'
+
+				TabbedPanelItem
+					id:tab_view_ias
+					text:'IAS'
+
+				TabbedPanelItem
+					id:tab_view_vs
+					text:'VS'
+
+				TabbedPanelItem
+					id:tab_view_bank
+					text:'Bank'
+
+				TabbedPanelItem
+					id:tab_view_pitch
+					text:'Pitch'
+
+		TabbedPanelItem
+			id:tab_freeze
+			text:'Freeze'
+			AnchorLayout:
+				ToggleButton:
+					text:'Pause'
+					size_hint: (.5,.5)
+					on_press:root.pause()
+
