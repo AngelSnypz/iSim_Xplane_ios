@@ -1,4 +1,3 @@
-from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -10,11 +9,7 @@ from kivy.clock import Clock
 from threading import Thread
 from time import sleep
 
-from kivy.lang import Builder
-
 from kivy.app import App
-
-from kivy.core.window import Window
 
 from functools import partial
 
@@ -38,9 +33,9 @@ class RootWidget(FloatLayout):
         global airSpeed
         global altitude
         global timeRunning
-        # timeRunning=client.getDREF('sim/time/total_running_time_sec')
-        # airSpeed=client.getDREF('sim/flightmodel/position/true_airspeed')
-        # altitude=client.getDREF('sim/flightmodel/misc/h_ind')
+        #timeRunning=client.getDREF('sim/time/total_running_time_sec')
+        #airSpeed=client.getDREF('sim/flightmodel/position/true_airspeed')
+        #altitude=client.getDREF('sim/flightmodel/misc/h_ind')
 
     # Code that runs every second checking for systems that have failed
     def autoFail(self, dt):
@@ -67,20 +62,74 @@ class RootWidget(FloatLayout):
         self.ids.fail_external_power_switch.active = False
         self.ids.fail_passenger02_switch.active = False
         self.ids.fail_microburst_switch.active = False
-        # self.ids.fail_smoke_button.state='normal'
-        # self.ids.fail_door_button.state='normal'
-        # self.ids.fail_externalpower_button.state='normal'
-        # self.ids.fail_passenger02_button.state='normal'
-        # self.ids.fail_microburst_button.state='normal'
-        self.ids.fail_pilot_vertigo_button.state = 'normal'
-        self.ids.fail_fuel_cap_button.state = 'normal'
-        self.ids.fail_water_fuel_button.state = 'normal'
-        self.ids.fail_wrong_fuel_button.state = 'normal'
-        self.ids.fail_fuel_filter_button.state = 'normal'
-        self.ids.fail_vasi_button.state = 'normal'
-        self.ids.fail_runway_lights_button.state = 'normal'
-        self.ids.fail_bird_strike_button.state = 'normal'
-        self.ids.fail_brownout_button.state = 'normal'
+        self.ids.fail_vertigo_switch.active=False
+        self.ids.fail_water_fuel_switch.active=False
+        self.ids.fail_wrong_fuel_switch.active=False
+        self.ids.fail_vasi_switch.active=False
+        self.ids.fail_runway_lights_switch.active=False
+        self.ids.fail_bird_strike_switch.active=False
+        self.ids.fail_engine_flameout_switch.active=False
+        self.ids.fail_engine_lost_power_switch.active=False
+        self.ids.fail_oil_over_temp_switch.active=False
+        self.ids.fail_oil_low_pres_switch.active=False
+        self.ids.fail_eng_fire_switch.active=False
+        self.ids.fail_eng_fadec_switch.active=False
+        self.ids.fail_twt_grip_switch.active=False
+        self.ids.fail_eng_chip_switch.active=False
+        self.ids.fail_main_gbox_low_oil_pres_switch.active=False
+        self.ids.fail_main_gbox_oil_overheat_switch.active=False
+        self.ids.fail_bleed_valve_switch.active=False
+        self.ids.fail_fuel_flow_fluctuation_switch.active=False
+        self.ids.fail_compressor_stall_switch.active=False
+        self.ids.fail_engine_seize_switch.active=False
+        self.ids.fail_engine_fuel_pump_switch.active=False
+        self.ids.fail_fuel_filter_switch.active=False
+        self.ids.fail_battery_over_temp_switch.active=False
+        self.ids.fail_battery_offline_switch.active=False
+        self.ids.fail_gen_offline_switch.active=False
+        self.ids.fail_instrument_light_switch.active=False
+        self.ids.fail_electrical_bus_switch.active=False
+        self.ids.fail_landing_light_switch.active=False
+
+        self.ids.fail_landing_light_spinner.text='Not Set'
+        self.ids.fail_electrical_bus_spinner.text='Not Set'
+        self.ids.fail_instrument_light_spinner.text='Not Set'
+        self.ids.fail_gen_offline_spinner.text='Not Set'
+        self.ids.fail_battery_offline_spinner.text='Not Set'
+        self.ids.fail_battery_over_temp_spinner.text='Not Set'
+        self.ids.fail_fuel_filter_spinner.text='Not Set'
+        self.ids.fail_smoke_cockpit_spinner.text='Not Set'
+        self.ids.fail_door_open_spinner.text='Not Set'
+        self.ids.fail_external_power_spinner.text='Not Set'
+        self.ids.fail_passenger02_spinner.text='Not Set'
+        self.ids.fail_microburst_spinner.text='Not Set'
+        self.ids.fail_vertigo_spinner.text='Not Set'
+        self.ids.fail_water_fuel_spinner.text='Not Set'
+        self.ids.fail_wrong_fuel_spinner.text='Not Set'
+        self.ids.fail_vasi_spinner.text='Not Set'
+        self.ids.fail_runway_lights_spinner.text='Not Set'
+        self.ids.fail_bird_strike_spinner.text='Not Set'
+        self.ids.fail_engine_flameout_spinner.text='Not Set'
+        self.ids.fail_engine_lost_power_spinner.text='Not Set'
+        self.ids.fail_oil_over_temp_spinner.text='Not Set'
+        self.ids.fail_oil_low_pres_spinner.text='Not Set'
+        self.ids.fail_eng_fire_spinner.text='Not Set'
+        self.ids.fail_eng_fadec_spinner.text='Not Set'
+        self.ids.fail_twt_grip_spinner.text='Not Set'
+        self.ids.fail_eng_chip_spinner.text='Not Set'
+        self.ids.fail_main_gbox_low_oil_pres_spinner.text='Not Set'
+        self.ids.fail_main_gbox_oil_overheat_spinner.text='Not Set'
+        self.ids.fail_bleed_valve_spinner.text='Not Set'
+        self.ids.fail_fuel_flow_fluctuation_spinner.text='Not Set'
+        self.ids.fail_compressor_stall_spinner.text='Not Set'
+        self.ids.fail_engine_seize_spinner.text='Not Set'
+        self.ids.fail_engine_fuel_pump_spinner.text='Not Set'
+
+
+
+
+
+
         del setFailures[:]
 
     # simple method for handling slider input for weather primarily
@@ -92,8 +141,8 @@ class RootWidget(FloatLayout):
     def setFails(self, spinner, switch):
         global timeRunning
         slider = Slider(min=0, max=400, id='slider_popup')
-        label = Label(text=str(int(slider.value)))
-        label2 = Label(text='stuff')
+        label = Label(text=str(int(slider.value)),font_size=25)
+        label2 = Label(text='stuff',font_size=25)
         box = BoxLayout(orientation='vertical')
         box2 = BoxLayout()
 
@@ -145,10 +194,22 @@ class RootWidget(FloatLayout):
         failure = [switch.text, failType, int(val), 0, switch, spinner]
         setFailures.append(failure)
 
-    # STILL NEED TO SORT THIS OUT - Should handle time slider and send it to the sim
+    # handle time slider and send it to the sim, also formats it to be human readable
     def setTime(self, dref, val):
-        hours, minutes = val[:len(val) / 2], val[len(val) / 2:]
-        # client.sendDREF(
+        time=val
+        minutes=time/60 % 60
+        hours =time/3600
+        self.ids.time_minutes.text=str(minutes)
+        self.ids.time_hours.text='Zulu Time:   ' + str(hours) + ' : '
+
+        client.sendDREF(dref,time)
+        localtimetuple= client.getDREF('sim/time/local_time_sec')
+        localtime=int(localtimetuple[0])
+        print localtime, time
+        localMinutes = localtime/60%60
+        localHours=localtime/3600
+        self.ids.local_time_minutes.text=str(localMinutes)
+        self.ids.local_time_hours.text='Local Time:   ' + str(localHours) +' : '
         # print hours,minutes
 
     # Simple failure triggers for the on/off switches
@@ -306,6 +367,7 @@ if __name__ == '__main__':
     timeRunning = [0, ]
 
     otherThread = Thread(target=checkFails)
+    otherThread.daemon=True
     otherThread.start()
     iosApp().run()
 
