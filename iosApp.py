@@ -90,7 +90,67 @@ class RootWidget(FloatLayout):
         self.ids.fail_instrument_light_switch.active=False
         self.ids.fail_electrical_bus_switch.active=False
         self.ids.fail_landing_light_switch.active=False
+        self.ids.fail_pitot_blockage_switch.active=False
+        self.ids.fail_static_blocked_switch.active=False
+        self.ids.fail_static_heating_switch.active=False
+        self.ids.fail_vsi_switch.active=False
+        self.ids.fail_pitot_heating_inop_switch.active=False
+        self.ids.fail_airspeed_indicator_switch.active=False
+        self.ids.fail_artificial_horizon_switch.active=False
+        self.ids.fail_altimeter_switch.active=False
+        self.ids.fail_turn_indicator_switch.active=False
+        self.ids.fail_directional_gyro_switch.active=False
+        self.ids.fail_nav_1_switch.active=False
+        self.ids.fail_nav_2_switch.active = False
+        self.ids.fail_dme_switch.active=False
+        self.ids.fail_localizer_switch.active=False
+        self.ids.fail_glide_slope_switch.active=False
+        self.ids.fail_vvi_switch.active=False
+        self.ids.fail_g430_switch.active=False
+        self.ids.fail_transponder_switch.active=False
+        self.ids.fail_hung_start_switch.active=False
+        self.ids.fail_ignitor_switch.active=False
+        self.ids.fail_engine_starter_switch.active=False
+        self.ids.fail_hot_start_switch.active=False
+        self.ids.fail_runway_itt_switch.active=False
+        self.ids.fail_rudder_trim_runaway_switch.active=False
+        self.ids.fail_rudder_trim_switch.active=False
+        self.ids.fail_tail_rotor_effect_loss_switch.active=False
+        self.ids.fail_major_gov_switch.active=False
+        self.ids.fail_gov_fine_switch.active=False
+        self.ids.fail_gov_coarse_switch.active=False
+        self.ids.fail_driveshaft_switch.active=False
 
+        self.ids.fail_driveshaft_spinner.text='Not Set'
+        self.ids.fail_gov_coarse_spinner.text='Not Set'
+        self.ids.fail_gov_fine_spinner.text='Not Set'
+        self.ids.fail_major_gov_spinner.text='Not Set'
+        self.ids.fail_tail_rotor_effect_loss_spinner.text='Not Set'
+        self.ids.fail_rudder_trim_spinner.text='Not Set'
+        self.ids.fail_rudder_trim_runaway_spinner.text='Not Set'
+        self.ids.fail_runway_itt_spinner.text='Not Set'
+        self.ids.fail_hot_start_spinner.text='Not Set'
+        self.ids.fail_engine_starter_spinner.text='Not Set'
+        self.ids.fail_ignitor_spinner.text='Not Set'
+        self.ids.fail_hung_start_spinner.text='Not Set'
+        self.ids.fail_transponder_spinner.text='Not Set'
+        self.ids.fail_g430_spinner.text='Not Set'
+        self.ids.fail_vvi_spinner.text='Not Set'
+        self.ids.fail_glide_slope_spinner.text='Not Set'
+        self.ids.fail_localizer_spinner.text='Not Set'
+        self.ids.fail_dme_spinner.text='Not Set'
+        self.ids.fail_nav_1_spinner.text='Not Set'
+        self.ids.fail_nav_2_spinner.text = 'Not Set'
+        self.ids.fail_directional_gyro_spinner.text='Not Set'
+        self.ids.fail_turn_indicator_spinner.text='Not Set'
+        self.ids.fail_altimeter_spinner.text='Not Set'
+        self.ids.fail_artificial_horizon_spinner.text='Not Set'
+        self.ids.fail_airspeed_indicator_spinner.text='Not Set'
+        self.ids.fail_pitot_heating_inop_spinner.text='Not Set'
+        self.ids.fail_vsi_spinner.text='Not Set'
+        self.ids.fail_static_heating_spinner.text='Not Set'
+        self.ids.fail_static_blocked_spinner.text='Not Set'
+        self.ids.fail_pitot_blockage_spinner.text='Not Set'
         self.ids.fail_landing_light_spinner.text='Not Set'
         self.ids.fail_electrical_bus_spinner.text='Not Set'
         self.ids.fail_instrument_light_spinner.text='Not Set'
@@ -278,6 +338,7 @@ class RootWidget(FloatLayout):
     # Simply Loads the airport based on what the user clicked in the search results
     def loadAirport(self, airportCode, *args):
         client.sendPREL(11, airportCode)
+        self.fixAllSystems()
         print airportCode
 
     # Sets cloud layers from UI, 3 layers, multiple settings per layer
@@ -340,17 +401,17 @@ def checkFails():
         # check each system
         for system in setFailures:
             if system[1] == 'speed':
-                if airSpeed[0] > system[2]:
+                if airSpeed[0] == system[2] or (airSpeed[0]-system[2])>=-1 and (airSpeed[0]-system[2])<=1:
                     system[3] = 1
             elif system[1] == 'altitude':
-                if altitude[0] > system[2]:
+                if altitude[0] == system[2] or (altitude[0]-system[2])>=-1 and (altitude[0]-system[2])<=1 :
                     system[3] = 1
             elif system[1] == 'time':
-                if timeRunning[0] > system[2]:
+                if timeRunning[0] == system[2] or (timeRunning[0]-system[2]) >=-1 and  (timeRunning[0]-system[2]) <=1 :
                     system[3] = 1
 
-        # wait a second to avoid overpolling (might not be needed)
-        sleep(1)
+        # wait a bit to avoid over-polling and unneeded CPU usage (~10-12% without the wait, 1-3% with a 0.1s sleep)
+        sleep(0.1)
 
 
 class iosApp(App):
