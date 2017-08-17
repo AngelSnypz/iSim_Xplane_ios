@@ -22,11 +22,24 @@ class RootWidget(FloatLayout):
     def __init__(self):
         super(RootWidget, self).__init__()
         global client
-
+        success=0
         client = xpc.XPlaneConnect("127.0.0.1", 49009, 49010)
+        while(success==0):
+            try:
+                
+                client.getDREF("sim/test/test_float")
+                success=1
+            except:
+
+                print 'Unable to Connect, retrying in 5s'
+                sleep(5)
+
+
+
         sleep(1)
         event = Clock.schedule_interval(self.getVars, 1)
         event2 = Clock.schedule_interval(self.autoFail, 1)
+
 
     # reads vars from Xplane (need to uncomment to use)
     def getVars(self, dt):
@@ -36,6 +49,69 @@ class RootWidget(FloatLayout):
         #timeRunning=client.getDREF('sim/time/total_running_time_sec')
         #airSpeed=client.getDREF('sim/flightmodel/position/true_airspeed')
         #altitude=client.getDREF('sim/flightmodel/misc/h_ind')
+
+
+    def weatherPresets(self,weatherPreset):
+        print weatherPreset
+        CAVOK =         [0,0,0,3048,5486,7924,3657,6096,8534,40233,   0,   0,0,29.92,15240,15240,15240,20,20,20,0,0,0,0,0,0,0,0,0,0,0,0]
+        VFR =           [0,0,0,3048,5486,7924,3657,6096,8534,11265,   0,   0,0,29.92,15240,15240,15240,20,20,20,0,0,0,0,0,0,0,0,0,0,0,0]
+        MarginalVFR =   [4,0,0, 311,5486,7924, 920,6096,8534, 8046,   0,   0,0,29.92,15240,15240,15240,20,20,20,0,0,0,0,0,0,0,0,0,0,0,0]
+        NonPrecision=   [4,0,0, 128,5486,7924, 737,6096,8534, 4828,   0,   0,0,29.92,15240,15240,15240,20,20,20,0,0,0,0,0,0,0,0,0,0,0,0]
+        IFRCat1=        [4,0,0,  67,5486,7924, 676,6096,8534,  804,   0,   0,0,29.92,15240,15240,15240,20,20,20,0,0,0,0,0,0,0,0,0,0,0,0]
+        IFRCat2=        [4,0,0,  36,5486,7924, 646,6096,8534,  321,   0,   0,0,29.92,15240,15240,15240,20,20,20,0,0,0,0,0,0,0,0,0,0,0,0]
+        IFRCat3=        [4,0,0,  21,5486,7924, 631,6096,8534,  160,   0,   0,0,29.92,15240,15240,15240,20,20,20,0,0,0,0,0,0,0,0,0,0,0,0]
+        Stormy=         [4,0,0,  67,5486,7924,5248,6096,8534,  804,0.75,0.75,0,29.92,15240,15240,15240,20,20,20,0,0,0,0,0,0,0,0,0,0,0,0]
+        drefs=['sim/weather/cloud_type[0]',
+               'sim/weather/cloud_type[1]',
+               'sim/weather/cloud_type[2]',
+               'sim/weather/cloud_base_msl_m[0]',
+               'sim/weather/cloud_base_msl_m[1]',
+               'sim/weather/cloud_base_msl_m[2]',
+               'sim/weather/cloud_tops_msl_m[0]',
+               'sim/weather/cloud_tops_msl_m[1]',
+               'sim/weather/cloud_tops_msl_m[2]',
+               'sim/weather/visibility_reported_m',
+               'sim/weather/rain_percent',
+               'sim/weather/thunderstorm_percent',
+               'sim/weather/wind_turbulence_percent',
+               'sim/weather/barometer_sealevel_inhg',
+               'sim/weather/wind_altitude_msl_m[0]',
+               'sim/weather/wind_altitude_msl_m[1]',
+               'sim/weather/wind_altitude_msl_m[2]',
+               'sim/weather/wind_direction_degt[0]',
+               'sim/weather/wind_direction_degt[1]',
+               'sim/weather/wind_direction_degt[2]',
+               'sim/weather/wind_speed_kt[0]',
+               'sim/weather/wind_speed_kt[1]',
+               'sim/weather/wind_speed_kt[2]',
+               'sim/weather/shear_direction_degt[0]',
+               'sim/weather/shear_direction_degt[1]',
+               'sim/weather/shear_direction_degt[2]',
+               'sim/weather/shear_speed_kt[0]',
+               'sim/weather/shear_speed_kt[1]',
+               'sim/weather/shear_speed_kt[2]',
+               'sim/weather/turbulence[0]',
+               'sim/weather/turbulence[1]',
+               'sim/weather/turbulence[2]']
+
+        if weatherPreset=='CAVOK':
+            client.sendDREFs(drefs, CAVOK)
+        elif weatherPreset=='VFR':
+            client.sendDREFs(drefs,VFR)
+        elif weatherPreset=='MarginalVFR':
+            client.sendDREFs(drefs,MarginalVFR)
+        elif weatherPreset=='NonPrecision':
+            client.sendDREFs(drefs,NonPrecision)
+        elif weatherPreset=='IFRCat1':
+            client.sendDREFs(drefs,IFRCat1)
+        elif weatherPreset=='IFRCat2':
+            client.sendDREFs(drefs,IFRCat2)
+        elif weatherPreset=='IFRCat3':
+            client.sendDREFs(drefs,IFRCat3)
+        elif weatherPreset=='Stormy':
+            client.sendDREFs(drefs,Stormy)
+
+        #update all of teh weather sliders to the new values
 
     # Code that runs every second checking for systems that have failed
     def autoFail(self, dt):
@@ -120,7 +196,17 @@ class RootWidget(FloatLayout):
         self.ids.fail_gov_fine_switch.active=False
         self.ids.fail_gov_coarse_switch.active=False
         self.ids.fail_driveshaft_switch.active=False
+        self.ids.fail_fuel_lo_pres_switch.active=False
+        self.ids.fail_fuel_filter_clog_switch.active=False
+        self.ids.fail_hyd_pres_loss_switch.active=False
+        self.ids.fail_yaw_damper_switch.active=False
+        self.ids.fail_hyd_overpressure_switch.active=False
 
+        self.ids.fail_hyd_overpressure_spinner.text='Not Set'
+        self.ids.fail_yaw_damper_spinner.text='Not Set'
+        self.ids.fail_hyd_pres_loss_spinner.text='Not Set'
+        self.ids.fail_fuel_filter_clog_spinner.text='Not Set'
+        self.ids.fail_fuel_lo_pres_spinner.text='Not Set'
         self.ids.fail_driveshaft_spinner.text='Not Set'
         self.ids.fail_gov_coarse_spinner.text='Not Set'
         self.ids.fail_gov_fine_spinner.text='Not Set'
@@ -186,7 +272,9 @@ class RootWidget(FloatLayout):
         self.ids.fail_engine_fuel_pump_spinner.text='Not Set'
 
 
-
+        self.ids.fail_pitot_ice_slider.value=0
+        self.ids.fail_prop_ice_slider.value=0
+        self.ids.fail_inlet_ice_slider.value=0
 
 
 
@@ -199,7 +287,7 @@ class RootWidget(FloatLayout):
 
     # Method to handle setting failures to fail at specific conditions
     def setFails(self, spinner, switch):
-        global timeRunning
+
         slider = Slider(min=0, max=400, id='slider_popup')
         label = Label(text=str(int(slider.value)),font_size=25)
         label2 = Label(text='stuff',font_size=25)
@@ -211,7 +299,7 @@ class RootWidget(FloatLayout):
         box2.add_widget(label2)
         box2.add_widget(label)
 
-        btn = Button(text='confirm', size_hint=(1, 0.5))
+        btn = Button(text='Confirm', size_hint=(1, 0.5),font_size=25)
         box.add_widget(btn)
         popup = Popup(title='failure set',
                       content=box)
@@ -264,6 +352,7 @@ class RootWidget(FloatLayout):
 
         client.sendDREF(dref,time)
         localtimetuple= client.getDREF('sim/time/local_time_sec')
+
         localtime=int(localtimetuple[0])
         print localtime, time
         localMinutes = localtime/60%60
@@ -328,13 +417,6 @@ class RootWidget(FloatLayout):
                         size_hint=(0.5,0.5))
             popup.open()'''
 
-    '''start selection via radio buttons can be done here. HOWEVER
-    there is no way to check if an aiport has a helipad.
-    it might be simpler to just default it to the runway
-    and leave it up to the instructor to use the second screen
-    to do the final movement (helipad/approach etc)
-    '''
-
     # Simply Loads the airport based on what the user clicked in the search results
     def loadAirport(self, airportCode, *args):
         client.sendPREL(11, airportCode)
@@ -389,7 +471,7 @@ class RootWidget(FloatLayout):
         self.searchAirports(self.ids.search_input.text)
 
 # Thread Process for checking for Failures based on a simple list
-# Avoids locking up the UI
+# Avoids locking up the UI (maybe?)
 def checkFails():
     global setFailures
     global airSpeed
@@ -421,6 +503,8 @@ class iosApp(App):
 
 if __name__ == '__main__':
     setFailures = []
+
+    #The values need to be in an array with val in pos 0, with a blank pos 1 due to how XPlane 11 returns the values
     airSpeed = [0, ]
     altitude = [0, ]
     switch = [0, ]

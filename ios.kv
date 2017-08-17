@@ -11,231 +11,169 @@
 			id:tab_position
 			text:'Position'
 
-			TabbedPanel:
-				id:tab_panel_position
-				do_default_tab: False
-				tab_pos: 'bottom_left'
-				tab_width: self.size[0]/len(self.tab_list)
-				tab_height:60
-
-				TabbedPanelItem:
-					id:tab_position_quickstart
-					text:'Quick Start'
 
 
-				TabbedPanelItem:
-					id:tab_position_set
-					text:'Set'
+            BoxLayout:
+                orientation:'vertical'
+                BoxLayout:
+
+                    BoxLayout
+                        orientation:'vertical'
+                        ScrollView:
+
+                            BoxLayout:
+                                orientation:'vertical'
+                                size_hint_y:None
+                                height: self.minimum_height
+                                id:results_scrollview
 
 
-					BoxLayout:
-						orientation:'vertical'
-						BoxLayout:
-
-							BoxLayout
-								orientation:'vertical'
-								ScrollView:
-
-									BoxLayout:
-										orientation:'vertical'
-										size_hint_y:None
-										height: self.minimum_height
-										id:results_scrollview
+                        TextInput:
+                            id:search_input
+                            hint_text:'search..'
+                            size_hint:(1,0.2)
+                            font_size:search_input.height-search_input.height/3
 
 
-								TextInput:
-									id:search_input
-									hint_text:'search..'
-									size_hint:(1,0.2)
-									font_size:search_input.height-search_input.height/3
-
-
-						BoxLayout:
-							orientation:'vertical'
-							BoxLayout:
-								id:keyboard_numrow
-								Button:
-									text:'1'
-									on_press:root.keypress('1')
-								Button:
-									text:'2'
-									on_press:root.keypress('2')
-								Button:
-									text:'3'
-									on_press:root.keypress('3')
-								Button:
-									text:'4'
-									on_press:root.keypress('4')
-								Button:
-									text:'5'
-									on_press:root.keypress('5')
-								Button:
-									text:'6'
-									on_press:root.keypress('6')
-								Button:
-									text:'7'
-									on_press:root.keypress('7')
-								Button:
-									text:'8'
-									on_press:root.keypress('8')
-								Button:
-									text:'9'
-									on_press:root.keypress('9')
-								Button:
-									text:'0'
-									on_press:root.keypress('0')
-								Button:
-									text:'Backspace'
-									size_hint:(1.5,1)
-									on_press:root.keypress('backspace')
+                BoxLayout:
+                    orientation:'vertical'
+                    BoxLayout:
+                        id:keyboard_numrow
+                        Button:
+                            text:'1'
+                            on_press:root.keypress('1')
+                        Button:
+                            text:'2'
+                            on_press:root.keypress('2')
+                        Button:
+                            text:'3'
+                            on_press:root.keypress('3')
+                        Button:
+                            text:'4'
+                            on_press:root.keypress('4')
+                        Button:
+                            text:'5'
+                            on_press:root.keypress('5')
+                        Button:
+                            text:'6'
+                            on_press:root.keypress('6')
+                        Button:
+                            text:'7'
+                            on_press:root.keypress('7')
+                        Button:
+                            text:'8'
+                            on_press:root.keypress('8')
+                        Button:
+                            text:'9'
+                            on_press:root.keypress('9')
+                        Button:
+                            text:'0'
+                            on_press:root.keypress('0')
+                        Button:
+                            text:'Backspace'
+                            size_hint:(1.5,1)
+                            on_press:root.keypress('backspace')
 
 
 
-							BoxLayout:
-								id:keyboard_topletters
+                    BoxLayout:
+                        id:keyboard_topletters
 
-								Button:
-									text:'Q'
-									on_press:root.keypress('Q')
-								Button:
-									text:'W'
-									on_press:root.keypress('W')
-								Button:
-									text:'E'
-									on_press:root.keypress('E')
-								Button:
-									text:'R'
-									on_press:root.keypress('R')
-								Button:
-									text:'T'
-									on_press:root.keypress('T')
-								Button:
-									text:'Y'
-									on_press:root.keypress('Y')
-								Button:
-									text:'U'
-									on_press:root.keypress('U')
-								Button:
-									text:'I'
-									on_press:root.keypress('I')
-								Button:
-									text:'O'
-									on_press:root.keypress('O')
-								Button:
-									text:'P'
-									on_press:root.keypress('P')
-
-
-							BoxLayout:
-								id:keyboard_midletters
-
-								Button:
-									text:'A'
-									on_press:root.keypress('A')
-								Button:
-									text:'S'
-									on_press:root.keypress('S')
-								Button:
-									text:'D'
-									on_press:root.keypress('D')
-								Button:
-									text:'F'
-									on_press:root.keypress('F')
-								Button:
-									text:'G'
-									on_press:root.keypress('G')
-								Button:
-									text:'H'
-									on_press:root.keypress('H')
-								Button:
-									text:'J'
-									on_press:root.keypress('J')
-								Button:
-									text:'K'
-									on_press:root.keypress('K')
-								Button:
-									text:'L'
-									on_press:root.keypress('L')
-								#Button:
-								#	text:'Submit'
-								#	size_hint:(1.5,1)
-								#	on_press:root.searchAirports(search_input.text)
+                        Button:
+                            text:'Q'
+                            on_press:root.keypress('Q')
+                        Button:
+                            text:'W'
+                            on_press:root.keypress('W')
+                        Button:
+                            text:'E'
+                            on_press:root.keypress('E')
+                        Button:
+                            text:'R'
+                            on_press:root.keypress('R')
+                        Button:
+                            text:'T'
+                            on_press:root.keypress('T')
+                        Button:
+                            text:'Y'
+                            on_press:root.keypress('Y')
+                        Button:
+                            text:'U'
+                            on_press:root.keypress('U')
+                        Button:
+                            text:'I'
+                            on_press:root.keypress('I')
+                        Button:
+                            text:'O'
+                            on_press:root.keypress('O')
+                        Button:
+                            text:'P'
+                            on_press:root.keypress('P')
 
 
+                    BoxLayout:
+                        id:keyboard_midletters
 
-							BoxLayout:
-								id:keyboard_botletters
-								Widget:
-								Button:
-									text:'Z'
-									on_press:root.keypress('Z')
-								Button:
-									text:'X'
-									on_press:root.keypress('X')
-								Button:
-									text:'C'
-									on_press:root.keypress('C')
-								Button:
-									text:'V'
-									on_press:root.keypress('V')
-								Button:
-									text:'B'
-									on_press:root.keypress('B')
-								Button:
-									text:'N'
-									on_press:root.keypress('N')
-								Button:
-									text:'M'
-									on_press:root.keypress('M')
-								Widget:
+                        Button:
+                            text:'A'
+                            on_press:root.keypress('A')
+                        Button:
+                            text:'S'
+                            on_press:root.keypress('S')
+                        Button:
+                            text:'D'
+                            on_press:root.keypress('D')
+                        Button:
+                            text:'F'
+                            on_press:root.keypress('F')
+                        Button:
+                            text:'G'
+                            on_press:root.keypress('G')
+                        Button:
+                            text:'H'
+                            on_press:root.keypress('H')
+                        Button:
+                            text:'J'
+                            on_press:root.keypress('J')
+                        Button:
+                            text:'K'
+                            on_press:root.keypress('K')
+                        Button:
+                            text:'L'
+                            on_press:root.keypress('L')
+                        #Button:
+                        #	text:'Submit'
+                        #	size_hint:(1.5,1)
+                        #	on_press:root.searchAirports(search_input.text)
 
 
 
+                    BoxLayout:
+                        id:keyboard_botletters
+                        Widget:
+                        Button:
+                            text:'Z'
+                            on_press:root.keypress('Z')
+                        Button:
+                            text:'X'
+                            on_press:root.keypress('X')
+                        Button:
+                            text:'C'
+                            on_press:root.keypress('C')
+                        Button:
+                            text:'V'
+                            on_press:root.keypress('V')
+                        Button:
+                            text:'B'
+                            on_press:root.keypress('B')
+                        Button:
+                            text:'N'
+                            on_press:root.keypress('N')
+                        Button:
+                            text:'M'
+                            on_press:root.keypress('M')
+                        Widget:
 
-
-
-				TabbedPanelItem:
-					id:tab_position_apron
-					text:'Apron'
-					BoxLayout:
-						Label:
-							text:'is this needed?'
-
-				TabbedPanelItem:
-					id:tab_position_to
-					text:'T/O'
-					BoxLayout:
-						Label:
-							text:'is this needed?'
-
-				TabbedPanelItem:
-					id:tab_position_downwind
-					text:'Downwind'
-					BoxLayout:
-						Label:
-							text:'is this needed?'
-
-				TabbedPanelItem:
-					id:tab_position_final1nm
-					text:'Final 1 NM'
-					BoxLayout:
-						Label:
-							text:'is this needed?'
-
-
-				TabbedPanelItem:
-					id:tab_position_final4nm
-					text:'Final 4 NM'
-					BoxLayout:
-						Label:
-							text:'is this needed?'
-
-				TabbedPanelItem:
-					id:tab_position_situation
-					text:'Situation'
-					BoxLayout:
-						Label:
-							text:'is this needed?'
 
 
 
@@ -319,6 +257,7 @@
 							BoxLayout:
 								orientation:'vertical'
 								Widget:
+
 								Label:
 									text:'Base of Cloud Layer 2: ' +str(int(clouds_slider_2.value)) + ' feet'
 									font_size:25
@@ -439,12 +378,15 @@
 							size_hint:(0.1,0.1)
 						BoxLayout:
 							orientation:'vertical'
+							Label:
+							    text:'Wind Layer - Low'
+							    font_size:25
 							BoxLayout:
 
 								Slider:
 									id:winds_slider_altitude_1
 									min:0
-									max:40000
+									max:36000
 									size_hint:(2,1)
                                     on_value:root.sliderSystem('sim/weather/wind_altitude_msl_m[0]',winds_slider_altitude_1.value)
 								Label:
@@ -505,12 +447,15 @@
 									font_size:25
                             Widget:
                                 size_hint:(1,1)
+                            Label:
+                                text:'Wind Layer - Mid'
+                                font_size:25
                             BoxLayout:
 
 								Slider:
 									id:winds_slider_altitude_2
-									min:0
-									max:40000
+									min:winds_slider_altitude_1.value+2000
+									max:38000
 									size_hint:(2,1)
                                     on_value:root.sliderSystem('sim/weather/wind_altitude_msl_m[1]',winds_slider_altitude_2.value)
 								Label:
@@ -555,7 +500,7 @@
 									min:0
 									max:200
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/shear_speed_kt[2]',winds_slider_shearspeed_2.value)
+									on_value:root.sliderSystem('sim/weather/shear_speed_kt[1]',winds_slider_shearspeed_2.value)
 								Label:
 									text: 'Wind 2 Shear Speed: ' + str(int(winds_slider_shearspeed_2.value))
 									font_size:25
@@ -568,6 +513,76 @@
 									on_value:root.sliderSystem('sim/weather/turbulence[1]',winds_slider_turbulence_2.value)
 								Label:
 									text: 'Wind 2 Turbulence: ' + str(int(winds_slider_turbulence_2.value))
+									font_size:25
+
+							Widget:
+                                size_hint:(1,1)
+                            Label:
+                                text:'Wind Layer - High'
+                                font_size:25
+                            BoxLayout:
+
+								Slider:
+									id:winds_slider_altitude_3
+									min:winds_slider_altitude_2.value+2000
+									max:40000
+									size_hint:(2,1)
+                                    on_value:root.sliderSystem('sim/weather/wind_altitude_msl_m[2]',winds_slider_altitude_3.value)
+								Label:
+									text: 'Wind 3 Altitude: ' + str(int(winds_slider_altitude_3.value))
+									font_size:25
+
+							BoxLayout:
+								Slider:
+									id:winds_slider_direction_3
+									min:0
+									max:360
+									size_hint:(2,1)
+									on_value:root.sliderSystem('sim/weather/wind_direction_degt[2]',winds_slider_direction_3.value)
+								Label:
+									text: 'Wind 3 Direction from North: ' + str(int(winds_slider_direction_3.value))
+									font_size:25
+
+							BoxLayout:
+								Slider:
+									id:winds_slider_speed_3
+									min:0
+									max:200
+									size_hint:(2,1)
+									on_value:root.sliderSystem('sim/weather/wind_speed_kt[2]',winds_slider_speed_3.value)
+								Label:
+									text: 'Wind 3 Speed: ' + str(int(winds_slider_speed_3.value))
+									font_size:25
+
+							BoxLayout:
+								Slider:
+									id:winds_slider_sheardirection_3
+									min:0
+									max:359
+									size_hint:(2,1)
+									on_value:root.sliderSystem('sim/weather/shear_direction_degt[2]',winds_slider_sheardirection_3.value)
+								Label:
+									text: 'Wind Shear 3 Direction from North: ' + str(int(winds_slider_sheardirection_3.value))
+									font_size:25
+							BoxLayout:
+								Slider:
+									id:winds_slider_shearspeed_3
+									min:0
+									max:200
+									size_hint:(2,1)
+									on_value:root.sliderSystem('sim/weather/shear_speed_kt[2]',winds_slider_shearspeed_3.value)
+								Label:
+									text: 'Wind 3 Shear Speed: ' + str(int(winds_slider_shearspeed_3.value))
+									font_size:25
+							BoxLayout:
+								Slider:
+									id:winds_slider_turbulence_3
+									min:0
+									max:10
+									size_hint:(2,1)
+									on_value:root.sliderSystem('sim/weather/turbulence[2]',winds_slider_turbulence_3.value)
+								Label:
+									text: 'Wind 3 Turbulence: ' + str(int(winds_slider_turbulence_3.value))
 									font_size:25
 					    Widget:
 					        size_hint:(0.1,0.1)
@@ -697,6 +712,90 @@
 				TabbedPanelItem:
 					id:tab_weather_preset
 					text:'Preset'
+					BoxLayout:
+					    BoxLayout:
+					        BoxLayout:
+					            orientation:'vertical'
+					            Widget:
+					                size_hint:(0.1,0.1)
+
+					            Button:
+					                text:'CAVOK'
+					                font_size:25
+					                on_press:root.weatherPresets('CAVOK')
+					            Widget:
+					                size_hint:(0.1,0.1)
+					            Button:
+					                text:'VFR'
+					                font_size:25
+					                on_press:root.weatherPresets('VFR')
+					            Widget:
+					                size_hint:(0.1,0.1)
+					        Widget:
+					            size_hint:(0.1,0.1)
+
+					        BoxLayout:
+					            orientation:'vertical'
+					            Widget:
+					                size_hint:(0.1,0.1)
+
+					            Button:
+					                text:'Marginal VFR'
+					                font_size:25
+					                on_press:root.weatherPresets('MarginalVFR')
+					            Widget:
+					                size_hint:(0.1,0.1)
+					            Button:
+					                text:'IFR Cat 1'
+					                font_size:25
+					                on_press:root.weatherPresets('IFRCat1')
+
+
+					            Widget:
+					                size_hint:(0.1,0.1)
+
+                            Widget:
+                                size_hint:(0.1,0.1)
+
+
+					        BoxLayout:
+					            orientation:'vertical'
+					            Widget:
+					                size_hint:(0.1,0.1)
+                                Button:
+					                text:'Non Precision'
+					                font_size:25
+					                on_press:root.weatherPresets('NonPrecision')
+                                Widget:
+					                size_hint:(0.1,0.1)
+					            Button:
+					                text:'IFR Cat 2'
+					                font_size:25
+					                on_press:root.weatherPresets('IFRCat2')
+
+					            Widget:
+					                size_hint:(0.1,0.1)
+                            Widget:
+                                size_hint:(0.1,0.1)
+					        BoxLayout:
+					            orientation:'vertical'
+					            Widget:
+					                size_hint:(0.1,0.1)
+					            Button:
+					                text:'Stormy'
+					                font_size:25
+					                on_press:root.weatherPresets('Stormy')
+
+					            Widget:
+					                size_hint:(0.1,0.1)
+					            Button:
+					                text:'IFR Cat 3'
+					                font_size:25
+					                on_press:root.weatherPresets('IFRCat3')
+					            Widget:
+					                size_hint:(0.1,0.1)
+
+
 
 
 
@@ -711,6 +810,7 @@
 						id:slider_fuel
 						min:0
 						max:420
+						value:200
 						on_value:root.sliderSystem('sim/flightmodel/weight/m_fuel1',slider_fuel.value)
 					Label:
 						font_size:25
@@ -739,8 +839,8 @@
 					Slider:
 						id:slider_zfw
 						min:0
-						max:5000
-						value:4000
+						max:2500
+						value:1334
 						on_value:root.sliderSystem('sim/aircraft/weight/acf_m_empty',slider_zfw.value)
 					Label:
 						font_size:25
@@ -769,6 +869,7 @@
                                 BoxLayout:
                                     Label:
                                         text:'Battery Over Temp'
+
                                     Switch:
                                         id:fail_battery_over_temp_switch
                                         text:'debug/missing'
@@ -779,12 +880,14 @@
                                     values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
                                     text:'Not Set'
                                     on_text:root.setFails(self,fail_battery_over_temp_switch)
+
                                 Widget:
                                     size_hint:(0.1,0.1)
 
 
                                 BoxLayout:
                                     Label:
+
                                         text:'Battery Offline'
                                     Switch:
                                         id:fail_battery_offline_switch
@@ -796,6 +899,7 @@
                                     values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
                                     text:'Not Set'
                                     on_text:root.setFails(self,fail_battery_offline_switch)
+
                                 Widget:
                                     size_hint:(0.1,0.1)
 
@@ -804,6 +908,7 @@
                                 BoxLayout:
                                     Label:
                                         text:'DC Gen Offline'
+
                                     Switch:
                                         id:fail_gen_offline_switch
                                         text:'sim/operation/failures/rel_genera0'
@@ -812,6 +917,7 @@
                                 Spinner:
                                     id:fail_gen_offline_spinner
                                     values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+
                                     text:'Not Set'
                                     on_text:root.setFails(self,fail_gen_offline_switch)
                                 Widget:
@@ -821,6 +927,7 @@
                                 BoxLayout:
                                     Label:
                                         text:'Landing Light Failure'
+
                                     Switch:
                                         id:fail_landing_light_switch
                                         text:'sim/operation/failures/rel_lites_land'
@@ -828,6 +935,7 @@
 
                                 Spinner:
                                     id:fail_landing_light_spinner
+
                                     values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
                                     text:'Not Set'
                                     on_text:root.setFails(self,fail_landing_light_switch)
@@ -839,9 +947,11 @@
                                 orientation:'vertical'
                                 BoxLayout:
                                     Label:
+
                                         text:'Instrument Light Failure'
                                     Switch:
                                         id:fail_instrument_light_switch
+                                        font_size:25
                                         text:'sim/operation/failures/rel_lites_ins'
                                         on_active:root.failSystem2(self)
 
@@ -850,14 +960,17 @@
                                     values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
                                     text:'Not Set'
                                     on_text:root.setFails(self,fail_instrument_light_switch)
+
                                 Widget:
                                     size_hint:(0.1,0.1)
 
 
                                 BoxLayout:
                                     Label:
+
                                         text:'Electrical Bus Failure'
                                     Switch:
+
                                         id:fail_electrical_bus_switch
                                         text:'sim/operation/failures/rel_esys'
                                         on_active:root.failSystem2(self)
@@ -866,6 +979,7 @@
                                     id:fail_electrical_bus_spinner
                                     values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
                                     text:'Not Set'
+
                                     on_text:root.setFails(self,fail_electrical_bus_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
@@ -1001,9 +1115,6 @@
 
 
 
-                TabbedPanelItem:
-                    id:tab_aircraft_failures_deice
-                    text:'De Ice'
 
 
 				TabbedPanelItem:
@@ -1303,6 +1414,160 @@
 									on_text:root.setFails(self,fail_transponder_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
+
+
+
+
+
+
+				TabbedPanelItem:
+					id:tab_failure_engines
+					text:'VEMD'
+
+					BoxLayout:
+					    BoxLayout:
+
+					        BoxLayout:
+					            orientation:'vertical'
+
+					            BoxLayout:
+					                Label:
+					                    text:'VEMD Failure'
+					                Switch:
+					                    id:fail_vemd_switch
+					                    text:'Dataref Missing'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_vemd_spinner
+					                values:'-'
+									text:'-'
+									on_text:root.setFails(self,fail_vemd_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                                BoxLayout:
+					                Label:
+					                    text:'VEH param OOR'
+					                Switch:
+					                    id:fail_veh_param_oor_switch
+					                    text:'Dataref Missing'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_veh_param_oor_spinner
+					                values:'-'
+									text:'-'
+									on_text:root.setFails(self,fail_veh_param_oor_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                            BoxLayout:
+                                orientation:'vertical'
+
+                                BoxLayout:
+					                Label:
+					                    text:'TRQ Indication'
+					                Switch:
+					                    id:fail_trq_indication_switch
+					                    text:'sim/operation/failures/rel_TRQind0'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_trq_indication_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_trq_indication_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+
+                                BoxLayout:
+					                Label:
+					                    text:'Ng Indication'
+					                Switch:
+					                    id:fail_ng_indication_switch
+					                    text:'sim/operation/failures/rel_N1_ind0'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_ng_indication_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_ng_indication_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                            BoxLayout:
+                                orientation:'vertical'
+
+                                BoxLayout:
+					                Label:
+					                    text:'Crosstalk'
+					                Switch:
+					                    id:fail_crosstalk_switch
+					                    text:'Dataref Missing'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_crosstalk_spinner
+					                values:'-'
+									text:'-'
+									on_text:root.setFails(self,fail_crosstalk_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                                BoxLayout:
+					                Label:
+					                    text:'FLI'
+					                Switch:
+					                    id:fail_fli_switch
+					                    text:'Dataref Missing'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_fli_spinner
+					                values:'-'
+									text:'-'
+									on_text:root.setFails(self,fail_fli_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                            BoxLayout:
+                                orientation:'vertical'
+
+                                BoxLayout:
+					                Label:
+					                    text:'Gen param Overlimit'
+					                Switch:
+					                    id:fail_gen_param_overlimit_switch
+					                    text:'Dataref Missing'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_gen_param_overlimit_spinner
+					                values:'-'
+									text:'-'
+									on_text:root.setFails(self,fail_gen_param_overlimit_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                                BoxLayout:
+					                Label:
+					                    text:'Bat param Overlimit'
+					                Switch:
+					                    id:fail_bat_param_overlimit_switch
+					                    text:'Dataref Missing'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_bat_param_overlimit_spinner
+					                values:'-'
+									text:'-'
+									on_text:root.setFails(self,fail_bat_param_overlimit_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
 
 
 
@@ -1675,6 +1940,150 @@
 
 
 
+                TabbedPanelItem:
+                    id:tab_aircraft_failures_misc
+                    text:'Misc'
+                    BoxLayout:
+                        BoxLayout:
+
+                            BoxLayout:
+                                orientation:'vertical'
+                                Widget:
+                                    size_hint:(1.1,1.1)
+                                BoxLayout:
+
+                                    Slider:
+                                        id:fail_pitot_ice_slider
+                                        min:0
+                                        max:10
+                                        step:0.1
+                                        text:'sim/ﬂightmodel/failures/pitot_ice'
+                                        on_value:root.sliderSystem(self.text,int(self.value))
+                                    Label:
+                                        text:'Pitot Ice Ratio : ' + str(float(fail_pitot_ice_slider.value)) + '    NEEDS TESTING'
+
+                                Widget:
+                                    size_hint:(1.1,1.1)
+
+                                BoxLayout:
+
+                                    Slider:
+                                        id:fail_prop_ice_slider
+                                        min:0
+                                        max:10
+                                        step:0.1
+                                        text:'sim/ﬂightmodel/failures/prop_ice'
+                                        on_value:root.sliderSystem(self.text,int(self.value))
+                                    Label:
+                                        text:'Prop Ice Ratio : ' + str(float(fail_prop_ice_slider.value))
+                                Widget:
+                                    size_hint:(1.1,1.1)
+
+                                BoxLayout:
+
+                                    Slider:
+                                        id:fail_inlet_ice_slider
+                                        min:0
+                                        max:10
+                                        step:0.1
+                                        text:'sim/ﬂightmodel/failures/inlet_ice'
+                                        on_value:root.sliderSystem(self.text,int(self.value))
+                                    Label:
+                                        text:'Inlet Ice Ratio : ' + str(float(fail_inlet_ice_slider.value))
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                                BoxLayout:
+					                Label:
+					                    text:'Fuel Low Pres'
+					                Switch:
+					                    id:fail_fuel_lo_pres_switch
+					                    text:'sim/operation/failures/rel_eng_lo0'
+					                    on_active:root.failSystem2(self)
+
+
+					            Spinner:
+					                id:fail_fuel_lo_pres_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_fuel_lo_pres_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                            BoxLayout:
+                                orientation:'vertical'
+
+                                BoxLayout:
+					                Label:
+					                    text:'Fuel Filter Clogged'
+					                Switch:
+					                    id:fail_fuel_filter_clog_switch
+					                    text:'sim/operation/failures/rel_fuel_block0'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_fuel_filter_clog_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_fuel_filter_clog_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+
+                                BoxLayout:
+					                Label:
+					                    text:'Hydraulic Pressure Loss'
+					                Switch:
+					                    id:fail_hyd_pres_loss_switch
+					                    text:'sim/operation/failures/rel_hydpmp'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_hyd_pres_loss_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_hyd_pres_loss_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                                BoxLayout:
+					                Label:
+					                    text:'Yaw Damper'
+					                Switch:
+					                    id:fail_yaw_damper_switch
+					                    text:'sim/cockpit/warnings/annunciators/yaw_damper'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_yaw_damper_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_yaw_damper_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                                BoxLayout:
+					                Label:
+					                    text:'Hydraulics Overpressure'
+					                Switch:
+					                    id:fail_hyd_overpressure_switch
+					                    text:'sim/operation/failures/rel_hydoverp'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_hyd_overpressure_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_hyd_overpressure_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+
+
+
+
+
+
 
 
 
@@ -1957,53 +2366,6 @@
 				Widget:
 
 
-		TabbedPanelItem
-			id:tab_traffic
-			text:'Traffic'
-			BoxLayout:
-				Label:
-					text: 'Traffic Content Area'
-
-		TabbedPanelItem
-			id:tab_print
-			text:'Print'
-			BoxLayout:
-				Label:
-					text: 'Print Content Area'
-
-		TabbedPanelItem
-			id:tab_view
-			text:'View'
-			TabbedPanel:
-				id:tab_panel_view
-				do_default_tab: False
-				tab_pos: 'bottom_left'
-				tab_width: self.size[0]/len(self.tab_list)
-				tab_height:60
-
-				TabbedPanelItem
-					id:tab_view_approach
-					text:'Approach'
-
-				TabbedPanelItem
-					id:tab_view_alt
-					text:'ALT'
-
-				TabbedPanelItem
-					id:tab_view_ias
-					text:'IAS'
-
-				TabbedPanelItem
-					id:tab_view_vs
-					text:'VS'
-
-				TabbedPanelItem
-					id:tab_view_bank
-					text:'Bank'
-
-				TabbedPanelItem
-					id:tab_view_pitch
-					text:'Pitch'
 
 		TabbedPanelItem
 			id:tab_freeze
