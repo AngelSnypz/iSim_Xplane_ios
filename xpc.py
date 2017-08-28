@@ -4,9 +4,12 @@ import struct
 class XPlaneConnect(object):
     '''XPlaneConnect (XPC) facilitates communication to and from the XPCPlugin.'''
     socket = None
+    systemIP = '0'
 
     # Basic Functions
-    def __init__(self, xpHost = 'localhost', xpPort = 49009, port = 49010, timeout = 30000):
+    def __init__(self, xpHost, xpPort = 49009, port = 49010, timeout = 30000):
+        global systemIP
+        #def __init__(self, xpHost='localhost', xpPort=49009, port=49010, timeout=30000):
         '''Sets up a new connection to an X-Plane Connect plugin running in X-Plane.
         
             Args:
@@ -20,6 +23,7 @@ class XPlaneConnect(object):
         xpIP = None
         try:
             xpIP = socket.gethostbyname(xpHost)
+            systemIP=xpIP
         except:
             raise ValueError("Unable to resolve xpHost.")
 
@@ -57,7 +61,8 @@ class XPlaneConnect(object):
             self.socket = None
 
     def pauseXplane(self):
-        udpip='localhost'
+        global systemIP
+        #udpip='localhost'
         udpport=49000
         buffer=struct.pack('<4sx',"CMND")
         fmt='26s';
@@ -65,20 +70,22 @@ class XPlaneConnect(object):
         buffer+=struct.pack(fmt,data)
         while(len(buffer)<64+5):
             buffer+=struct.pack('x')
-        self.socket.sendto(buffer,(udpip,udpport))
+        self.socket.sendto(buffer,(systemIP,udpport))
         
     def repairAll(self):
+        global systemIP
         buffer=struct.pack('<4sx','RESE')
         while(len(buffer)<64+5):
             buffer+=struct.pack('x')
-        udp_ip = 'localhost'
+        #udp_ip = 'localhost'
         udp_port=49000
         sock =socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-        sock.sendto(buffer,(udp_ip,udp_port))
+        sock.sendto(buffer,(systemIP,udp_port))
 
 
     def sendPREL(self,startpos,airportcode):
-        udpip='localhost'
+        #udpip='localhost'
+        global systemIP
         udpport=49000
         buffer=struct.pack('<4sx',"PREL")
         start=startpos                #different starts as per the rtf files
@@ -97,7 +104,7 @@ class XPlaneConnect(object):
         buffer+=struct.pack(fmt,start,index,code1,code2,code3,code4)
         while(len(buffer)<64+5):
             buffer+=struct.pack('x')
-        self.socket.sendto(buffer,(udpip,udpport))
+        self.socket.sendto(buffer,(systemIP,udpport))
        
     def sendUDP(self, buffer):
         '''Sends a message over the underlying UDP socket.'''

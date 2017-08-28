@@ -907,7 +907,7 @@
                                 orientation:'vertical'
                                 BoxLayout:
                                     Label:
-                                        text:'DC Gen Offline'
+                                        text:'DC Gen Offline - Cannot Set This'
 
                                     Switch:
                                         id:fail_gen_offline_switch
@@ -1066,7 +1066,7 @@
                                         text:'GOV fail to fine'
                                     Switch:
                                         id:fail_gov_fine_switch
-                                        text:'sim/operation/failures/rel_prpﬁn0'
+                                        text:'sim/operation/failures/rel_prpfin0'
                                         on_active:root.failSystem2(self)
                                 Spinner:
 					                id:fail_gov_fine_spinner
@@ -1241,21 +1241,6 @@
 
                                 BoxLayout:
                                     Label:
-                                        text:'VVI'
-                                    Switch:
-                                        id:fail_vvi_switch
-                                        text:'sim/operation/failures/rel_ss_vvi'
-                                        on_active:root.failSystem2(self)
-                                Spinner:
-					                id:fail_vvi_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_vvi_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                                BoxLayout:
-                                    Label:
                                         text:'Altimeter'
                                     Switch:
                                         id:fail_altimeter_switch
@@ -1268,6 +1253,9 @@
 									on_text:root.setFails(self,fail_altimeter_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
+
+                                Widget:
+                                    size_hint:(2.1,2.1)
 
                             BoxLayout:
                                 orientation:'vertical'
@@ -1292,7 +1280,7 @@
                                         text:'Directional Gyro'
                                     Switch:
                                         id:fail_directional_gyro_switch
-                                        text:'sim/operation/failures/rel_ss_tsi'
+                                        text:'sim/operation/failures/rel_ss_dgy'
                                         on_active:root.failSystem2(self)
                                 Spinner:
 					                id:fail_directional_gyro_spinner
@@ -1593,7 +1581,7 @@
 					                    text:'Engine Flameout'
 					                Switch:
 					                    id:fail_engine_flameout_switch
-					                    text:'sim/operation/failures/rel_engﬂa0'
+					                    text:'sim/operation/failures/rel_engfla0'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
@@ -1680,7 +1668,7 @@
 					                    text:'Engine Fire'
 					                Switch:
 					                    id:fail_eng_fire_switch
-					                    text:'sim/operation/failures/rel_engﬁr0'
+					                    text:'sim/operation/failures/rel_engfir0'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
@@ -1838,7 +1826,7 @@
 					                    text:'Fuel Flow Fluctuation'
 					                Switch:
 					                    id:fail_fuel_flow_fluctuation_switch
-					                    text:'sim/operation/failures/rel_fuelﬂ0'
+					                    text:'sim/operation/failures/rel_fuelfl0'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
@@ -2118,7 +2106,7 @@
 
 								BoxLayout:
 									Label:
-										text:'Door Open'
+										text:'Door Open - Clarify'
 									Switch:
 										id:fail_door_open_switch
 										text:'sim/operation/failures/rel_door_open'

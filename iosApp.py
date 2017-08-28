@@ -5,7 +5,6 @@ from kivy.uix.slider import Slider
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.clock import Clock
-
 from threading import Thread
 from time import sleep
 
@@ -23,10 +22,15 @@ class RootWidget(FloatLayout):
         super(RootWidget, self).__init__()
         global client
         success=0
-        client = xpc.XPlaneConnect("127.0.0.1", 49009, 49010)
+
+        #Connect the to the XPC plugin running inside xplane
+        client = xpc.XPlaneConnect("192.168.137.79", 49009, 49010)
+
+
+        #Looping to wait for the connection
         while(success==0):
             try:
-                
+
                 client.getDREF("sim/test/test_float")
                 success=1
             except:
@@ -35,22 +39,24 @@ class RootWidget(FloatLayout):
                 sleep(5)
 
 
-
+        #sleep to wait for setup, then setting clocks to tick to read data from xplane and fail the set failures as needed
         sleep(1)
-        event = Clock.schedule_interval(self.getVars, 1)
-        event2 = Clock.schedule_interval(self.autoFail, 1)
+        event = Clock.schedule_interval(self.getVars, .1)
+        event2 = Clock.schedule_interval(self.autoFail, .1)
 
 
-    # reads vars from Xplane (need to uncomment to use)
+    # reads vars from Xplane for use in checking failures etc
     def getVars(self, dt):
         global airSpeed
         global altitude
         global timeRunning
-        #timeRunning=client.getDREF('sim/time/total_running_time_sec')
-        #airSpeed=client.getDREF('sim/flightmodel/position/true_airspeed')
-        #altitude=client.getDREF('sim/flightmodel/misc/h_ind')
+
+        airSpeed=client.getDREF('sim/flightmodel/position/true_airspeed')
+        altitude=client.getDREF('sim/flightmodel/misc/h_ind')
+        timeRunning = client.getDREF('sim/time/total_running_time_sec')
 
 
+    #Hardcoded weather presets (modifying these is a laborious process
     def weatherPresets(self,weatherPreset):
         print weatherPreset
         CAVOK =         [0,0,0,3048,5486,7924,3657,6096,8534,40233,   0,   0,0,29.92,15240,15240,15240,20,20,20,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -181,7 +187,6 @@ class RootWidget(FloatLayout):
         self.ids.fail_dme_switch.active=False
         self.ids.fail_localizer_switch.active=False
         self.ids.fail_glide_slope_switch.active=False
-        self.ids.fail_vvi_switch.active=False
         self.ids.fail_g430_switch.active=False
         self.ids.fail_transponder_switch.active=False
         self.ids.fail_hung_start_switch.active=False
@@ -221,7 +226,6 @@ class RootWidget(FloatLayout):
         self.ids.fail_hung_start_spinner.text='Not Set'
         self.ids.fail_transponder_spinner.text='Not Set'
         self.ids.fail_g430_spinner.text='Not Set'
-        self.ids.fail_vvi_spinner.text='Not Set'
         self.ids.fail_glide_slope_spinner.text='Not Set'
         self.ids.fail_localizer_spinner.text='Not Set'
         self.ids.fail_dme_spinner.text='Not Set'
@@ -288,6 +292,7 @@ class RootWidget(FloatLayout):
     # Method to handle setting failures to fail at specific conditions
     def setFails(self, spinner, switch):
 
+        #popup setup code
         slider = Slider(min=0, max=400, id='slider_popup')
         label = Label(text=str(int(slider.value)),font_size=25)
         label2 = Label(text='stuff',font_size=25)
@@ -310,6 +315,8 @@ class RootWidget(FloatLayout):
             label.text = str(int(val))
 
         slider.bind(value=onSliderValChange)
+
+        #code to handle the various options (fail at speed/alt/time) and submit the failure to the thread responsible for checking them
         if spinner.text == 'Not Set':
             print 'removed set failures for : ' + switch.text
             for x in setFailures:
@@ -338,11 +345,13 @@ class RootWidget(FloatLayout):
             popup.open()
             print 'set ' + switch.text + ' to fail at Time'
 
+    #simple method to submit the failure to the threat maintaining the set failures
     def setToFail(self, val, failType, switch, spinner):
         failure = [switch.text, failType, int(val), 0, switch, spinner]
         setFailures.append(failure)
 
     # handle time slider and send it to the sim, also formats it to be human readable
+    # The formatting needs to be set up correctly based on the size of the screen
     def setTime(self, dref, val):
         time=val
         minutes=time/60 % 60
@@ -372,7 +381,7 @@ class RootWidget(FloatLayout):
             print 'fixed system: ' + switch.text
 
     # OLD - first version of above method - NEED TO DELETE LATER
-    def failSystem(self, toggleButton, dref):
+    ''' def failSystem(self, toggleButton, dref):
         tb = toggleButton
         if tb.state == 'down':
             print 'failing system:  ' + dref
@@ -380,6 +389,7 @@ class RootWidget(FloatLayout):
         elif tb.state == 'normal':
             print 'fixing system: ' + dref
             client.sendDREF(dref, 0)
+    '''
 
     # Simple Pause Command
     def pause(self):
@@ -391,7 +401,7 @@ class RootWidget(FloatLayout):
         print value
         client.sendDREF("sim/time/sim_speed", value)
 
-    # Searches csv file for airports are keys are pressed.
+    # Searches csv file for airports as keys are pressed.
     def searchAirports(self, airportsearch):
         self.ids.results_scrollview.clear_widgets()
         csvfile = csv.reader(open('Airports.csv', 'rb'), delimiter=',')
@@ -479,20 +489,20 @@ def checkFails():
     global timeRunning
     while True:
 
-        print airSpeed[0], altitude[0], timeRunning[0]
+        #print airSpeed[0], altitude[0], timeRunning[0]
         # check each system
         for system in setFailures:
             if system[1] == 'speed':
-                if airSpeed[0] == system[2] or (airSpeed[0]-system[2])>=-1 and (airSpeed[0]-system[2])<=1:
+                if airSpeed[0] == system[2] or (airSpeed[0]-system[2])>=-2 and (airSpeed[0]-system[2])<=2:
                     system[3] = 1
             elif system[1] == 'altitude':
-                if altitude[0] == system[2] or (altitude[0]-system[2])>=-1 and (altitude[0]-system[2])<=1 :
+                if altitude[0] == system[2] or (altitude[0]-system[2])>=-10 and (altitude[0]-system[2])<=10:
                     system[3] = 1
             elif system[1] == 'time':
-                if timeRunning[0] == system[2] or (timeRunning[0]-system[2]) >=-1 and  (timeRunning[0]-system[2]) <=1 :
+                if timeRunning[0] == system[2] or (timeRunning[0]-system[2]) >=-1 and  (timeRunning[0]-system[2]) <=1:
                     system[3] = 1
 
-        # wait a bit to avoid over-polling and unneeded CPU usage (~10-12% without the wait, 1-3% with a 0.1s sleep)
+        # wait a bit to avoid over-polling and unneeded CPU usage (~10-12% without the wait, 1-3% with a 0.1s sleep, Numbers from Laptop)
         sleep(0.1)
 
 
@@ -502,6 +512,7 @@ class iosApp(App):
 
 
 if __name__ == '__main__':
+    #Container for failures that are set to happen
     setFailures = []
 
     #The values need to be in an array with val in pos 0, with a blank pos 1 due to how XPlane 11 returns the values
@@ -511,6 +522,7 @@ if __name__ == '__main__':
     spinner = [0, ]
     timeRunning = [0, ]
 
+    #spawn the thread to handle the set failure checking, set it to be a daemon thread so it closes when the main thread does
     otherThread = Thread(target=checkFails)
     otherThread.daemon=True
     otherThread.start()
