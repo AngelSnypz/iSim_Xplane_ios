@@ -207,14 +207,20 @@
 									font_size:25
 								Slider:
 									id:clouds_slider_1
+									text:'cloud1bot'
+									step:1
 									min:0
 									max:clouds_slider_1_top.value-4000
+
+
 								Label:
 									text:'Top of Cloud Layer 1: ' +str(int(clouds_slider_1_top.value)) + ' feet'
 									font_size:25
 								Slider:
 									id:clouds_slider_1_top
 									min:clouds_slider_1.value+4000
+									text:'cloud1top'
+									step:1
 									max:40000
 							BoxLayout:
 								orientation:'vertical'
@@ -222,36 +228,40 @@
 									text:'Cloud Layer 1'
 								BoxLayout:
 									ToggleButton:
+									    id:cloud1_none
 										text:'None'
 										group:'1'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
 										state:'down'
 									ToggleButton:
+									    id:cloud1_cirrus
 										text:'Cirrus'
 										group:'1'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
+
 									ToggleButton:
+									    id:cloud1_scattered
 										text:'Scattered'
 										group:'1'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
+
 									ToggleButton:
+									    id:cloud1_broken
 										text:'Broken'
 										group:'1'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
+
 									ToggleButton:
+									    id:cloud1_overcast
 										text:'Overcast'
 										group:'1'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
+
 
 						BoxLayout:
 							BoxLayout:
@@ -279,35 +289,40 @@
 								BoxLayout:
 									ToggleButton:
 										text:'None'
+										id:cloud2_none
 										group:'2'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
+
 										state:'down'
 									ToggleButton:
+									    id:cloud2_cirrus
 										text:'Cirrus'
 										group:'2'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
+
 									ToggleButton:
+									    id:cloud2_scattered
 										text:'Scattered'
 										group:'2'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
+
 									ToggleButton:
+									    id:cloud2_broken
 										text:'Broken'
 										group:'2'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
+
 									ToggleButton:
+									    id:cloud2_overcast
 										text:'Overcast'
 										group:'2'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
+
 
 
 						BoxLayout:
@@ -334,37 +349,41 @@
 									text:'Cloud Layer 3'
 								BoxLayout:
 									ToggleButton:
-										id:clouds_none_3
+										id:cloud3_none
 										text:'None'
 										group:'3'
 										allow_no_selection:False
 										state:'down'
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_3.value),int(clouds_slider_3_top.value))
+
 									ToggleButton:
+									    id:cloud3_cirrus
 										text:'Cirrus'
 										group:'3'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_3.value),int(clouds_slider_3_top.value))
+
 									ToggleButton:
+									    id:cloud3_scattered
 										text:'Scattered'
 										group:'3'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_3.value),int(clouds_slider_3_top.value))
+
 									ToggleButton:
+									    id:cloud3_broken
 										text:'Broken'
 										group:'3'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_3.value),int(clouds_slider_3_top.value))
+
 									ToggleButton:
+									    id:cloud3_overcast
 										text:'Overcast'
 										group:'3'
 										allow_no_selection:False
 										font_size:25
-										on_state:root.setClouds(self,int(clouds_slider_3.value),int(clouds_slider_3_top.value))
+
 
 
 
@@ -601,6 +620,7 @@
 								id:slider_temp
 								min:-10
 								max:40
+								value:18
 								step:1
 								on_value:root.sliderSystem('sim/weather/temperature_sealevel_c',slider_temp.value)
 							Label:
