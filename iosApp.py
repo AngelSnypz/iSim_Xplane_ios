@@ -10,8 +10,8 @@ from threading import Thread
 from time import sleep
 
 from kivy.app import App
-
 from functools import partial
+
 
 import csv
 
@@ -22,6 +22,8 @@ class RootWidget(FloatLayout):
     def __init__(self):
         super(RootWidget, self).__init__()
         global client
+        global disconnectCount
+        disconnectCount=0
         success = 0
 
         # Connect the to the XPC plugin running inside xplane (localhost for same machine, other is for remote (ip will need to be changed to suit))
@@ -43,19 +45,31 @@ class RootWidget(FloatLayout):
         # and fail the set failures as needed
         # also handle the cloud layers based on the current UI state
         sleep(1)
-        Clock.schedule_interval(self.getVars, .1)
-        Clock.schedule_interval(self.autoFail, .1)
-        Clock.schedule_interval(self.cloudController,1)
+        event1= Clock.schedule_interval(self.getVars, .1)
+        event2= Clock.schedule_interval(self.autoFail, .1)
+        event3= Clock.schedule_interval(self.cloudController,1)
 
     # reads vars from Xplane for use in checking failures etc
     def getVars(self, dt):
         global airSpeed
         global altitude
         global timeRunning
+        global disconnectCount
+        disconnectThreshold=30
 
-        airSpeed = client.getDREF('sim/flightmodel/position/true_airspeed')
-        altitude = client.getDREF('sim/flightmodel/misc/h_ind')
-        timeRunning = client.getDREF('sim/time/total_running_time_sec')
+        try:
+            airSpeed = client.getDREF('sim/flightmodel/position/true_airspeed')
+            altitude = client.getDREF('sim/flightmodel/misc/h_ind')
+            timeRunning = client.getDREF('sim/time/total_running_time_sec')
+            if isinstance(App.get_running_app().root_window.children[0],Popup):
+                App.get_running_app().root_window.children[0].dismiss()
+            disconnectCount=0
+        except:
+            disconnectCount+=1
+            if disconnectCount==disconnectThreshold:
+                exit("XPlane Shutdown/In a Menu for Longer than 30s")
+            print "No Response from XPlane, Disconnecting in " + str(disconnectThreshold-disconnectCount)
+
 
     # Hardcoded weather presets (modifying these is a laborious process
     def weatherPresets(self, weatherPreset):
@@ -273,7 +287,6 @@ class RootWidget(FloatLayout):
         self.ids.winds_slider_turbulence_2.value=vals[30]
         self.ids.winds_slider_turbulence_3.value=vals[31]
 
-
     # Code that runs every second checking for systems that have failed
     def autoFail(self, dt):
         for system in setFailures:
@@ -436,7 +449,7 @@ class RootWidget(FloatLayout):
 
         del setFailures[:]
 
-    # simple method for handling slider input for weather primarily
+    # simple method for handling slider input for non-cloud weather settings primarily
     def sliderSystem(self, dref, val):
         client.sendDREF(dref, val)
         # print dref + "  " + str(val)
@@ -561,7 +574,7 @@ class RootWidget(FloatLayout):
         found = 0
         for row in csvfile:
 
-            if airportsearch.lower() in row[0].lower() or airportsearch.lower() in row[1].lower():
+            if airportsearch.lower() in row[0].lower() and airportsearch!='' or airportsearch.lower() in row[1].lower() and airportsearch!='':
                 foundairports[row[0]] = row[1]
                 found = 1
 
@@ -581,17 +594,28 @@ class RootWidget(FloatLayout):
 
     # Simply Loads the airport based on what the user clicked in the search results
     def loadAirport(self, airportCode, *args):
+
+        waitLabel=Label(text='Please Wait whilst the sim loads')
+        box = BoxLayout(orientation='vertical')
+        box.add_widget(waitLabel)
+
+        popup= Popup(title='Loading',
+                      content=box, auto_dismiss=False)
+        popup.open()
+
+
+
         client.sendPREL(11, airportCode)
         self.fixAllSystems()
+        self.ids.search_input.text=''
+        self.searchAirports('')
+
+
         print airportCode
 
     def cloudController(self,dt):
 
-        cloudstate=0
         cloudLayer=0
-        cloudLayerHeightBot=0
-        cloudLayerHeightTop=0
-
         if self.ids.cloud1_none.state=='down': cloudstate=0
         elif self.ids.cloud1_cirrus.state=='down': cloudstate=1
         elif self.ids.cloud1_scattered.state=='down':cloudstate=2
@@ -629,13 +653,14 @@ class RootWidget(FloatLayout):
 
 
 
-    # Sets cloud layers from UI, 3 layers, multiple settings per layer
+    # Depreciated -- Delete Later --
+    '''
     def setClouds(self, togglebutton, cloudLayerHeightBot, cloudLayerHeightTop):
-        '''
+        
         on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
         on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
 
-        '''
+        
         tb = togglebutton
         if (tb.state == 'down'):
             # Need to send weather data to xplane here
@@ -670,6 +695,7 @@ class RootWidget(FloatLayout):
             client.sendDREF('sim/weather/cloud_type[' + str(cloudLayer) + ']', cloudType)
             client.sendDREF('sim/weather/cloud_base_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightBot)
             client.sendDREF('sim/weather/clout_tops_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightTop)
+    '''
 
     # Custom VKeyboard handler
     def keypress(self, key):
