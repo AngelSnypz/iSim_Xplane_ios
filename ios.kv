@@ -968,21 +968,23 @@
                         BoxLayout:
                             BoxLayout:
                                 orientation:'vertical'
+
                                 BoxLayout:
                                     Label:
-                                        text:'Battery Over Temp'
 
+                                        text:'Electrical Bus Failure'
                                     Switch:
-                                        id:fail_battery_over_temp_switch
-                                        text:'debug/missing'
+
+                                        id:fail_electrical_bus_switch
+                                        text:'sim/operation/failures/rel_esys'
                                         on_active:root.failSystem2(self)
 
                                 Spinner:
-                                    id:fail_battery_over_temp_spinner
+                                    id:fail_electrical_bus_spinner
                                     values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
                                     text:'Not Set'
-                                    on_text:root.setFails(self,fail_battery_over_temp_switch)
 
+                                    on_text:root.setFails(self,fail_electrical_bus_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
 
@@ -1069,20 +1071,19 @@
 
                                 BoxLayout:
                                     Label:
+                                        text:'Battery Over Temp'
 
-                                        text:'Electrical Bus Failure'
                                     Switch:
-
-                                        id:fail_electrical_bus_switch
-                                        text:'sim/operation/failures/rel_esys'
+                                        id:fail_battery_over_temp_switch
+                                        text:'debug/missing'
                                         on_active:root.failSystem2(self)
 
                                 Spinner:
-                                    id:fail_electrical_bus_spinner
-                                    values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-                                    text:'Not Set'
+                                    id:fail_battery_over_temp_spinner
+                                    values:'-'
+                                    text:'-'
+                                    on_text:root.setFails(self,fail_battery_over_temp_switch)
 
-                                    on_text:root.setFails(self,fail_electrical_bus_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
 
@@ -1512,7 +1513,7 @@
 
 
 				TabbedPanelItem:
-					id:tab_failure_engines
+					id:tab_failure_vemd
 					text:'VEMD'
 
 					BoxLayout:
@@ -1523,33 +1524,33 @@
 
 					            BoxLayout:
 					                Label:
-					                    text:'VEMD Failure'
+					                    text:'VEMD Screen 1'
 					                Switch:
-					                    id:fail_vemd_switch
-					                    text:'Dataref Missing'
-					                    on_active:root.failSystem2(self)
+					                    id:fail_vemd_sc1_switch
+					                    text:'AS350/VEMD/Off1'
+					                    on_active:root.sendCommand(self.text)
 
 					            Spinner:
-					                id:fail_vemd_spinner
-					                values:'-'
-									text:'-'
-									on_text:root.setFails(self,fail_vemd_switch)
+					                id:fail_vemd_sc1_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_vemd_sc1_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
 
                                 BoxLayout:
 					                Label:
-					                    text:'VEH param OOR'
+					                    text:'VEMD Screen 2'
 					                Switch:
-					                    id:fail_veh_param_oor_switch
-					                    text:'Dataref Missing'
-					                    on_active:root.failSystem2(self)
+					                    id:fail_vemd_sc2_switch
+					                    text:'AS350/VEMD/Off2'
+					                    on_active:root.sendCommand(self.text)
 
 					            Spinner:
-					                id:fail_veh_param_oor_spinner
-					                values:'-'
-									text:'-'
-									on_text:root.setFails(self,fail_veh_param_oor_switch)
+					                id:fail_vemd_sc1_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_vemd_sc2_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
 
@@ -1715,17 +1716,17 @@
 
 					            BoxLayout:
 					                Label:
-					                    text:'Oil Over Temp'
+					                    text:'Engine Seize'
 					                Switch:
-					                    id:fail_oil_over_temp_switch
-					                    text:'missing_drefs'
+					                    id:fail_engine_seize_switch
+					                    text:'sim/operation/failures/rel_seize_0'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
-					                id:fail_oil_over_temp_spinner
+					                id:fail_engine_seize_spinner
 					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
 									text:'Not Set'
-									on_text:root.setFails(self,fail_oil_over_temp_switch)
+									on_text:root.setFails(self,fail_engine_seize_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
 
@@ -1821,19 +1822,20 @@
 
 					            BoxLayout:
 					                Label:
-					                    text:'TWT Grip'
+					                    text:'Compressor Stall'
 					                Switch:
-					                    id:fail_twt_grip_switch
-					                    text:'debug/missing'
+					                    id:fail_compressor_stall_switch
+					                    text:'sim/operation/failures/rel_comsta0'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
-					                id:fail_twt_grip_spinner
+					                id:fail_compressor_stall_spinner
 					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
 									text:'Not Set'
-									on_text:root.setFails(self,fail_twt_grip_switch)
+									on_text:root.setFails(self,fail_compressor_stall_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
+
 
 
 					            BoxLayout:
@@ -1855,17 +1857,17 @@
 
 					            BoxLayout:
 					                Label:
-					                    text:'Main Gearbox - Low Oil Pres'
+					                    text:'Engine Fuel Pump'
 					                Switch:
-					                    id:fail_main_gbox_low_oil_pres_switch
-					                    text:'debug/missing'
+					                    id:fail_engine_fuel_pump_switch
+					                    text:'sim/operation/failures/rel_fuepmp0'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
-					                id:fail_main_gbox_low_oil_pres_spinner
+					                id:fail_engine_fuel_pump_spinner
 					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
 									text:'Not Set'
-									on_text:root.setFails(self,fail_main_gbox_low_oil_pres_switch)
+									on_text:root.setFails(self,fail_engine_fuel_pump_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
 
@@ -1891,20 +1893,19 @@
 
 					            BoxLayout:
 					                Label:
-					                    text:'Main Gearbox - Oil Overheat'
+					                    text:'Starter'
 					                Switch:
-					                    id:fail_main_gbox_oil_overheat_switch
-					                    text:'debug/missing'
+					                    id:fail_engine_starter_switch
+					                    text:'sim/operation/failures/rel_startr0'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
-					                id:fail_main_gbox_oil_overheat_spinner
+					                id:fail_engine_starter_spinner
 					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
 									text:'Not Set'
-									on_text:root.setFails(self,fail_main_gbox_oil_overheat_switch)
+									on_text:root.setFails(self,fail_engine_starter_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
-
 
 
 
@@ -1958,74 +1959,11 @@
 
 
 
-                            BoxLayout:
-                                orientation:'vertical'
-
-					            BoxLayout:
-					                Label:
-					                    text:'Compressor Stall'
-					                Switch:
-					                    id:fail_compressor_stall_switch
-					                    text:'sim/operation/failures/rel_comsta0'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_compressor_stall_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_compressor_stall_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
 
-					            BoxLayout:
-					                Label:
-					                    text:'Engine Seize'
-					                Switch:
-					                    id:fail_engine_seize_switch
-					                    text:'sim/operation/failures/rel_seize_0'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_engine_seize_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_engine_seize_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
 
-					            BoxLayout:
-					                Label:
-					                    text:'Engine Fuel Pump'
-					                Switch:
-					                    id:fail_engine_fuel_pump_switch
-					                    text:'sim/operation/failures/rel_fuepmp0'
-					                    on_active:root.failSystem2(self)
 
-					            Spinner:
-					                id:fail_engine_fuel_pump_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_engine_fuel_pump_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                                BoxLayout:
-					                Label:
-					                    text:'Starter'
-					                Switch:
-					                    id:fail_engine_starter_switch
-					                    text:'sim/operation/failures/rel_startr0'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_engine_starter_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_engine_starter_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
 
 
@@ -2049,7 +1987,7 @@
                                         min:0
                                         max:10
                                         step:0.1
-                                        text:'sim/ﬂightmodel/failures/pitot_ice'
+                                        text:'sim/flightmodel/failures/pitot_ice'
                                         on_value:root.sliderSystem(self.text,int(self.value))
                                     Label:
                                         text:'Pitot Ice Ratio : ' + str(float(fail_pitot_ice_slider.value)) + '    NEEDS TESTING'
@@ -2065,7 +2003,7 @@
                                         min:0
                                         max:10
                                         step:0.1
-                                        text:'sim/ﬂightmodel/failures/prop_ice'
+                                        text:'sim/flightmodel/failures/prop_ice'
                                         on_value:root.sliderSystem(self.text,int(self.value))
                                     Label:
                                         text:'Prop Ice Ratio : ' + str(float(fail_prop_ice_slider.value))
@@ -2080,7 +2018,7 @@
                                         min:0
                                         max:10
                                         step:0.1
-                                        text:'sim/ﬂightmodel/failures/inlet_ice'
+                                        text:'sim/flightmodel/failures/inlet_ice'
                                         on_value:root.sliderSystem(self.text,int(self.value))
                                     Label:
                                         text:'Inlet Ice Ratio : ' + str(float(fail_inlet_ice_slider.value))

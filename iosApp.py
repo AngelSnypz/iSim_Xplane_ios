@@ -12,7 +12,6 @@ from time import sleep
 from kivy.app import App
 from functools import partial
 
-
 import csv
 
 import xpc
@@ -46,7 +45,7 @@ class RootWidget(FloatLayout):
         # also handle the cloud layers based on the current UI state
         sleep(1)
         event1= Clock.schedule_interval(self.getVars, .1)
-        event2= Clock.schedule_interval(self.autoFail, .1)
+        event2= Clock.schedule_interval(self.autoFail, 1)
         event3= Clock.schedule_interval(self.cloudController,1)
 
     # reads vars from Xplane for use in checking failures etc
@@ -56,16 +55,25 @@ class RootWidget(FloatLayout):
         global timeRunning
         global disconnectCount
         disconnectThreshold=30
+        skip=False
 
         try:
             airSpeed = client.getDREF('sim/flightmodel/position/true_airspeed')
             altitude = client.getDREF('sim/flightmodel/misc/h_ind')
             timeRunning = client.getDREF('sim/time/total_running_time_sec')
             if isinstance(App.get_running_app().root_window.children[0],Popup):
-                App.get_running_app().root_window.children[0].dismiss()
+                if App.get_running_app().root_window.children[0].id=='Fails':
+                    pass
+                else:
+                    App.get_running_app().root_window.children[0].dismiss()
             disconnectCount=0
         except:
-            disconnectCount+=1
+            if isinstance(App.get_running_app().root_window.children[0], Popup) and skip==False:
+                if App.get_running_app().root_window.children[0].id == 'Fails':
+                    if isinstance(App.get_running_app().root_window.children[1], Popup):
+                        skip=True
+            else:
+                disconnectCount+=1
             if disconnectCount==disconnectThreshold:
                 exit("XPlane Shutdown/In a Menu for Longer than 30s")
             print "No Response from XPlane, Disconnecting in " + str(disconnectThreshold-disconnectCount)
@@ -292,11 +300,15 @@ class RootWidget(FloatLayout):
         for system in setFailures:
             print system
             if system[3] == 1:
+
                 sw = system[4]
                 spinner = system[5]
                 spinner.text = 'Not Set'
                 sw.active = True
                 # actually fail the system
+                #if len(system)==7:
+                #   self.sendCommand(system[0])
+
                 client.sendDREF(system[0], 6)
                 # need to remove failed system from setFailures list
                 print system[0] + ' failed'
@@ -320,14 +332,10 @@ class RootWidget(FloatLayout):
         self.ids.fail_bird_strike_switch.active = False
         self.ids.fail_engine_flameout_switch.active = False
         self.ids.fail_engine_lost_power_switch.active = False
-        self.ids.fail_oil_over_temp_switch.active = False
         self.ids.fail_oil_low_pres_switch.active = False
         self.ids.fail_eng_fire_switch.active = False
         self.ids.fail_eng_fadec_switch.active = False
-        self.ids.fail_twt_grip_switch.active = False
         self.ids.fail_eng_chip_switch.active = False
-        self.ids.fail_main_gbox_low_oil_pres_switch.active = False
-        self.ids.fail_main_gbox_oil_overheat_switch.active = False
         self.ids.fail_bleed_valve_switch.active = False
         self.ids.fail_fuel_flow_fluctuation_switch.active = False
         self.ids.fail_compressor_stall_switch.active = False
@@ -374,7 +382,11 @@ class RootWidget(FloatLayout):
         self.ids.fail_hyd_pres_loss_switch.active = False
         self.ids.fail_yaw_damper_switch.active = False
         self.ids.fail_hyd_overpressure_switch.active = False
+        self.ids.fail_vemd_sc1_switch.active=False
+        self.ids.fail_vemd_sc2_switch.active=False
 
+        self.ids.fail_vemd_sc1_spinner.text='Not Set'
+        self.ids.fail_vemd_sc1_spinner.text='Not Set'
         self.ids.fail_hyd_overpressure_spinner.text = 'Not Set'
         self.ids.fail_yaw_damper_spinner.text = 'Not Set'
         self.ids.fail_hyd_pres_loss_spinner.text = 'Not Set'
@@ -429,14 +441,10 @@ class RootWidget(FloatLayout):
         self.ids.fail_bird_strike_spinner.text = 'Not Set'
         self.ids.fail_engine_flameout_spinner.text = 'Not Set'
         self.ids.fail_engine_lost_power_spinner.text = 'Not Set'
-        self.ids.fail_oil_over_temp_spinner.text = 'Not Set'
         self.ids.fail_oil_low_pres_spinner.text = 'Not Set'
         self.ids.fail_eng_fire_spinner.text = 'Not Set'
         self.ids.fail_eng_fadec_spinner.text = 'Not Set'
-        self.ids.fail_twt_grip_spinner.text = 'Not Set'
         self.ids.fail_eng_chip_spinner.text = 'Not Set'
-        self.ids.fail_main_gbox_low_oil_pres_spinner.text = 'Not Set'
-        self.ids.fail_main_gbox_oil_overheat_spinner.text = 'Not Set'
         self.ids.fail_bleed_valve_spinner.text = 'Not Set'
         self.ids.fail_fuel_flow_fluctuation_spinner.text = 'Not Set'
         self.ids.fail_compressor_stall_spinner.text = 'Not Set'
@@ -472,7 +480,7 @@ class RootWidget(FloatLayout):
         btn = Button(text='Confirm', size_hint=(1, 0.5), font_size=25)
         box.add_widget(btn)
         popup = Popup(title='failure set',
-                      content=box)
+                      content=box, id='Fails')
         btn.bind(on_press=popup.dismiss)
 
         # small handler method to capture slider changes
@@ -545,17 +553,6 @@ class RootWidget(FloatLayout):
             client.sendDREF(switch.text, 0)
             print 'fixed system: ' + switch.text
 
-    # OLD - first version of above method - NEED TO DELETE LATER
-    ''' def failSystem(self, toggleButton, dref):
-        tb = toggleButton
-        if tb.state == 'down':
-            print 'failing system:  ' + dref
-            client.sendDREF(dref, 3)
-        elif tb.state == 'normal':
-            print 'fixing system: ' + dref
-            client.sendDREF(dref, 0)
-    '''
-
     # Simple Pause Command
     def pause(self):
         print "Pause Toggle"
@@ -599,9 +596,9 @@ class RootWidget(FloatLayout):
         box = BoxLayout(orientation='vertical')
         box.add_widget(waitLabel)
 
-        popup= Popup(title='Loading',
+        loading= Popup(title='Loading',
                       content=box, auto_dismiss=False)
-        popup.open()
+        loading.open()
 
 
 
@@ -613,9 +610,11 @@ class RootWidget(FloatLayout):
 
         print airportCode
 
+    # method to change cloud layers, runs every 1s applying any changes necessary
     def cloudController(self,dt):
 
         cloudLayer=0
+        cloudstate=0
         if self.ids.cloud1_none.state=='down': cloudstate=0
         elif self.ids.cloud1_cirrus.state=='down': cloudstate=1
         elif self.ids.cloud1_scattered.state=='down':cloudstate=2
@@ -628,6 +627,7 @@ class RootWidget(FloatLayout):
         client.sendDREF('sim/weather/clout_tops_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightTop)
 
         cloudLayer=1
+        cloudstate=0
         if self.ids.cloud2_none.state=='down': cloudstate=0
         elif self.ids.cloud2_cirrus.state=='down': cloudstate=1
         elif self.ids.cloud2_scattered.state=='down':cloudstate=2
@@ -640,6 +640,7 @@ class RootWidget(FloatLayout):
         client.sendDREF('sim/weather/clout_tops_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightTop)
 
         cloudLayer = 2
+        cloudstate=0
         if self.ids.cloud3_none.state == 'down':cloudstate = 0
         elif self.ids.cloud3_cirrus.state == 'down': cloudstate = 1
         elif self.ids.cloud3_scattered.state == 'down': cloudstate = 2
@@ -650,52 +651,6 @@ class RootWidget(FloatLayout):
         client.sendDREF('sim/weather/cloud_type[' + str(cloudLayer) + ']', cloudstate)
         client.sendDREF('sim/weather/cloud_base_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightBot)
         client.sendDREF('sim/weather/clout_tops_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightTop)
-
-
-
-    # Depreciated -- Delete Later --
-    '''
-    def setClouds(self, togglebutton, cloudLayerHeightBot, cloudLayerHeightTop):
-        
-        on_state:root.setClouds(self,int(clouds_slider_1.value),int(clouds_slider_1_top.value))
-        on_state:root.setClouds(self,int(clouds_slider_2.value),int(clouds_slider_2_top.value))
-
-        
-        tb = togglebutton
-        if (tb.state == 'down'):
-            # Need to send weather data to xplane here
-            # Convert Group to layer
-            # Convert Text to Type
-            # Use sliderval for layer height
-            cloudLayer = -1
-            cloudType = -1
-
-            if tb.group == '1':
-                cloudLayer = 0
-            elif tb.group == '2':
-                cloudLayer = 1
-            elif tb.group == '3':
-                cloudLayer = 2
-            else:
-                print 'an error occurred'
-
-            if tb.text == 'None':
-                cloudType = 0
-            elif tb.text == 'Cirrus':
-                cloudType = 1
-            elif tb.text == 'Scattered':
-                cloudType = 2
-            elif tb.text == 'Broken':
-                cloudType = 3
-            elif tb.text == 'Overcast':
-                cloudType = 4
-            else:
-                print 'an error occurred'
-
-            client.sendDREF('sim/weather/cloud_type[' + str(cloudLayer) + ']', cloudType)
-            client.sendDREF('sim/weather/cloud_base_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightBot)
-            client.sendDREF('sim/weather/clout_tops_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightTop)
-    '''
 
     # Custom VKeyboard handler
     def keypress(self, key):
@@ -709,11 +664,14 @@ class RootWidget(FloatLayout):
         # After each keypress the CSV is searched
         self.searchAirports(self.ids.search_input.text)
 
+    def sendCommand(self,command):
+        client.sendCommand(command)
+
 
 # Thread Process for checking for Failures based on a simple list
 # Avoids locking up the UI (might not be needed but better to be safe)
 # Pythons Threading Capabilities are limited at best due to the GIL
-# However this seems to work flawlessly ¯\_(ツ)_/¯
+# However this seems to work perfectly for the purpose ¯\_(ツ)_/¯
 def checkFails():
     global setFailures
     global airSpeed
@@ -759,4 +717,6 @@ if __name__ == '__main__':
     otherThread = Thread(target=checkFails)
     otherThread.daemon = True
     otherThread.start()
+
+    # now everything is set up, launch the main thread
     iosApp().run()

@@ -60,12 +60,23 @@ class XPlaneConnect(object):
             self.socket.close()
             self.socket = None
 
+    def sendCommand(self, command):
+        global  systemIP
+        udpport=49000
+        buffer=struct.pack('<4sx',"CMND")
+        fmt = str(len(command))+'s'
+        data=command
+        buffer+=struct.pack(fmt,data)
+        while(len(buffer)<64+5):
+            buffer+=struct.pack('x')
+        self.socket.sendto(buffer,(systemIP,udpport))
+
     def pauseXplane(self):
         global systemIP
         #udpip='localhost'
         udpport=49000
         buffer=struct.pack('<4sx',"CMND")
-        fmt='26s';
+        fmt='26s'
         data="sim/operation/pause_toggle"
         buffer+=struct.pack(fmt,data)
         while(len(buffer)<64+5):
