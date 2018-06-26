@@ -1,4 +1,4 @@
-
+#:import Bar kivy.garden.bar
 <RootWidget>:
 	TabbedPanel:
 		id: tab_panel
@@ -7,9 +7,17 @@
 		tab_width: self.size[0]/len(self.tab_list)
 		tab_height:60
 
+
 		TabbedPanelItem:
 			id:tab_position
 			text:'Position'
+			canvas:
+			    Rectangle:
+			        source:'icons\Position 1.png'
+                    size: 60,60
+                    pos: self.pos[0] +0.1*self.size[0], self.pos[1]
+
+
 
 
 
@@ -181,7 +189,11 @@
 		TabbedPanelItem
 			id:tab_weather
 			text:'Weather'
-
+            canvas:
+			    Rectangle:
+			        source:'icons\Weather.png'
+                    size: 60,60
+                    pos: self.pos[0] +0.1*self.size[0], self.pos[1]
 			TabbedPanel:
 				id:tab_panel_weather
 				do_default_tab: False
@@ -194,181 +206,50 @@
 					id:tab_weather_cloud
 					text:'Cloud'
 
+
 					BoxLayout:
 						orientation:'vertical'
 
 						BoxLayout:
-
 							BoxLayout:
 								orientation:'vertical'
 								Widget:
 								Label:
-									text:'Base of Cloud Layer 1: ' +str(int(clouds_slider_1.value)) + ' feet'
-									font_size:25
-								BoxLayout:
-                                    Widget:
-                                        size_hint:(0.1,0.1)
-                                    Slider:
-                                        id:clouds_slider_1
-                                        text:'cloud1bot'
-                                        step:1
-                                        min:0
-                                        max:clouds_slider_1_top.value-4000
-
-
-								Label:
-									text:'Top of Cloud Layer 1: ' +str(int(clouds_slider_1_top.value)) + ' feet'
-									font_size:25
-								BoxLayout:
-                                    Widget:
-                                        size_hint:(0.1,0.1)
-                                    Slider:
-                                        id:clouds_slider_1_top
-                                        min:clouds_slider_1.value+4000
-                                        text:'cloud1top'
-                                        step:1
-                                        max:40000
-							BoxLayout:
-								orientation:'vertical'
-								Label:
-									text:'Cloud Layer 1'
-								BoxLayout:
-									ToggleButton:
-									    id:cloud1_none
-										text:'None'
-										group:'1'
-										allow_no_selection:False
-										font_size:25
-										state:'down'
-									ToggleButton:
-									    id:cloud1_cirrus
-										text:'Cirrus'
-										group:'1'
-										allow_no_selection:False
-										font_size:25
-
-									ToggleButton:
-									    id:cloud1_scattered
-										text:'Scattered'
-										group:'1'
-										allow_no_selection:False
-										font_size:25
-
-									ToggleButton:
-									    id:cloud1_broken
-										text:'Broken'
-										group:'1'
-										allow_no_selection:False
-										font_size:25
-
-									ToggleButton:
-									    id:cloud1_overcast
-										text:'Overcast'
-										group:'1'
-										allow_no_selection:False
-										font_size:25
-
-
-						BoxLayout:
-							BoxLayout:
-								orientation:'vertical'
-								Widget:
-
-								Label:
-									text:'Base of Cloud Layer 2: ' +str(int(clouds_slider_2.value)) + ' feet'
-									font_size:25
-							    BoxLayout:
-                                    Widget:
-                                        size_hint:(0.1,0.1)
-                                    Slider:
-                                        id:clouds_slider_2
-                                        min:0
-                                        step:1
-                                        max:clouds_slider_2_top.value-4000
-								Label:
-									text:'Top of Cloud Layer 2: ' +str(int(clouds_slider_2_top.value)) + ' feet'
-									font_size:25
-								BoxLayout:
-                                    Widget:
-                                        size_hint:(0.1,0.1)
-                                    Slider:
-                                        id:clouds_slider_2_top
-                                        min:clouds_slider_2.value+4000
-                                        max:40000
-                                        step:1
-							BoxLayout:
-								orientation:'vertical'
-								Label:
-									text:'Cloud Layer 2'
-								BoxLayout:
-									ToggleButton:
-										text:'None'
-										id:cloud2_none
-										group:'2'
-										allow_no_selection:False
-										font_size:25
-
-										state:'down'
-									ToggleButton:
-									    id:cloud2_cirrus
-										text:'Cirrus'
-										group:'2'
-										allow_no_selection:False
-										font_size:25
-
-									ToggleButton:
-									    id:cloud2_scattered
-										text:'Scattered'
-										group:'2'
-										allow_no_selection:False
-										font_size:25
-
-									ToggleButton:
-									    id:cloud2_broken
-										text:'Broken'
-										group:'2'
-										allow_no_selection:False
-										font_size:25
-
-									ToggleButton:
-									    id:cloud2_overcast
-										text:'Overcast'
-										group:'2'
-										allow_no_selection:False
-										font_size:25
-
-
-
-						BoxLayout:
-							BoxLayout:
-								orientation:'vertical'
-								Widget:
-								Label:
-									text:'Base of Cloud Layer 3: ' +str(int(clouds_slider_3.value)) + ' feet'
-									font_size:25
-								BoxLayout:
-                                    Widget:
-                                        size_hint:(0.1,0.1)
-                                    Slider:
-                                        id:clouds_slider_3
-                                        min:0
-                                        max:clouds_slider_3_top.value-4000
-                                        step:1
-								Label:
-									text:'Top of Cloud Layer 3: ' +str(int(clouds_slider_3_top.value)) + ' feet'
+									text:'Top of Cloud Layer: ' +str(int(clouds_slider_3_top.value)) + ' feet'
 									font_size:25
 								BoxLayout:
                                     Widget:
                                         size_hint:(0.1,0.1)
                                     Slider:
                                         id:clouds_slider_3_top
-                                        min:clouds_slider_3.value+4000
-                                        max:40000
+                                        min:clouds_slider_3.value
+                                        max:400000
                                         step:1
+								Label:
+									text:'Base of Cloud Layer: ' +str(int(clouds_slider_3.value)) + ' feet'
+									font_size:25
+								BoxLayout:
+                                    Widget:
+                                        size_hint:(0.1,0.1)
+                                    Slider:
+                                        id:clouds_slider_3
+                                        min:23000
+                                        max:clouds_slider_3_top.value
+                                        step:1
+
 							BoxLayout:
 								orientation:'vertical'
-								Label:
-									text:'Cloud Layer 3'
+                                BoxLayout:
+
+                                    canvas:
+                                        Rectangle:
+                                            source:'icons\cloud layer 3.png'
+                                            size: self.size[0]*0.5,self.size[1]
+                                            pos: self.pos[0],self.pos[1]
+                                    Widget:
+
+                                    Label:
+                                        text:'Cloud Layer High'
 								BoxLayout:
 									ToggleButton:
 										id:cloud3_none
@@ -380,7 +261,7 @@
 
 									ToggleButton:
 									    id:cloud3_cirrus
-										text:'Cirrus'
+										text:'Few'
 										group:'3'
 										allow_no_selection:False
 										font_size:25
@@ -410,93 +291,263 @@
 
 
 
+
+						BoxLayout:
+							BoxLayout:
+								orientation:'vertical'
+								Widget:
+                                Label:
+									text:'Top of Cloud Layer : ' +str(int(clouds_slider_2_top.value)) + ' feet'
+									font_size:25
+								BoxLayout:
+                                    Widget:
+                                        size_hint:(0.1,0.1)
+                                    Slider:
+                                        id:clouds_slider_2_top
+                                        min:clouds_slider_2.value
+                                        max:23000
+                                        step:1
+								Label:
+									text:'Base of Cloud Layer : ' +str(int(clouds_slider_2.value)) + ' feet'
+									font_size:25
+							    BoxLayout:
+                                    Widget:
+                                        size_hint:(0.1,0.1)
+                                    Slider:
+                                        id:clouds_slider_2
+                                        min:6500
+                                        step:1
+                                        max:clouds_slider_2_top.value
+
+							BoxLayout:
+								orientation:'vertical'
+								BoxLayout:
+
+                                    canvas:
+                                        Rectangle:
+                                            source:'icons\cloud layer 2.png'
+                                            size: self.size[0]*0.5,self.size[1]
+                                            pos: self.pos[0],self.pos[1]
+                                    Widget:
+
+                                    Label:
+                                        text:'Cloud Layer Middle'
+								BoxLayout:
+									ToggleButton:
+										text:'None'
+										id:cloud2_none
+										group:'2'
+										allow_no_selection:False
+										font_size:25
+
+										state:'down'
+									ToggleButton:
+									    id:cloud2_cirrus
+										text:'Few'
+										group:'2'
+										allow_no_selection:False
+										font_size:25
+
+									ToggleButton:
+									    id:cloud2_scattered
+										text:'Scattered'
+										group:'2'
+										allow_no_selection:False
+										font_size:25
+
+									ToggleButton:
+									    id:cloud2_broken
+										text:'Broken'
+										group:'2'
+										allow_no_selection:False
+										font_size:25
+
+									ToggleButton:
+									    id:cloud2_overcast
+										text:'Overcast'
+										group:'2'
+										allow_no_selection:False
+										font_size:25
+
+                        BoxLayout:
+							BoxLayout:
+								orientation:'vertical'
+								Widget:
+								Label:
+									text:'Top of Cloud Layer: ' +str(int(clouds_slider_1_top.value)) + ' feet'
+									font_size:25
+								BoxLayout:
+                                    Widget:
+                                        size_hint:(0.1,0.1)
+                                    Slider:
+                                        id:clouds_slider_1_top
+                                        min:clouds_slider_1.value
+                                        text:'cloud1top'
+                                        step:1
+                                        max:6500
+								Label:
+									text:'Base of Cloud Layer: ' +str(int(clouds_slider_1.value)) + ' feet'
+									font_size:25
+								BoxLayout:
+                                    Widget:
+                                        size_hint:(0.1,0.1)
+                                    Slider:
+                                        id:clouds_slider_1
+                                        text:'cloud1bot'
+                                        step:1
+                                        min:0
+                                        max:clouds_slider_1_top.value
+
+
+
+
+							BoxLayout:
+								orientation:'vertical'
+								BoxLayout:
+
+                                    canvas:
+                                        Rectangle:
+                                            source:'icons\cloud layer 1.png'
+                                            size: self.size[0]*0.5,self.size[1]
+                                            pos: self.pos[0],self.pos[1]
+                                    Widget:
+
+                                    Label:
+                                        text:'Cloud Layer Low'
+
+
+
+
+								BoxLayout:
+									ToggleButton:
+									    id:cloud1_none
+										text:'None'
+										group:'1'
+										allow_no_selection:False
+										font_size:25
+										state:'down'
+									ToggleButton:
+									    id:cloud1_cirrus
+										text:'Few'
+										group:'1'
+										allow_no_selection:False
+										font_size:25
+
+									ToggleButton:
+									    id:cloud1_scattered
+										text:'Scattered'
+										group:'1'
+										allow_no_selection:False
+										font_size:25
+
+									ToggleButton:
+									    id:cloud1_broken
+										text:'Broken'
+										group:'1'
+										allow_no_selection:False
+										font_size:25
+
+									ToggleButton:
+									    id:cloud1_overcast
+										text:'Overcast'
+										group:'1'
+										allow_no_selection:False
+										font_size:25
+
+
+
+
+
+
+
 				TabbedPanelItem
 					id:tab_weather_wind
 					text:'Wind'
+
 					BoxLayout:
 						orientation:'vertical'
 						Widget:
 							size_hint:(0.1,0.1)
 						BoxLayout:
 							orientation:'vertical'
-							Label:
-							    text:'Wind Layer - Low'
-							    font_size:25
-							BoxLayout:
-							    Widget:
-							        size_hint:(0.1,0.1)
 
+                            Label:
+                                text:'Wind Layer - High'
+                                font_size:25
+                            BoxLayout:
+                                Widget:
+							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_altitude_1
-									min:0
-									max:36000
+									id:winds_slider_altitude_3
+									min:winds_slider_altitude_2.value+2000
+									max:40000
 									size_hint:(2,1)
-                                    on_value:root.sliderSystem('sim/weather/wind_altitude_msl_m[0]',winds_slider_altitude_1.value)
+                                    on_value:root.sliderSystem('sim/weather/wind_altitude_msl_m[2]',winds_slider_altitude_3.value)
 								Label:
-									text: 'Wind 1 Altitude: ' + str(int(winds_slider_altitude_1.value))
+									text: 'Wind Altitude: ' + str(int(winds_slider_altitude_3.value))
 									font_size:25
 
 							BoxLayout:
 							    Widget:
 							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_direction_1
+									id:winds_slider_direction_3
 									min:0
 									max:360
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/wind_direction_degt[0]',winds_slider_direction_1.value)
+									on_value:root.sliderSystem('sim/weather/wind_direction_degt[2]',winds_slider_direction_3.value)
 								Label:
-									text: 'Wind 1 Direction from North: ' + str(int(winds_slider_direction_1.value))
+									text: 'Wind Direction from North: ' + str(int(winds_slider_direction_3.value))
 									font_size:25
 
 							BoxLayout:
 							    Widget:
 							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_speed_1
+									id:winds_slider_speed_3
 									min:0
 									max:200
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/wind_speed_kt[0]',winds_slider_speed_1.value)
+									on_value:root.sliderSystem('sim/weather/wind_speed_kt[2]',winds_slider_speed_3.value)
 								Label:
-									text: 'Wind 1 Speed: ' + str(int(winds_slider_speed_1.value))
+									text: 'Wind Speed: ' + str(int(winds_slider_speed_3.value))
 									font_size:25
 
 							BoxLayout:
 							    Widget:
 							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_sheardirection_1
+									id:winds_slider_sheardirection_3
 									min:0
 									max:359
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/shear_direction_degt[0]',winds_slider_sheardirection_1.value)
+									on_value:root.sliderSystem('sim/weather/shear_direction_degt[2]',winds_slider_sheardirection_3.value)
 								Label:
-									text: 'Wind Shear 1 Direction from North: ' + str(int(winds_slider_sheardirection_1.value))
+									text: 'Wind Gust Direction from North: ' + str(int(winds_slider_sheardirection_3.value))
 									font_size:25
 							BoxLayout:
 							    Widget:
 							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_shearspeed_1
+									id:winds_slider_shearspeed_3
 									min:0
 									max:200
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/shear_speed_kt[0]',winds_slider_shearspeed_1.value)
+									on_value:root.sliderSystem('sim/weather/shear_speed_kt[2]',winds_slider_shearspeed_3.value)
 								Label:
-									text: 'Wind 1 Shear Speed: ' + str(int(winds_slider_shearspeed_1.value))
+									text: 'Wind Gust Speed: ' + str(int(winds_slider_shearspeed_3.value))
 									font_size:25
 							BoxLayout:
 							    Widget:
 							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_turbulence_1
+									id:winds_slider_turbulence_3
 									min:0
 									max:10
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/turbulence[0]',winds_slider_turbulence_1.value)
+									on_value:root.sliderSystem('sim/weather/turbulence[2]',winds_slider_turbulence_3.value)
 								Label:
-									text: 'Wind 1 Turbulence: ' + str(int(winds_slider_turbulence_1.value))
+									text: 'Wind Turbulence: ' + str(int(winds_slider_turbulence_3.value))
 									font_size:25
                             Widget:
                                 size_hint:(1,1)
@@ -514,7 +565,7 @@
 									size_hint:(2,1)
                                     on_value:root.sliderSystem('sim/weather/wind_altitude_msl_m[1]',winds_slider_altitude_2.value)
 								Label:
-									text: 'Wind 2 Altitude: ' + str(int(winds_slider_altitude_2.value))
+									text: 'Wind Altitude: ' + str(int(winds_slider_altitude_2.value))
 									font_size:25
 
 							BoxLayout:
@@ -527,7 +578,7 @@
 									size_hint:(2,1)
 									on_value:root.sliderSystem('sim/weather/wind_direction_degt[1]',winds_slider_direction_2.value)
 								Label:
-									text: 'Wind 2 Direction from North: ' + str(int(winds_slider_direction_2.value))
+									text: 'Wind Direction from North: ' + str(int(winds_slider_direction_2.value))
 									font_size:25
 
 							BoxLayout:
@@ -540,7 +591,7 @@
 									size_hint:(2,1)
 									on_value:root.sliderSystem('sim/weather/wind_speed_kt[1]',winds_slider_speed_2.value)
 								Label:
-									text: 'Wind 2 Speed: ' + str(int(winds_slider_speed_2.value))
+									text: 'Wind Speed: ' + str(int(winds_slider_speed_2.value))
 									font_size:25
 
 							BoxLayout:
@@ -553,7 +604,7 @@
 									size_hint:(2,1)
 									on_value:root.sliderSystem('sim/weather/shear_direction_degt[1]',winds_slider_sheardirection_2.value)
 								Label:
-									text: 'Wind Shear 2 Direction from North: ' + str(int(winds_slider_sheardirection_2.value))
+									text: 'Wind Gust Direction from North: ' + str(int(winds_slider_sheardirection_2.value))
 									font_size:25
 							BoxLayout:
 							    Widget:
@@ -565,7 +616,7 @@
 									size_hint:(2,1)
 									on_value:root.sliderSystem('sim/weather/shear_speed_kt[1]',winds_slider_shearspeed_2.value)
 								Label:
-									text: 'Wind 2 Shear Speed: ' + str(int(winds_slider_shearspeed_2.value))
+									text: 'Wind Gust Speed: ' + str(int(winds_slider_shearspeed_2.value))
 									font_size:25
 							BoxLayout:
 							    Widget:
@@ -577,89 +628,95 @@
 									size_hint:(2,1)
 									on_value:root.sliderSystem('sim/weather/turbulence[1]',winds_slider_turbulence_2.value)
 								Label:
-									text: 'Wind 2 Turbulence: ' + str(int(winds_slider_turbulence_2.value))
+									text: 'Wind Turbulence: ' + str(int(winds_slider_turbulence_2.value))
 									font_size:25
 
-							Widget:
+
+                            Widget:
                                 size_hint:(1,1)
-                            Label:
-                                text:'Wind Layer - High'
-                                font_size:25
-                            BoxLayout:
-                                Widget:
+							Label:
+							    text:'Wind Layer - Low'
+							    font_size:25
+							BoxLayout:
+							    Widget:
 							        size_hint:(0.1,0.1)
+
 								Slider:
-									id:winds_slider_altitude_3
-									min:winds_slider_altitude_2.value+2000
-									max:40000
+									id:winds_slider_altitude_1
+									min:0
+									max:36000
 									size_hint:(2,1)
-                                    on_value:root.sliderSystem('sim/weather/wind_altitude_msl_m[2]',winds_slider_altitude_3.value)
+                                    on_value:root.sliderSystem('sim/weather/wind_altitude_msl_m[0]',winds_slider_altitude_1.value)
 								Label:
-									text: 'Wind 3 Altitude: ' + str(int(winds_slider_altitude_3.value))
+									text: 'Wind Altitude: ' + str(int(winds_slider_altitude_1.value))
 									font_size:25
 
 							BoxLayout:
 							    Widget:
 							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_direction_3
+									id:winds_slider_direction_1
 									min:0
 									max:360
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/wind_direction_degt[2]',winds_slider_direction_3.value)
+									on_value:root.sliderSystem('sim/weather/wind_direction_degt[0]',winds_slider_direction_1.value)
 								Label:
-									text: 'Wind 3 Direction from North: ' + str(int(winds_slider_direction_3.value))
+									text: 'Wind Direction from North: ' + str(int(winds_slider_direction_1.value))
 									font_size:25
 
 							BoxLayout:
 							    Widget:
 							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_speed_3
+									id:winds_slider_speed_1
 									min:0
 									max:200
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/wind_speed_kt[2]',winds_slider_speed_3.value)
+									on_value:root.sliderSystem('sim/weather/wind_speed_kt[0]',winds_slider_speed_1.value)
 								Label:
-									text: 'Wind 3 Speed: ' + str(int(winds_slider_speed_3.value))
+									text: 'Wind Speed: ' + str(int(winds_slider_speed_1.value))
 									font_size:25
 
 							BoxLayout:
 							    Widget:
 							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_sheardirection_3
+									id:winds_slider_sheardirection_1
 									min:0
 									max:359
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/shear_direction_degt[2]',winds_slider_sheardirection_3.value)
+									on_value:root.sliderSystem('sim/weather/shear_direction_degt[0]',winds_slider_sheardirection_1.value)
 								Label:
-									text: 'Wind Shear 3 Direction from North: ' + str(int(winds_slider_sheardirection_3.value))
+									text: 'Wind Gust Direction from North: ' + str(int(winds_slider_sheardirection_1.value))
 									font_size:25
+
 							BoxLayout:
 							    Widget:
 							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_shearspeed_3
+									id:winds_slider_shearspeed_1
 									min:0
 									max:200
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/shear_speed_kt[2]',winds_slider_shearspeed_3.value)
+									on_value:root.sliderSystem('sim/weather/shear_speed_kt[0]',winds_slider_shearspeed_1.value)
 								Label:
-									text: 'Wind 3 Shear Speed: ' + str(int(winds_slider_shearspeed_3.value))
+									text: 'Wind Gust Speed: ' + str(int(winds_slider_shearspeed_1.value))
 									font_size:25
 							BoxLayout:
 							    Widget:
 							        size_hint:(0.1,0.1)
 								Slider:
-									id:winds_slider_turbulence_3
+									id:winds_slider_turbulence_1
 									min:0
 									max:10
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/turbulence[2]',winds_slider_turbulence_3.value)
+									on_value:root.sliderSystem('sim/weather/turbulence[0]',winds_slider_turbulence_1.value)
 								Label:
-									text: 'Wind 3 Turbulence: ' + str(int(winds_slider_turbulence_3.value))
+									text: 'Wind Turbulence: ' + str(int(winds_slider_turbulence_1.value))
 									font_size:25
+
+
+
 					    Widget:
 					        size_hint:(0.1,0.1)
 
@@ -679,7 +736,7 @@
 								id:slider_temp
 								min:-10
 								max:40
-								value:18
+								value:15
 								step:1
 								on_value:root.sliderSystem('sim/weather/temperature_sealevel_c',slider_temp.value)
 							Label:
@@ -693,12 +750,14 @@
 							Slider:
 								id:slider_baro
 								min:27
+								value:29.92
 								max:34
-								step:0.1
+								step:0.01
 								on_value:root.sliderSystem('sim/weather/barometer_sealevel_inhg',slider_baro.value)
-							Label:
-								text: 'Barometer at sea level :' + str(float(slider_baro.value)) + ' hg'
-								font_size:25
+							BoxLayout:
+                                Label:
+                                    text: 'Barometer at sea level :' + str(int(slider_baro.value*33.8639)) + ' hPa'
+                                    font_size:25
 
 						BoxLayout:
 						    Widget:
@@ -757,48 +816,76 @@
 				TabbedPanelItem:
 					id:tab_weather_time
 					text:'Time'
-					BoxLayout:
-						orientation:'vertical'
-
+                    BoxLayout:
+                        orientation:'vertical'
                         BoxLayout:
+                            orientation:'vertical'
 
-					        Widget:
-					        Label:
-						        id:time_hours
-						        text:'Zulu Time: 0:'
-						        font_size:25
-						        size_hint:(0.4,1)
+                            BoxLayout:
 
-						    Label:
-						        id:time_minutes
-						        text:'00'
-						        font_size:25
-						        size_hint:(0.1,1)
-						    Widget:
-						    Label:
-						        id:local_time_hours
-						        text:'Local Time: 0:'
-						        font_size:25
-						        size_hint:(0.4,1)
-						    Label:
-						        id:local_time_minutes
-						        text:'00'
-						        font_size:25
-						        size_hint:(0.1,1)
-						    Widget:
+                                Widget:
+                                Label:
+                                    id:time_hours
+                                    text:'Zulu Time: 0000'
+                                    font_size:25
+                                    size_hint:(0.4,1)
 
+                                Widget:
+                                Label:
+                                    id:local_time_hours
+                                    text:'Local Time: 0000'
+                                    font_size:25
+                                    size_hint:(0.4,1)
+
+                                Widget:
+
+                            BoxLayout:
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                                Slider:
+                                    id:time_hours_slider
+                                    min:0000
+                                    max:86400
+                                    step:60
+                                    on_value:root.setTime('sim/time/zulu_time_sec',(int(time_hours_slider.value)),'slider')
+                                Widget:
+                                    size_hint:(0.1,0.1)
                         BoxLayout:
                             Widget:
                                 size_hint:(0.1,0.1)
-
-                            Slider:
-                                id:time_hours_slider
-                                min:0000
-                                max:86400
-                                step:1
-                                on_value:root.setTime('sim/time/zulu_time_sec',(int(time_hours_slider.value)))
+                            Button:
+                                id:time_preset_dawn
+                                text:'Dawn'
+                                size_hint:(0.8,0.8)
+                                on_press:root.setTime('sim/time/zulu_time_sec',66666,'button')
                             Widget:
                                 size_hint:(0.1,0.1)
+
+                            Button:
+                                id:time_preset_day
+                                text:'Day'
+                                size_hint:(0.8,0.8)
+                                on_press:root.setTime('sim/time/zulu_time_sec',83953,'button')
+                            Widget:
+                                size_hint:(0.1,0.1)
+                            Button:
+                                id:time_preset_dusk
+                                text:'Dusk'
+                                size_hint:(0.8,0.8)
+                                on_press:root.setTime('sim/time/zulu_time_sec',21391,'button')
+                            Widget:
+                                size_hint:(0.1,0.1)
+                            Button:
+                                id:time_preset_night
+                                text:'Night'
+                                size_hint:(0.8,0.8)
+                                on_press:root.setTime('sim/time/zulu_time_sec',28900,'button')
+                            Widget:
+                                size_hint:(0.1,0.1)
+                        Widget:
+                            size_hint:(0.1,0.1)
+
 
 
 
@@ -814,13 +901,18 @@
 					                size_hint:(0.1,0.1)
 
 					            Button:
-					                text:'CAVOK'
+					                text:'CAVOK\n\n\nVisibility: ' + '40km' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + 'No Clouds'
+					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('CAVOK')
+					                background_normal:'icons\cavok.png'
+
+
 					            Widget:
 					                size_hint:(0.1,0.1)
 					            Button:
-					                text:'VFR'
+					                text:'VFR\n\n\nVisibility: ' + '11km' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + 'No Clouds'
+					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('VFR')
 					            Widget:
@@ -834,13 +926,15 @@
 					                size_hint:(0.1,0.1)
 
 					            Button:
-					                text:'Marginal VFR'
+					                text:'Marginal VFR\n\n\nVisibility: ' + '8km' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '311m'
+					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('MarginalVFR')
 					            Widget:
 					                size_hint:(0.1,0.1)
 					            Button:
-					                text:'IFR Cat 1'
+					                text:'IFR Cat 1\n\n\nVisibility: ' + '804m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '67m'
+					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('IFRCat1')
 
@@ -857,13 +951,15 @@
 					            Widget:
 					                size_hint:(0.1,0.1)
                                 Button:
-					                text:'Non Precision'
+					                text:'Non Precision\n\n\nVisibility: ' + '5km' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '128m'
+					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('NonPrecision')
                                 Widget:
 					                size_hint:(0.1,0.1)
 					            Button:
-					                text:'IFR Cat 2'
+					                text:'IFR Cat 2\n\n\nVisibility: ' + '321m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '36m'
+					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('IFRCat2')
 
@@ -876,14 +972,16 @@
 					            Widget:
 					                size_hint:(0.1,0.1)
 					            Button:
-					                text:'Stormy'
+					                text:'Stormy\n\n\nVisibility: ' + '804m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '67m'
+					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('Stormy')
 
 					            Widget:
 					                size_hint:(0.1,0.1)
 					            Button:
-					                text:'IFR Cat 3'
+					                text:'IFR Cat 3\n\n\nVisibility: ' + '160m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '21m'
+					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('IFRCat3')
 					            Widget:
@@ -895,63 +993,123 @@
 
 
 		TabbedPanelItem:
-			id:tab_weight
-			text:'Weight'
-			BoxLayout:
-				orientation:'vertical'
-				BoxLayout:
-				    Widget:
-				        size_hint:(0.1,0.1)
-					Slider:
-						id:slider_fuel
-						min:0
-						max:420
-						value:200
-						on_value:root.sliderSystem('sim/flightmodel/weight/m_fuel1',slider_fuel.value)
-					Label:
-						font_size:25
-						text:'Fuel Weight: ' + str(int(slider_fuel.value))
-				BoxLayout:
-				    Widget:
-				        size_hint:(0.1,0.1)
-					Slider:
-						id:slider_cg
-						min:-0.9
-						max:0.18
-						step:0.01
-						on_value:root.sliderSystem('sim/flightmodel/misc/cgz_ref_to_default',slider_cg.value)
+            id:tab_weight
+            text:'Weight'
 
-					Label:
-						font_size:25
-						text:'Center of Gravity: ' + str(float(slider_cg.value))
-				BoxLayout:
-				    Widget:
-				        size_hint:(0.1,0.1)
-					Slider:
-						id:slider_payload_weight
-						min:0
-						max:5400
-						on_value:root.sliderSystem('sim/flightmodel/weight/m_fixed',slider_payload_weight.value)
-					Label:
-						font_size:25
-						text:'Payload Weight:' + str(int(slider_payload_weight.value))
-				BoxLayout:
-				    Widget:
-				        size_hint:(0.1,0.1)
-					Slider:
-						id:slider_zfw
-						min:0
-						max:2500
-						value:1334
-						on_value:root.sliderSystem('sim/aircraft/weight/acf_m_empty',slider_zfw.value)
-					Label:
-						font_size:25
-						text:'ZFW: '+ str(int(slider_zfw.value))
+            BoxLayout:
+                BoxLayout:
+                    text:'control side'
+                    orientation:'vertical'
+                    size_hint:(2,1)
+                    BoxLayout:
+
+                        Widget:
+                            size_hint:(0.1,0.1)
+                        Slider:
+                            id:slider_fuel
+                            min:0
+                            max:420
+                            value:200
+                            on_value:root.sliderSystem('sim/flightmodel/weight/m_fuel1',slider_fuel.value)
+                        Label:
+                            canvas:
+                                Rectangle:
+                                    source:'icons\fuel.png'
+                                    size: self.size[0],self.size[1]*0.5
+                                    pos: self.pos[0],self.pos[1]+(self.size[1]/2)
+                            font_size:25
+                            text:'Fuel Weight: ' + str(int(slider_fuel.value)) + ' Kg'
+                    BoxLayout:
+                        Widget:
+                            size_hint:(0.1,0.1)
+                        Slider:
+                            id:slider_cg
+                            min:-0.9
+                            max:0.18
+                            step:0.01
+                            on_value:root.sliderSystem('sim/flightmodel/misc/cgz_ref_to_default',slider_cg.value)
+
+                        Label:
+                            canvas:
+                                Rectangle:
+                                    source:'icons\Gravity.png'
+                                    size: self.size[0]*0.5,self.size[1]*0.5
+                                    pos: self.pos[0],self.pos[1]+(self.size[1]/3)
+                            font_size:25
+                            text:'Center of Gravity: ' + str(float(slider_cg.value)) + ' cm'
+                    BoxLayout:
+                        Widget:
+                            size_hint:(0.1,0.1)
+                        Slider:
+                            id:slider_payload_weight
+                            min:0
+                            max:2500
+                            on_value:root.sliderSystem('sim/flightmodel/weight/m_fixed',slider_payload_weight.value)
+                        Label:
+                            canvas:
+                                Rectangle:
+                                    source:'icons\Payload.png'
+                                    size: self.size[0]*0.5,self.size[1]*0.5
+                                    pos: self.pos[0],self.pos[1]+(self.size[1]/2)
+                            font_size:25
+                            text:'Payload Weight: ' + str(int(slider_payload_weight.value)) + ' Kg'
+                    BoxLayout:
+                        Widget:
+                            size_hint:(0.1,0.1)
+                        Slider:
+                            id:slider_zfw
+                            min:1300
+                            max:2500
+                            value:1334
+                            on_value:root.sliderSystem('sim/aircraft/weight/acf_m_empty',slider_zfw.value)
+                        Label:
+                            canvas:
+                                Rectangle:
+                                    source:'icons\ZFW1.png'
+                                    size: self.size[0]*0.5,self.size[1]*0.5
+                                    pos: self.pos[0],self.pos[1]+(self.size[1]/2)
+                            font_size:25
+                            text:'ZFW: '+ str(int(slider_zfw.value)) + ' Kg'
+
+
+
+
+                BoxLayout:
+                    id:display_boxlayout
+                    text:'total and graph side'
+                    orientation:'vertical'
+                    canvas:
+                        Rectangle:
+                            source:'icons\Weight_Balance.png'
+                            pos: self.pos[0], self.pos[1]+self.size[1]*0.5
+                            size:self.size[0],self.size[1]*0.5
+                    Widget:
+                    BoxLayout:
+                        orientation:'vertical'
+                        BoxLayout:
+                            Label:
+                                id:weight_percent_label
+                                text:str(int(((slider_zfw.value+slider_payload_weight.value+slider_fuel.value)/2250)*100)) + '% Weight Capacity'
+                                font_size:50
+
+
+
+                        Label:
+                            id:weight_total_label
+                            text:'Total Weight (Kg): ' +str(int(slider_zfw.value+slider_payload_weight.value+slider_fuel.value))
+                            font_size:50
+
+
 
 
 		TabbedPanelItem:
 			id:tab_failure
 			text:'Failures'
+			canvas:
+			    Rectangle:
+			        source:'icons\failures 2.png'
+                    size: 60,60
+                    pos: self.pos[0] +0.1*self.size[0], self.pos[1]
 			TabbedPanel:
 				id:tab_panel_failure
 				do_default_tab: False
@@ -1468,6 +1626,8 @@
                                 Widget:
                                     size_hint:(0.1,0.1)
 
+
+
                             BoxLayout:
                                 orientation:'vertical'
 
@@ -1501,8 +1661,19 @@
 									on_text:root.setFails(self,fail_g430_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
+
+                                BoxLayout:
+                                    Label:
+                                        text:'Auckland Navaid'
+                                    Switch:
+                                        id:fail_auckland_switch
+                                        text:'AA'
+                                        on_active:root.failNavaid(self)
+
                                 Widget:
-                                    size_hint:(2.1,2.1)
+                                    size_hint:(0.1,0.1)
+                                Widget:
+                                    size_hint:(1.1,1.1)
 
 
 
@@ -1894,6 +2065,7 @@
 					            BoxLayout:
 					                Label:
 					                    text:'Starter'
+
 					                Switch:
 					                    id:fail_engine_starter_switch
 					                    text:'sim/operation/failures/rel_startr0'
@@ -2368,34 +2540,54 @@
 			id:tab_sim_rate
 			text:'Sim Rate'
 			BoxLayout:
-				orientation:'vertical'
-				Widget:
+			    orientation:'vertical'
+                BoxLayout:
+                    Widget:
+                        size_hint:(0.1,0.1)
+                    Slider:
+                        id:sim_rate_slider
+                        min:1
+                        max:4
+                        step:1
+                        text:'sim/time/sim_speed'
+                        on_value:root.sliderSystem(self.text,int(self.value))
 
-				Label:
-					text:'Sim Rate'
-					font_size:25
-					size:(50,50)
-				Label:
-					id:slider_val_label
-					text:str(sim_rate_slider.value)+'x'
-					size:(50,50)
-					font_size:25
+                    Label:
+                        text:'Sim Rate'
+                        font_size:25
+                        size_hint:(0.5,1)
+                    Label:
+                        id:sim_rate_val_label
+                        text:str(int(sim_rate_slider.value))+'x'
+                        size_hint:(0.5,1)
+                        font_size:25
 
-				Slider:
-					id:sim_rate_slider
-					text:'Sim Rate'
-					min:1
-					max:4
-					step:1
-				Button:
-					id:sim_rate_update
-					text:'Apply Speed Change'
-					font_size:25
-					on_press:root.applySpeed(sim_rate_slider.value)
+                    Widget:
+                        size_hint:(0.1,0.1)
 
+                BoxLayout:
+                    Widget:
+                        size_hint:(0.1,0.1)
+                    Slider:
+                        id:ground_speed_slider
+                        min:1
+                        max:4
+                        step:1
+                        text:'sim/time/ground_speed'
+                        on_value:root.sliderSystem(self.text,int(self.value))
 
+                    Label:
+                        text:'Ground Speed Multiplier'
+                        font_size:25
+                        size_hint:(0.5,1)
+                    Label:
+                        id:ground_speed_val_label
+                        text:str(int(ground_speed_slider.value))+'x'
+                        size_hint:(0.5,1)
+                        font_size:25
 
-				Widget:
+                    Widget:
+                        size_hint:(0.1,0.1)
 
 
 
@@ -2407,4 +2599,23 @@
 					text:'Pause'
 					size_hint: (.5,.5)
 					on_press:root.pause()
+
+
+		TabbedPanelItem
+		    id:tab_quit
+		    text:'Exit'
+		    BoxLayout:
+		        orientation:'vertical'
+		        Label:
+		            text:'Press Button below to Shut down the Simulator'
+		            font_size:72
+		        BoxLayout:
+
+                    Button:
+                        id:quit_button
+                        text:'Quit'
+                        on_press:root.quit()
+                        font_size:72
+
+
 

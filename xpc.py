@@ -7,7 +7,7 @@ class XPlaneConnect(object):
     systemIP = '0'
 
     # Basic Functions
-    def __init__(self, xpHost, xpPort = 49009, port = 49010, timeout = 1000):
+    def __init__(self, xpHost, xpPort = 49009, port = 49010, timeout = 20000):
         global systemIP
         #def __init__(self, xpHost='localhost', xpPort=49009, port=49010, timeout=30000):
         '''Sets up a new connection to an X-Plane Connect plugin running in X-Plane.
@@ -94,6 +94,17 @@ class XPlaneConnect(object):
         sock.sendto(buffer,(systemIP,udp_port))
 
 
+    def sendNfal(self,navaid):
+        global systemIP
+        udpport = 49000
+        buffer = struct.pack('<4sx', "NFAL")
+        fmt="2c"
+        buffer+=struct.pack(fmt,'A','A')
+        #while (len(buffer) < 64 + 5):
+        #   buffer += struct.pack('x')
+        self.socket.sendto(buffer, (systemIP, udpport))
+        print 'failed stuff'
+
     def sendPREL(self,startpos,airportcode):
         #udpip='localhost'
         global systemIP
@@ -106,16 +117,63 @@ class XPlaneConnect(object):
         code2=airportcodesplit[1]
         code3=airportcodesplit[2]
         code4=airportcodesplit[3]
+        #Add in Runway number Selection: xint apt_rwy_idx;	// runway index
+        #Add in Runway Direction:        xint apt_rwy_dir;  // runway dir
+
         '''print code1
         print code2
         print code3
         print code4'''
-     
+
         fmt="2i4c"
         buffer+=struct.pack(fmt,start,index,code1,code2,code3,code4)
         while(len(buffer)<64+5):
             buffer+=struct.pack('x')
         self.socket.sendto(buffer,(systemIP,udpport))
+
+    def sendACPR(self, startpos, airportcode):
+        # udpip='localhost'
+        global systemIP
+        udpport = 49000
+        #buffer = struct.pack('<4sx', "ACPR")
+        aircraft=0
+        pathtoaircraft="Aircraft/AS350B3 Plus/AS350B3.acf"
+        sLen=len(pathtoaircraft)
+        liveryindex=0
+        fmt="<4sxi"+str(sLen)+"sxix"
+        acfnbuffer=struct.pack(fmt,"ACFN",aircraft,pathtoaircraft,liveryindex)
+
+
+        start = startpos  # different starts as per the rtf files
+        index = 0  # index of aircraft. stays at 0
+        airportcodesplit = list(airportcode)
+        code1 = airportcodesplit[0]
+        code2 = airportcodesplit[1]
+        code3 = airportcodesplit[2]
+        code4 = airportcodesplit[3]
+        # Add in Runway number Selection: xint apt_rwy_idx;	// runway index
+        # Add in Runway Direction:        xint apt_rwy_dir;  // runway dir
+
+        '''print code1
+        print code2
+        print code3
+        print code4'''
+
+        fmt = "<4sx2i4c"
+        prelbuf=struct.pack(fmt,"PREL", start, index, code1, code2, code3, code4)
+
+        #buffer+=acfnbuffer
+        #buffer+=prelbuf
+
+        #buffer += struct.pack(fmt, start, index, code1, code2, code3, code4)
+        while (len(acfnbuffer) < 160 +5) :
+            acfnbuffer += struct.pack('x')
+        while (len(prelbuf)<64+5):
+            prelbuf+=struct.pack('x')
+
+
+        self.socket.sendto(prelbuf,(systemIP,udpport))
+        self.socket.sendto(acfnbuffer, (systemIP, udpport))
        
     def sendUDP(self, buffer):
         '''Sends a message over the underlying UDP socket.'''

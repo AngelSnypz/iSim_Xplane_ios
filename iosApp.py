@@ -1,18 +1,24 @@
 # coding=utf-8
+from kivy.config import Config
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.button import Button
 from kivy.uix.slider import Slider
+from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.clock import Clock
 from threading import Thread
-from time import sleep
+from time import sleep, time
+
 
 from kivy.app import App
 from functools import partial
 
 import csv
+import sys
+import logging
 
 import xpc
 
@@ -22,6 +28,14 @@ class RootWidget(FloatLayout):
         super(RootWidget, self).__init__()
         global client
         global disconnectCount
+        global event1
+        global start_time
+        global current_time
+        global elapsed_time
+        elapsed_time=0
+        current_time=0
+        start_time=0
+
         disconnectCount=0
         success = 0
 
@@ -47,6 +61,23 @@ class RootWidget(FloatLayout):
         event1= Clock.schedule_interval(self.getVars, .1)
         event2= Clock.schedule_interval(self.autoFail, 1)
         event3= Clock.schedule_interval(self.cloudController,1)
+        event4= Clock.schedule_interval(self.adaptiveUI,1)
+
+
+    def adaptiveUI(self,dt):
+        weightpercent = self.ids.weight_percent_label.text
+        weightpercent2=weightpercent.split('%')
+
+
+
+        if(int(weightpercent2[0])>=100):
+            self.ids.weight_percent_label.color=[1,0,0,1]
+            self.ids.weight_total_label.color=[1,0,0,1]
+        else:
+            self.ids.weight_percent_label.color = [1, 1, 1, 1]
+            self.ids.weight_total_label.color = [1, 1, 1, 1]
+
+
 
     # reads vars from Xplane for use in checking failures etc
     def getVars(self, dt):
@@ -54,6 +85,12 @@ class RootWidget(FloatLayout):
         global altitude
         global timeRunning
         global disconnectCount
+        global start_time
+        global current_time
+        global elapsed_time
+
+
+        current_time=time()
         disconnectThreshold=30
         skip=False
 
@@ -62,42 +99,40 @@ class RootWidget(FloatLayout):
             altitude = client.getDREF('sim/flightmodel/misc/h_ind')
             timeRunning = client.getDREF('sim/time/total_running_time_sec')
             if isinstance(App.get_running_app().root_window.children[0],Popup):
-                if App.get_running_app().root_window.children[0].id=='Fails':
+                if App.get_running_app().root_window.children[0].id=='Fails' or App.get_running_app().root_window.children[0].id=='QuitPopup' or App.get_running_app().root_window.children[0].id=='posPopup' :
                     pass
                 else:
+                    client.getDREF("sim/test/test_float")
                     App.get_running_app().root_window.children[0].dismiss()
             disconnectCount=0
+            start_time=time()
+
         except:
             if isinstance(App.get_running_app().root_window.children[0], Popup) and skip==False:
-                if App.get_running_app().root_window.children[0].id == 'Fails':
+                if App.get_running_app().root_window.children[0].id == 'Fails' or App.get_running_app().root_window.children[0].id == 'QuitPopup' or  App.get_running_app().root_window.children[0].id == 'posPopup':
                     if isinstance(App.get_running_app().root_window.children[1], Popup):
                         skip=True
-            else:
-                disconnectCount+=1
-            if disconnectCount==disconnectThreshold:
-                exit("XPlane Shutdown/In a Menu for Longer than 30s")
-            print "No Response from XPlane, Disconnecting in " + str(disconnectThreshold-disconnectCount)
+            #else:
+
+                #disconnectCount+=1
+            if current_time-start_time>disconnectThreshold:
+                exit("XPlane Shutdown/Not Responding")
+            #if disconnectCount==disconnectThreshold:
+             #   exit("XPlane Shutdown/In a Menu for Longer than 30s")
+            print "No Response from XPlane, Disconnecting in " + str(disconnectThreshold-(current_time-start_time))
 
 
     # Hardcoded weather presets (modifying these is a laborious process
     def weatherPresets(self, weatherPreset):
         print weatherPreset
-        CAVOK = [0, 0, 0, 3048, 5486, 7924, 3657, 6096, 8534, 40233, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0,
-                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        VFR = [0, 0, 0, 3048, 5486, 7924, 3657, 6096, 8534, 11265, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0,
-               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        MarginalVFR = [4, 0, 0, 311, 5486, 7924, 920, 6096, 8534, 8046, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20,
-                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        NonPrecision = [4, 0, 0, 128, 5486, 7924, 737, 6096, 8534, 4828, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20,
-                        20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        IFRCat1 = [4, 0, 0, 67, 5486, 7924, 676, 6096, 8534, 804, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0,
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        IFRCat2 = [4, 0, 0, 36, 5486, 7924, 646, 6096, 8534, 321, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0,
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        IFRCat3 = [4, 0, 0, 21, 5486, 7924, 631, 6096, 8534, 160, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0,
-                   0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        Stormy = [4, 0, 0, 67, 5486, 7924, 5248, 6096, 8534, 804, 0.75, 0.75, 0, 29.92, 15240, 15240, 15240, 20, 20, 20,
-                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        CAVOK =         [0, 0, 0, 3048, 5486, 7924, 3657, 6096, 8534, 40233, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        VFR =           [0, 0, 0, 3048, 5486, 7924, 3657, 6096, 8534, 11265, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        MarginalVFR =   [4, 0, 0, 311, 5486, 7924, 920, 6096, 8534, 8046, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        NonPrecision =  [4, 0, 0, 128, 5486, 7924, 737, 6096, 8534, 4828, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        IFRCat1 =       [4, 0, 0, 67, 5486, 7924, 676, 6096, 8534, 804, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        IFRCat2 =       [4, 0, 0, 36, 5486, 7924, 646, 6096, 8534, 321, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        IFRCat3 =       [4, 0, 0, 21, 5486, 7924, 631, 6096, 8534, 160, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        Stormy =        [4, 0, 0, 67, 5486, 7924, 5248, 6096, 8534, 804, 0.75, 0.75, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         drefs = ['sim/weather/cloud_type[0]',
                  'sim/weather/cloud_type[1]',
                  'sim/weather/cloud_type[2]',
@@ -160,6 +195,7 @@ class RootWidget(FloatLayout):
 
 
             # update all of teh weather sliders to the new values
+
     # This Method is ridiculously Large, Only way to go about it afaik however
     def weatherPresetUI(self,vals):
         if vals[0]==0:
@@ -461,7 +497,9 @@ class RootWidget(FloatLayout):
     def sliderSystem(self, dref, val):
         client.sendDREF(dref, val)
         # print dref + "  " + str(val)
-
+    def failNavaid(self,switch):
+        print switch.text
+        client.sendNfal(switch.text)
     # Method to handle setting failures to fail at specific conditions
     def setFails(self, spinner, switch):
 
@@ -470,6 +508,8 @@ class RootWidget(FloatLayout):
         label = Label(text=str(int(slider.value)), font_size=25)
         label2 = Label(text='stuff', font_size=25)
         box = BoxLayout(orientation='vertical')
+        box3=BoxLayout()
+
         box2 = BoxLayout()
 
         box.add_widget(slider)
@@ -478,10 +518,15 @@ class RootWidget(FloatLayout):
         box2.add_widget(label)
 
         btn = Button(text='Confirm', size_hint=(1, 0.5), font_size=25)
-        box.add_widget(btn)
+        btn2 = Button(text='Cancel', size_hint=(1,0.5), font_size=25)
+
+        box3.add_widget(btn)
+        box3.add_widget(btn2)
+        box.add_widget(box3)
         popup = Popup(title='failure set',
                       content=box, id='Fails')
         btn.bind(on_press=popup.dismiss)
+        btn2.bind(on_press=popup.dismiss)
 
         # small handler method to capture slider changes
         def onSliderValChange(self, val):
@@ -525,22 +570,42 @@ class RootWidget(FloatLayout):
 
     # handle time slider and send it to the sim, also formats it to be human readable
     # The formatting needs to be set up correctly based on the size of the screen
-    def setTime(self, dref, val):
-        time = val
-        minutes = time / 60 % 60
-        hours = time / 3600
-        self.ids.time_minutes.text = str(minutes)
-        self.ids.time_hours.text = 'Zulu Time:   ' + str(hours) + ' : '
+    def setTime(self, dref, val,type):
 
-        client.sendDREF(dref, time)
-        localtimetuple = client.getDREF('sim/time/local_time_sec')
 
-        localtime = int(localtimetuple[0])
-        print localtime, time
-        localMinutes = localtime / 60 % 60
-        localHours = localtime / 3600
-        self.ids.local_time_minutes.text = str(localMinutes)
-        self.ids.local_time_hours.text = 'Local Time:   ' + str(localHours) + ' : '
+
+        if (type == 'button'):
+            self.ids.time_hours_slider.value = val
+        elif (type=='slider'):
+            time = val
+            minutes = time / 60 % 60
+            hours = time / 3600
+            client.sendDREF(dref, time)
+            if(hours<10 and minutes<10):
+                self.ids.time_hours.text = 'Zulu Time:   0' + str(hours) + '0'+str(minutes)
+            elif(minutes<10):
+                self.ids.time_hours.text = 'Zulu Time:    ' + str(hours) +'0'+ str(minutes)
+            elif(hours<10):
+                self.ids.time_hours.text = 'Zulu Time:   0' + str(hours) + str(minutes)
+            else:
+                self.ids.time_hours.text = 'Zulu Time:    ' + str(hours) +str(minutes)
+
+            localtimetuple = client.getDREF('sim/time/local_time_sec')
+
+            localtime = int(localtimetuple[0])
+
+            localMinutes = localtime / 60 % 60
+            localHours = localtime / 3600
+            if(localHours<10 and localMinutes<10):
+                self.ids.local_time_hours.text = 'Local Time:   0' + str(localHours) +'0'+ str(localMinutes)
+            elif(localHours<10):
+                self.ids.local_time_hours.text = 'Local Time:   0' + str(localHours) + str(localMinutes)
+            elif(localMinutes<10):
+                self.ids.local_time_hours.text = 'Local Time:    ' + str(localHours) +'0'+ str(localMinutes)
+            else:
+                self.ids.local_time_hours.text = 'Local Time:    ' + str(localHours) + str(localMinutes)
+
+
         # print hours,minutes
 
     # Simple failure triggers for the on/off switches
@@ -558,6 +623,31 @@ class RootWidget(FloatLayout):
         print "Pause Toggle"
         client.pauseXplane()
 
+    def quit(self):
+        box = BoxLayout()
+        box2=BoxLayout(orientation='vertical')
+        txt = Label(text='Are you Sure you wish to Quit?', font_size=75)
+        btn = Button(text='Confirm', size_hint=(1, 0.5), font_size=75)
+        btn2 = Button(text='Cancel', size_hint=(1, 0.5), font_size=75)
+        box.add_widget(btn)
+        box.add_widget(btn2)
+        box2.add_widget(txt)
+        box2.add_widget(box)
+
+
+
+        popup2 = Popup(title='Confirm Quit',
+                      content=box2, id='QuitPopup', auto_dismiss=False)
+        btn.bind(on_press=popup2.dismiss)
+        btn2.bind(on_press=popup2.dismiss)
+        btn.bind(on_press=self.quitConfirm)
+        popup2.open()
+
+
+    def quitConfirm(self,button):
+        client.sendCommand("sim/operation/quit")
+        sys.exit("Shutting Down")
+
     # Simple Speed Increase/Decrease based on slider value
     def applySpeed(self, value):
         print value
@@ -565,33 +655,90 @@ class RootWidget(FloatLayout):
 
     # Searches csv file for airports as keys are pressed.
     def searchAirports(self, airportsearch):
-        self.ids.results_scrollview.clear_widgets()
-        csvfile = csv.reader(open('Airports.csv', 'rb'), delimiter=',')
-        foundairports = {}
-        found = 0
-        for row in csvfile:
+        try:
+            self.ids.results_scrollview.clear_widgets()
+            csvfile = csv.reader(open('Airports.csv', 'rb'), delimiter=',')
+            foundairports = {}
+            found = 0
+            for row in csvfile:
 
-            if airportsearch.lower() in row[0].lower() and airportsearch!='' or airportsearch.lower() in row[1].lower() and airportsearch!='':
-                foundairports[row[0]] = row[1]
-                found = 1
+                if airportsearch.lower() in row[0].lower() and airportsearch!='' or airportsearch.lower() in row[1].lower() and airportsearch!='':
+                    foundairports[row[0]] = row[1]
+                    found = 1
 
-        if found == 1:
-            for x in foundairports:
-                # x is the ICAO code
-                # foundairports[x] is the Airport Name
-                btn = Button(text=foundairports[x] + ' - ' + x, size_hint=(1, None),
-                             size=(100, 75), font_size=20)
-                btn.bind(on_press=partial(self.loadAirport, x))
-                self.ids.results_scrollview.add_widget(btn)
+            if found == 1:
+                for x in foundairports:
+                    # x is the ICAO code
+                    # foundairports[x] is the Airport Name
+                    btn = Button(text=foundairports[x] + ' - ' + x, size_hint=(1, None),
+                                 size=(100, 75), font_size=20)
+                    btn.bind(on_press=partial(self.positionPopup, x))
+                    self.ids.results_scrollview.add_widget(btn)
+        except Exception:
+            logging.exception("An Error Occurred")
             ''' else:
             popup=Popup(title='Airport Not Found',
                         content=Label(text='That airport was not found\n Touch anywhere outside of this popup to close it'),
                         size_hint=(0.5,0.5))
             popup.open()'''
 
-    # Simply Loads the airport based on what the user clicked in the search results
-    def loadAirport(self, airportCode, *args):
+    def engState(self,state,*args):
+        if (state == 'on'):
+            client.sendDREF('sim/operation/prefs/startup_running', 1)
+        else:
+            client.sendDREF('sim/operation/prefs/startup_running', 0)
 
+    def positionPopup(self,airportCode, *args):
+
+        box = BoxLayout(orientation='vertical')
+        widget7 = Widget(size_hint=(0.2, 0.3))
+        box.add_widget(widget7)
+
+        box2 = BoxLayout()
+        box3=BoxLayout()
+
+
+        engoff=ToggleButton(text='Engine Not Running', group=10)
+        engon=ToggleButton(text='Engine Running', group=10, state='down')
+        engoff.bind(on_press=partial(self.engState,'off'))
+        engon.bind(on_press=partial(self.engState,'on'))
+
+
+        widget4 = Widget(size_hint=(0.2, 0.3))
+        widget5 = Widget(size_hint=(0.2, 0.3))
+        widget6 = Widget(size_hint=(0.2, 0.3))
+        box3.add_widget(widget4)
+        box3.add_widget(engoff)
+        box3.add_widget(widget5)
+        box3.add_widget(engon)
+        box3.add_widget(widget6)
+        box.add_widget(box3)
+        widget8 =Widget(size_hint=(0.2, 0.3))
+        box.add_widget(widget8)
+        box.add_widget(box2)
+        widget3 = Widget(size_hint=(0.2, 0.3))
+        box.add_widget(widget3)
+        popup=Popup(id='posPopup',title='Select Start', content=box,auto_dismiss=False)
+        buttonAccept=Button(text='Confirm')
+        buttonCancel=Button(text='Cancel')
+        buttonCancel.bind(on_press=popup.dismiss)
+        buttonAccept.bind(on_press=partial(self.loadAirport,airportCode,*args))
+        buttonAccept.bind(on_press=popup.dismiss)
+        widget=Widget(size_hint=(0.2, 0.3))
+        widget1 = Widget(size_hint=(0.2, 0.3))
+        widget2 = Widget(size_hint=(0.2, 0.3))
+        box2.add_widget(widget)
+        box2.add_widget(buttonAccept)
+        box2.add_widget(widget1)
+        box2.add_widget(buttonCancel)
+        box2.add_widget(widget2)
+        popup.open()
+
+
+
+    # Simply Loads the airport based on what the user clicked in the search results
+    def loadAirport(self, airportCode,*args):
+        global event1
         waitLabel=Label(text='Please Wait whilst the sim loads')
         box = BoxLayout(orientation='vertical')
         box.add_widget(waitLabel)
@@ -600,13 +747,23 @@ class RootWidget(FloatLayout):
                       content=box, auto_dismiss=False)
         loading.open()
 
+        event1.cancel()
+        if(airportCode=='Carrier'):
+            client.sendPREL(27, airportCode)
+        elif(airportCode=='Frigate'):
+            client.sendPREL(28, airportCode)
+        elif (airportCode == 'Oil Rig Small'):
+            client.sendPREL(29, airportCode)
+        elif (airportCode == 'Oil Rig Large'):
+            client.sendPREL(30, airportCode)
+        else:
+            client.sendACPR(11,airportCode)
 
 
-        client.sendPREL(11, airportCode)
         self.fixAllSystems()
         self.ids.search_input.text=''
         self.searchAirports('')
-
+        event1 = Clock.schedule_interval(self.getVars, .1)
 
         print airportCode
 
@@ -693,7 +850,7 @@ def checkFails():
                     timeRunning[0] - system[2]) <= 1:
                     system[3] = 1
 
-        # wait a bit to avoid over-polling and unneeded CPU usage (~10-12% without the wait, 1-3% with a 0.1s sleep, Numbers from Laptop)
+        # wait a bit to avoid over-polling and unneeded CPU usage (~10-12% without the wait, 1-3% with a 0.1s sleep, Numbers from Laptop with i7-7700HQ)
         sleep(0.1)
 
 
@@ -703,6 +860,12 @@ class iosApp(App):
 
 
 if __name__ == '__main__':
+    Config.set('graphics','borderless','0')
+    Config.set('graphics','position','custom')
+    Config.set('graphics','height','768')
+    Config.set('graphics','width','1366')
+    Config.set('graphics','left','0')
+
     # Container for failures that are set to happen
     setFailures = []
 
@@ -719,4 +882,7 @@ if __name__ == '__main__':
     otherThread.start()
 
     # now everything is set up, launch the main thread
-    iosApp().run()
+    try:
+        iosApp().run()
+    except Exception:
+        logging.exception("Application Crash")
