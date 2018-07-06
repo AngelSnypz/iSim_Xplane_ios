@@ -11,7 +11,7 @@ from kivy.uix.label import Label
 from kivy.clock import Clock
 from threading import Thread
 from time import sleep, time
-
+import DebriefCap
 
 from kivy.app import App
 from functools import partial
@@ -27,7 +27,6 @@ class RootWidget(FloatLayout):
     def __init__(self):
         super(RootWidget, self).__init__()
         global client
-        global disconnectCount
         global event1
         global start_time
         global current_time
@@ -36,12 +35,11 @@ class RootWidget(FloatLayout):
         current_time=0
         start_time=0
 
-        disconnectCount=0
         success = 0
 
         # Connect the to the XPC plugin running inside xplane (localhost for same machine, other is for remote (ip will need to be changed to suit))
         client=xpc.XPlaneConnect("localhost", 49009,49010)
-        #client = xpc.XPlaneConnect("192.168.137.79", 49009, 49010)
+        #client = xpc.XPlaneConnect("192.168.1.7", 49009, 49010)
 
         # Looping to wait for the connection
         while success == 0:
@@ -62,7 +60,16 @@ class RootWidget(FloatLayout):
         event2= Clock.schedule_interval(self.autoFail, 1)
         event3= Clock.schedule_interval(self.cloudController,1)
         event4= Clock.schedule_interval(self.adaptiveUI,1)
+        event5=Clock.schedule_interval(self.fuelLeak,1)
 
+    def fuelLeak(self,dt):
+        if(self.ids.fuel_leak_switch.active==True):
+            currFuel=client.getDREF('sim/flightmodel/weight/m_fuel1')
+            print str(currFuel) + " is current fuel"
+            newFuel=currFuel[0]-5
+            if(newFuel<=0): newFuel=0
+            client.sendDREF('sim/flightmodel/weight/m_fuel1',newFuel)
+            print str(newFuel) + " is new fuel"
 
     def adaptiveUI(self,dt):
         weightpercent = self.ids.weight_percent_label.text
@@ -84,7 +91,8 @@ class RootWidget(FloatLayout):
         global airSpeed
         global altitude
         global timeRunning
-        global disconnectCount
+        global currentNG
+
         global start_time
         global current_time
         global elapsed_time
@@ -98,13 +106,14 @@ class RootWidget(FloatLayout):
             airSpeed = client.getDREF('sim/flightmodel/position/true_airspeed')
             altitude = client.getDREF('sim/flightmodel/misc/h_ind')
             timeRunning = client.getDREF('sim/time/total_running_time_sec')
+            currentNG=client.getDREF('AS350/VEMD/NG')
             if isinstance(App.get_running_app().root_window.children[0],Popup):
                 if App.get_running_app().root_window.children[0].id=='Fails' or App.get_running_app().root_window.children[0].id=='QuitPopup' or App.get_running_app().root_window.children[0].id=='posPopup' :
                     pass
                 else:
                     client.getDREF("sim/test/test_float")
                     App.get_running_app().root_window.children[0].dismiss()
-            disconnectCount=0
+
             start_time=time()
 
         except:
@@ -114,12 +123,11 @@ class RootWidget(FloatLayout):
                         skip=True
             #else:
 
-                #disconnectCount+=1
+
             if current_time-start_time>disconnectThreshold:
                 exit("XPlane Shutdown/Not Responding")
-            #if disconnectCount==disconnectThreshold:
-             #   exit("XPlane Shutdown/In a Menu for Longer than 30s")
-            print "No Response from XPlane, Disconnecting in " + str(disconnectThreshold-(current_time-start_time))
+
+            print "No Response from XPlane, Disconnecting in " + str(int(disconnectThreshold-(current_time-start_time)))
 
 
     # Hardcoded weather presets (modifying these is a laborious process
@@ -132,7 +140,7 @@ class RootWidget(FloatLayout):
         IFRCat1 =       [4, 0, 0, 67, 5486, 7924, 676, 6096, 8534, 804, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         IFRCat2 =       [4, 0, 0, 36, 5486, 7924, 646, 6096, 8534, 321, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         IFRCat3 =       [4, 0, 0, 21, 5486, 7924, 631, 6096, 8534, 160, 0, 0, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        Stormy =        [4, 0, 0, 67, 5486, 7924, 5248, 6096, 8534, 804, 0.75, 0.75, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        Stormy =        [3, 0, 0, 240, 5486, 7924, 23000, 6096, 8534, 5000, 0.75, 0.75, 0, 29.92, 15240, 15240, 15240, 20, 20, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         drefs = ['sim/weather/cloud_type[0]',
                  'sim/weather/cloud_type[1]',
                  'sim/weather/cloud_type[2]',
@@ -356,13 +364,6 @@ class RootWidget(FloatLayout):
         client.repairAll()
         print 'all systems repaired'
         self.ids.fail_smoke_cockpit_switch.active = False
-        self.ids.fail_door_open_switch.active = False
-        self.ids.fail_external_power_switch.active = False
-        self.ids.fail_passenger02_switch.active = False
-        self.ids.fail_microburst_switch.active = False
-        self.ids.fail_vertigo_switch.active = False
-        self.ids.fail_water_fuel_switch.active = False
-        self.ids.fail_wrong_fuel_switch.active = False
         self.ids.fail_vasi_switch.active = False
         self.ids.fail_runway_lights_switch.active = False
         self.ids.fail_bird_strike_switch.active = False
@@ -370,18 +371,11 @@ class RootWidget(FloatLayout):
         self.ids.fail_engine_lost_power_switch.active = False
         self.ids.fail_oil_low_pres_switch.active = False
         self.ids.fail_eng_fire_switch.active = False
-        self.ids.fail_eng_fadec_switch.active = False
         self.ids.fail_eng_chip_switch.active = False
-        self.ids.fail_bleed_valve_switch.active = False
-        self.ids.fail_fuel_flow_fluctuation_switch.active = False
-        self.ids.fail_compressor_stall_switch.active = False
         self.ids.fail_engine_seize_switch.active = False
-        self.ids.fail_engine_fuel_pump_switch.active = False
-        self.ids.fail_fuel_filter_switch.active = False
         self.ids.fail_battery_over_temp_switch.active = False
         self.ids.fail_battery_offline_switch.active = False
         self.ids.fail_gen_offline_switch.active = False
-        self.ids.fail_instrument_light_switch.active = False
         self.ids.fail_electrical_bus_switch.active = False
         self.ids.fail_landing_light_switch.active = False
         self.ids.fail_pitot_blockage_switch.active = False
@@ -400,14 +394,10 @@ class RootWidget(FloatLayout):
         self.ids.fail_localizer_switch.active = False
         self.ids.fail_glide_slope_switch.active = False
         self.ids.fail_g430_switch.active = False
-        self.ids.fail_transponder_switch.active = False
         self.ids.fail_hung_start_switch.active = False
         self.ids.fail_ignitor_switch.active = False
         self.ids.fail_engine_starter_switch.active = False
-        self.ids.fail_hot_start_switch.active = False
         self.ids.fail_runway_itt_switch.active = False
-        self.ids.fail_rudder_trim_runaway_switch.active = False
-        self.ids.fail_rudder_trim_switch.active = False
         self.ids.fail_tail_rotor_effect_loss_switch.active = False
         self.ids.fail_major_gov_switch.active = False
         self.ids.fail_gov_fine_switch.active = False
@@ -416,15 +406,25 @@ class RootWidget(FloatLayout):
         self.ids.fail_fuel_lo_pres_switch.active = False
         self.ids.fail_fuel_filter_clog_switch.active = False
         self.ids.fail_hyd_pres_loss_switch.active = False
-        self.ids.fail_yaw_damper_switch.active = False
         self.ids.fail_hyd_overpressure_switch.active = False
         self.ids.fail_vemd_sc1_switch.active=False
         self.ids.fail_vemd_sc2_switch.active=False
+        self.ids.fuel_leak_switch.active=False
+        self.ids.fail_trq_indication_switch.active=False
+        self.ids.fail_microburst_switch.active=False
+        self.ids.fail_engine_fire_startup_switch.active=False
+        self.ids.fail_mgb_hi_oil_temp_switch.active=False
+        self.ids.fail_mgb_low_pres_switch.active=False
 
+        self.ids.fail_mgb_low_pres_spinner.text='Not Set'
+        self.ids.fail_mgb_hi_oil_temp_spinner.text='Not Set'
+        self.ids.fail_engine_fire_startup_spinner.text='Not Set'
+        self.ids.fail_microburst_spinner.text='Not Set'
+        self.ids.fail_trq_indication_spinner.text='Not Set'
+        self.ids.fuel_leak_spinner.text='Not Set'
         self.ids.fail_vemd_sc1_spinner.text='Not Set'
         self.ids.fail_vemd_sc1_spinner.text='Not Set'
         self.ids.fail_hyd_overpressure_spinner.text = 'Not Set'
-        self.ids.fail_yaw_damper_spinner.text = 'Not Set'
         self.ids.fail_hyd_pres_loss_spinner.text = 'Not Set'
         self.ids.fail_fuel_filter_clog_spinner.text = 'Not Set'
         self.ids.fail_fuel_lo_pres_spinner.text = 'Not Set'
@@ -433,14 +433,10 @@ class RootWidget(FloatLayout):
         self.ids.fail_gov_fine_spinner.text = 'Not Set'
         self.ids.fail_major_gov_spinner.text = 'Not Set'
         self.ids.fail_tail_rotor_effect_loss_spinner.text = 'Not Set'
-        self.ids.fail_rudder_trim_spinner.text = 'Not Set'
-        self.ids.fail_rudder_trim_runaway_spinner.text = 'Not Set'
         self.ids.fail_runway_itt_spinner.text = 'Not Set'
-        self.ids.fail_hot_start_spinner.text = 'Not Set'
         self.ids.fail_engine_starter_spinner.text = 'Not Set'
         self.ids.fail_ignitor_spinner.text = 'Not Set'
         self.ids.fail_hung_start_spinner.text = 'Not Set'
-        self.ids.fail_transponder_spinner.text = 'Not Set'
         self.ids.fail_g430_spinner.text = 'Not Set'
         self.ids.fail_glide_slope_spinner.text = 'Not Set'
         self.ids.fail_localizer_spinner.text = 'Not Set'
@@ -459,19 +455,13 @@ class RootWidget(FloatLayout):
         self.ids.fail_pitot_blockage_spinner.text = 'Not Set'
         self.ids.fail_landing_light_spinner.text = 'Not Set'
         self.ids.fail_electrical_bus_spinner.text = 'Not Set'
-        self.ids.fail_instrument_light_spinner.text = 'Not Set'
         self.ids.fail_gen_offline_spinner.text = 'Not Set'
         self.ids.fail_battery_offline_spinner.text = 'Not Set'
         self.ids.fail_battery_over_temp_spinner.text = 'Not Set'
-        self.ids.fail_fuel_filter_spinner.text = 'Not Set'
         self.ids.fail_smoke_cockpit_spinner.text = 'Not Set'
-        self.ids.fail_door_open_spinner.text = 'Not Set'
-        self.ids.fail_external_power_spinner.text = 'Not Set'
-        self.ids.fail_passenger02_spinner.text = 'Not Set'
+
         self.ids.fail_microburst_spinner.text = 'Not Set'
-        self.ids.fail_vertigo_spinner.text = 'Not Set'
-        self.ids.fail_water_fuel_spinner.text = 'Not Set'
-        self.ids.fail_wrong_fuel_spinner.text = 'Not Set'
+
         self.ids.fail_vasi_spinner.text = 'Not Set'
         self.ids.fail_runway_lights_spinner.text = 'Not Set'
         self.ids.fail_bird_strike_spinner.text = 'Not Set'
@@ -479,13 +469,9 @@ class RootWidget(FloatLayout):
         self.ids.fail_engine_lost_power_spinner.text = 'Not Set'
         self.ids.fail_oil_low_pres_spinner.text = 'Not Set'
         self.ids.fail_eng_fire_spinner.text = 'Not Set'
-        self.ids.fail_eng_fadec_spinner.text = 'Not Set'
         self.ids.fail_eng_chip_spinner.text = 'Not Set'
-        self.ids.fail_bleed_valve_spinner.text = 'Not Set'
-        self.ids.fail_fuel_flow_fluctuation_spinner.text = 'Not Set'
-        self.ids.fail_compressor_stall_spinner.text = 'Not Set'
         self.ids.fail_engine_seize_spinner.text = 'Not Set'
-        self.ids.fail_engine_fuel_pump_spinner.text = 'Not Set'
+
 
         self.ids.fail_pitot_ice_slider.value = 0
         self.ids.fail_prop_ice_slider.value = 0
@@ -493,75 +479,96 @@ class RootWidget(FloatLayout):
 
         del setFailures[:]
 
+
+    def sliderSystem(self,dref,val):
+        client.sendDREF(dref,val)
     # simple method for handling slider input for non-cloud weather settings primarily
-    def sliderSystem(self, dref, val):
-        client.sendDREF(dref, val)
+    def sliderSystem2(self, slider,label):
+        val=slider.value
+        if(val<1):
+            label.text='Wind Turbulence: None'
+        elif(val>1 and val<=3):
+            label.text='Wind Turbulence: Mild'
+        elif(val>3 and val <=7):
+            label.text='Wind Turbulence: Moderate'
+        elif(val>7):
+            label.text='Wind Turbulence: Severe'
+        client.sendDREF(slider.text, val)
         # print dref + "  " + str(val)
-    def failNavaid(self,switch):
-        print switch.text
-        client.sendNfal(switch.text)
+
+    def failNavaid(self,navaidID):
+        client.sendNfal(navaidID)
+
+
     # Method to handle setting failures to fail at specific conditions
     def setFails(self, spinner, switch):
-
+        if('%' in spinner.text):
+            if(spinner.text=='30% NG'):
+                self.setToFail(30, 'NG', switch, spinner)
+            elif (spinner.text == '40% NG'):
+                self.setToFail(40, 'NG', switch, spinner)
+            if (spinner.text == '50% NG'):
+                self.setToFail(50, 'NG', switch, spinner)
+        else:
         # popup setup code
-        slider = Slider(min=0, max=400, id='slider_popup')
-        label = Label(text=str(int(slider.value)), font_size=25)
-        label2 = Label(text='stuff', font_size=25)
-        box = BoxLayout(orientation='vertical')
-        box3=BoxLayout()
+            slider = Slider(min=0, max=400, id='slider_popup')
+            label = Label(text=str(int(slider.value)), font_size=25)
+            label2 = Label(text='stuff', font_size=25)
+            box = BoxLayout(orientation='vertical')
+            box3=BoxLayout()
 
-        box2 = BoxLayout()
+            box2 = BoxLayout()
 
-        box.add_widget(slider)
-        box.add_widget(box2)
-        box2.add_widget(label2)
-        box2.add_widget(label)
+            box.add_widget(slider)
+            box.add_widget(box2)
+            box2.add_widget(label2)
+            box2.add_widget(label)
 
-        btn = Button(text='Confirm', size_hint=(1, 0.5), font_size=25)
-        btn2 = Button(text='Cancel', size_hint=(1,0.5), font_size=25)
+            btn = Button(text='Confirm', size_hint=(1, 0.5), font_size=25)
+            btn2 = Button(text='Cancel', size_hint=(1,0.5), font_size=25)
 
-        box3.add_widget(btn)
-        box3.add_widget(btn2)
-        box.add_widget(box3)
-        popup = Popup(title='failure set',
-                      content=box, id='Fails')
-        btn.bind(on_press=popup.dismiss)
-        btn2.bind(on_press=popup.dismiss)
+            box3.add_widget(btn)
+            box3.add_widget(btn2)
+            box.add_widget(box3)
+            popup = Popup(title='failure set',
+                          content=box, id='Fails')
+            btn.bind(on_press=popup.dismiss)
+            btn2.bind(on_press=popup.dismiss)
 
-        # small handler method to capture slider changes
-        def onSliderValChange(self, val):
-            label.text = str(int(val))
+            # small handler method to capture slider changes
+            def onSliderValChange(self, val):
+                label.text = str(int(val))
 
-        slider.bind(value=onSliderValChange)
+            slider.bind(value=onSliderValChange)
 
-        # code to handle the various options (fail at speed/alt/time) and display correctly
-        if spinner.text == 'Not Set':
-            print 'removed set failures for : ' + switch.text
-            for x in setFailures:
-                if x[0] == switch.text:
-                    x[3] = 2
+            # code to handle the various options (fail at speed/alt/time) and display correctly
+            if spinner.text == 'Not Set':
+                print 'removed set failures for : ' + switch.text
+                for x in setFailures:
+                    if x[0] == switch.text:
+                        x[3] = 2
 
-        elif spinner.text == 'Fail at Speed':
-            slider.max = 150
-            label2.text = 'Speed (kts) To Fail System At: '
-            btn.bind(on_press=lambda x: self.setToFail(slider.value, 'speed', switch, spinner))
-            popup.open()
-            print 'set ' + switch.text + ' to fail at speed'
+            elif spinner.text == 'Fail at Speed':
+                slider.max = 150
+                label2.text = 'Speed (kts) To Fail System At: '
+                btn.bind(on_press=lambda x: self.setToFail(slider.value, 'speed', switch, spinner))
+                popup.open()
+                print 'set ' + switch.text + ' to fail at speed'
 
 
-        elif spinner.text == 'Fail at Altitude':
-            slider.max = 40000
-            label2.text = 'Altitude (m) To Fail System At: '
-            btn.bind(on_press=lambda x: self.setToFail(slider.value, 'altitude', switch, spinner))
-            popup.open()
-            print 'set ' + switch.text + ' to fail at altitude'
+            elif spinner.text == 'Fail at Altitude':
+                slider.max = 40000
+                label2.text = 'Altitude (m) To Fail System At: '
+                btn.bind(on_press=lambda x: self.setToFail(slider.value, 'altitude', switch, spinner))
+                popup.open()
+                print 'set ' + switch.text + ' to fail at altitude'
 
-        elif spinner.text == 'Fail at Time':
-            slider.max = 600
-            label2.text = 'Seconds To Fail System In: '
-            btn.bind(on_press=lambda x: self.setToFail(slider.value + timeRunning[0], 'time', switch, spinner))
-            popup.open()
-            print 'set ' + switch.text + ' to fail at Time'
+            elif spinner.text == 'Fail at Time':
+                slider.max = 600
+                label2.text = 'Seconds To Fail System In: '
+                btn.bind(on_press=lambda x: self.setToFail(slider.value + timeRunning[0], 'time', switch, spinner))
+                popup.open()
+                print 'set ' + switch.text + ' to fail at Time'
 
     # simple method to submit the failure to the threat maintaining the set failures
     def setToFail(self, val, failType, switch, spinner):
@@ -605,6 +612,7 @@ class RootWidget(FloatLayout):
             else:
                 self.ids.local_time_hours.text = 'Local Time:    ' + str(localHours) + str(localMinutes)
 
+            print(client.getDREF('AS350/VEMD/MODE'))
 
         # print hours,minutes
 
@@ -612,10 +620,35 @@ class RootWidget(FloatLayout):
     def failSystem2(self, switch):
         sw = switch
         if sw.active == True:
-            client.sendDREF(switch.text, 6)
+            if(sw.text=="AS350/Hydraulic/Isolation"):
+                client.sendDREF(switch.text,0)
+            elif(sw.text=="enginepower"):
+                origff=client.getDREF("sim/flightmodel/engine/ENGN_FF_")
+
+                newff=origff[0]*0.8
+
+                print(str(origff[0]) + " orig ff")
+                print(str(newff) + " new ff")
+                if(newff>0.05): newff=newff/3600
+                client.sendDREF("sim/operation/override/override_fuel_flow",1)
+                client.sendDREF("sim/operation/override/override_prop_pitch",1)
+
+
+                client.sendDREF("sim/flightmodel/engine/ENGN_FF_",newff)
+
+            else:
+                client.sendDREF(switch.text, 6)
             print 'failed system: ' + switch.text
+
         elif sw.active == False:
-            client.sendDREF(switch.text, 0)
+            if(sw.text=="AS350/Hydraulic/Isolation"):
+                client.sendDREF(switch.text,1)
+            elif(sw.text=="enginepower"):
+                client.sendDREF("sim/operation/override/override_fuel_flow",0)
+                client.sendDREF("sim/operation/override/override_prop_pitch",0)
+
+            else:
+                client.sendDREF(switch.text, 0)
             print 'fixed system: ' + switch.text
 
     # Simple Pause Command
@@ -698,8 +731,8 @@ class RootWidget(FloatLayout):
         box3=BoxLayout()
 
 
-        engoff=ToggleButton(text='Engine Not Running', group=10)
-        engon=ToggleButton(text='Engine Running', group=10, state='down')
+        engoff=ToggleButton(text='Engine Not Running', group=10, allow_no_selection=False)
+        engon=ToggleButton(text='Engine Running', group=10, state='down', allow_no_selection=False)
         engoff.bind(on_press=partial(self.engState,'off'))
         engon.bind(on_press=partial(self.engState,'on'))
 
@@ -767,47 +800,86 @@ class RootWidget(FloatLayout):
 
         print airportCode
 
+    # takes a screencap of the map and prints it
+    def printMap(self):
+        DebriefCap.takeScreenshot()
+
+
     # method to change cloud layers, runs every 1s applying any changes necessary
     def cloudController(self,dt):
 
-        cloudLayer=0
         cloudstate=0
         if self.ids.cloud1_none.state=='down': cloudstate=0
         elif self.ids.cloud1_cirrus.state=='down': cloudstate=1
         elif self.ids.cloud1_scattered.state=='down':cloudstate=2
         elif self.ids.cloud1_broken.state=='down':cloudstate=3
         elif self.ids.cloud1_overcast.state=='down':cloudstate=4
-        cloudLayerHeightBot=self.ids.clouds_slider_1.value
-        cloudLayerHeightTop=self.ids.clouds_slider_1_top.value
-        client.sendDREF('sim/weather/cloud_type[' + str(cloudLayer) + ']', cloudstate)
-        client.sendDREF('sim/weather/cloud_base_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightBot)
-        client.sendDREF('sim/weather/clout_tops_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightTop)
+        cloudLayerHeightBot=self.ids.clouds_slider_1.value*0.3048
+        cloudLayerHeightTop=self.ids.clouds_slider_1_top.value*0.3048
+        client.sendDREF('sim/weather/cloud_type[0]', cloudstate)
+        client.sendDREF('sim/weather/cloud_base_msl_m[0]', cloudLayerHeightBot)
+        client.sendDREF('sim/weather/cloud_tops_msl_m[0]', cloudLayerHeightTop)
 
-        cloudLayer=1
+
         cloudstate=0
         if self.ids.cloud2_none.state=='down': cloudstate=0
         elif self.ids.cloud2_cirrus.state=='down': cloudstate=1
         elif self.ids.cloud2_scattered.state=='down':cloudstate=2
         elif self.ids.cloud2_broken.state=='down':cloudstate=3
         elif self.ids.cloud2_overcast.state=='down':cloudstate=4
-        cloudLayerHeightBot=self.ids.clouds_slider_2.value
-        cloudLayerHeightTop=self.ids.clouds_slider_2_top.value
-        client.sendDREF('sim/weather/cloud_type[' + str(cloudLayer) + ']', cloudstate)
-        client.sendDREF('sim/weather/cloud_base_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightBot)
-        client.sendDREF('sim/weather/clout_tops_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightTop)
+        cloudLayerHeightBot=self.ids.clouds_slider_2.value*0.3048
+        cloudLayerHeightTop=self.ids.clouds_slider_2_top.value*0.3048
+        client.sendDREF('sim/weather/cloud_type[1]', cloudstate)
+        client.sendDREF('sim/weather/cloud_base_msl_m[1]', cloudLayerHeightBot)
+        client.sendDREF('sim/weather/cloud_tops_msl_m[1]', cloudLayerHeightTop)
 
-        cloudLayer = 2
+
         cloudstate=0
         if self.ids.cloud3_none.state == 'down':cloudstate = 0
         elif self.ids.cloud3_cirrus.state == 'down': cloudstate = 1
         elif self.ids.cloud3_scattered.state == 'down': cloudstate = 2
         elif self.ids.cloud3_broken.state == 'down': cloudstate = 3
         elif self.ids.cloud3_overcast.state == 'down': cloudstate = 4
-        cloudLayerHeightBot = self.ids.clouds_slider_3.value
-        cloudLayerHeightTop = self.ids.clouds_slider_3_top.value
-        client.sendDREF('sim/weather/cloud_type[' + str(cloudLayer) + ']', cloudstate)
-        client.sendDREF('sim/weather/cloud_base_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightBot)
-        client.sendDREF('sim/weather/clout_tops_msl_m[' + str(cloudLayer) + ']', cloudLayerHeightTop)
+        cloudLayerHeightBot = self.ids.clouds_slider_3.value*0.3048
+        cloudLayerHeightTop = self.ids.clouds_slider_3_top.value*0.3048
+        client.sendDREF('sim/weather/cloud_type[2]', cloudstate)
+        client.sendDREF('sim/weather/cloud_base_msl_m[2]', cloudLayerHeightBot)
+        client.sendDREF('sim/weather/cloud_tops_msl_m[2]', cloudLayerHeightTop)
+
+    def keypressNavaid(self,key):
+        if key == 'backspace':
+            self.ids.navaid_input.do_cursor_movement('cursor_end', control=False, alt=False)
+            self.ids.navaid_input.do_backspace(from_undo=False, mode='bkspc')
+        else:
+            self.ids.navaid_input.text += str(key)
+        self.searchNavaids(self.ids.navaid_input.text)
+
+    def searchNavaids(self,searchItem):
+        try:
+            self.ids.results_scrollview_navaids.clear_widgets()
+            csvfile = csv.reader(open('Airports1.csv', 'rb'), delimiter=',')
+            foundNavaids = [[]] # 2d array of ICAO, String Name, Navaid ID
+            found = 0
+            count=0
+            for row in csvfile:
+
+                if searchItem.lower() in row[0].lower() and searchItem != '' or searchItem.lower() in row[1].lower() and searchItem != '' or searchItem.lower() in row[2].lower() and searchItem!='':
+                    #foundNavaids.append([])
+                    foundNavaids[count].append(row[0])
+                    foundNavaids[count].append(row[1])
+                    foundNavaids[count].append(row[2])
+                    count=count+1
+                    found = 1
+
+            if found == 1:
+                for x in foundNavaids:
+                    btn = Button(text=x[0] + ' - ' +x[1] + ' - ' + x[2], size_hint=(1, None),
+                                 size=(100, 75), fontx_size=20)
+                    btn.bind(on_press=partial(self.failNavaid, x[2]))
+                    self.ids.results_scrollview_navaids.add_widget(btn)
+        except Exception:
+            logging.exception("An Error Occurred")
+
 
     # Custom VKeyboard handler
     def keypress(self, key):
@@ -834,6 +906,7 @@ def checkFails():
     global airSpeed
     global altitude
     global timeRunning
+    global currentNG
     while True:
 
         # print airSpeed[0], altitude[0], timeRunning[0]
@@ -850,6 +923,10 @@ def checkFails():
                     timeRunning[0] - system[2]) <= 1:
                     system[3] = 1
 
+            elif system[1]=='NG':
+                if currentNG[0]==system[2] or (currentNG[0] - system[2])>=-2 and (currentNG[0] - system[2]) <=2:
+                    system[3]=1
+
         # wait a bit to avoid over-polling and unneeded CPU usage (~10-12% without the wait, 1-3% with a 0.1s sleep, Numbers from Laptop with i7-7700HQ)
         sleep(0.1)
 
@@ -862,8 +939,8 @@ class iosApp(App):
 if __name__ == '__main__':
     Config.set('graphics','borderless','0')
     Config.set('graphics','position','custom')
-    Config.set('graphics','height','768')
-    Config.set('graphics','width','1366')
+    Config.set('graphics','height','1080')
+    Config.set('graphics','width','1920')
     Config.set('graphics','left','0')
 
     # Container for failures that are set to happen
@@ -875,6 +952,7 @@ if __name__ == '__main__':
     switch = [0, ]
     spinner = [0, ]
     timeRunning = [0, ]
+    engineNG=[0, ]
 
     # spawn the thread to handle the set failure checking, set it to be a daemon thread so it closes when the main thread does
     otherThread = Thread(target=checkFails)

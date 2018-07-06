@@ -11,11 +11,7 @@
 		TabbedPanelItem:
 			id:tab_position
 			text:'Position'
-			canvas:
-			    Rectangle:
-			        source:'icons\Position 1.png'
-                    size: 60,60
-                    pos: self.pos[0] +0.1*self.size[0], self.pos[1]
+
 
 
 
@@ -189,11 +185,7 @@
 		TabbedPanelItem
 			id:tab_weather
 			text:'Weather'
-            canvas:
-			    Rectangle:
-			        source:'icons\Weather.png'
-                    size: 60,60
-                    pos: self.pos[0] +0.1*self.size[0], self.pos[1]
+
 			TabbedPanel:
 				id:tab_panel_weather
 				do_default_tab: False
@@ -223,8 +215,9 @@
                                     Slider:
                                         id:clouds_slider_3_top
                                         min:clouds_slider_3.value
-                                        max:400000
+                                        max:40000
                                         step:1
+                                        value:23000
 								Label:
 									text:'Base of Cloud Layer: ' +str(int(clouds_slider_3.value)) + ' feet'
 									font_size:25
@@ -236,16 +229,12 @@
                                         min:23000
                                         max:clouds_slider_3_top.value
                                         step:1
+                                        value:23000
 
 							BoxLayout:
 								orientation:'vertical'
                                 BoxLayout:
 
-                                    canvas:
-                                        Rectangle:
-                                            source:'icons\cloud layer 3.png'
-                                            size: self.size[0]*0.5,self.size[1]
-                                            pos: self.pos[0],self.pos[1]
                                     Widget:
 
                                     Label:
@@ -307,6 +296,7 @@
                                         min:clouds_slider_2.value
                                         max:23000
                                         step:1
+                                        value:6500
 								Label:
 									text:'Base of Cloud Layer : ' +str(int(clouds_slider_2.value)) + ' feet'
 									font_size:25
@@ -318,16 +308,13 @@
                                         min:6500
                                         step:1
                                         max:clouds_slider_2_top.value
+                                        value:6500
 
 							BoxLayout:
 								orientation:'vertical'
 								BoxLayout:
 
-                                    canvas:
-                                        Rectangle:
-                                            source:'icons\cloud layer 2.png'
-                                            size: self.size[0]*0.5,self.size[1]
-                                            pos: self.pos[0],self.pos[1]
+
                                     Widget:
 
                                     Label:
@@ -405,11 +392,6 @@
 								orientation:'vertical'
 								BoxLayout:
 
-                                    canvas:
-                                        Rectangle:
-                                            source:'icons\cloud layer 1.png'
-                                            size: self.size[0]*0.5,self.size[1]
-                                            pos: self.pos[0],self.pos[1]
                                     Widget:
 
                                     Label:
@@ -542,12 +524,14 @@
 							        size_hint:(0.1,0.1)
 								Slider:
 									id:winds_slider_turbulence_3
+									text:'sim/weather/turbulence[2]'
 									min:0
 									max:10
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/turbulence[2]',winds_slider_turbulence_3.value)
+									on_value:root.sliderSystem2(self,wind3_turb)
 								Label:
-									text: 'Wind Turbulence: ' + str(int(winds_slider_turbulence_3.value))
+								    id:wind3_turb
+									text: 'Wind Turbulence: None'
 									font_size:25
                             Widget:
                                 size_hint:(1,1)
@@ -623,12 +607,14 @@
 							        size_hint:(0.1,0.1)
 								Slider:
 									id:winds_slider_turbulence_2
+									text:'sim/weather/turbulence[1]'
 									min:0
 									max:10
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/turbulence[1]',winds_slider_turbulence_2.value)
+									on_value:root.sliderSystem2(self,wind2_turb)
 								Label:
-									text: 'Wind Turbulence: ' + str(int(winds_slider_turbulence_2.value))
+								    id:wind2_turb
+									text: 'Wind Turbulence: None'
 									font_size:25
 
 
@@ -707,12 +693,14 @@
 							        size_hint:(0.1,0.1)
 								Slider:
 									id:winds_slider_turbulence_1
+									text:'sim/weather/turbulence[0]'
 									min:0
 									max:10
 									size_hint:(2,1)
-									on_value:root.sliderSystem('sim/weather/turbulence[0]',winds_slider_turbulence_1.value)
+									on_value:root.sliderSystem2(self, wind1_turb)
 								Label:
-									text: 'Wind Turbulence: ' + str(int(winds_slider_turbulence_1.value))
+							        id:wind1_turb
+									text: 'Wind Turbulence: None'
 									font_size:25
 
 
@@ -804,7 +792,7 @@
 							Slider:
 								id:slider_visibility
 								min:91
-								max:160000
+								max:20000
 								step:
 								on_value:root.sliderSystem('sim/weather/visibility_reported_m',slider_visibility.value)
 							Label:
@@ -905,7 +893,6 @@
 					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('CAVOK')
-					                background_normal:'icons\cavok.png'
 
 
 					            Widget:
@@ -926,14 +913,14 @@
 					                size_hint:(0.1,0.1)
 
 					            Button:
-					                text:'Marginal VFR\n\n\nVisibility: ' + '8km' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '311m'
+					                text:'Marginal VFR\n\n\nVisibility: ' + '8km' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '1000ft'
 					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('MarginalVFR')
 					            Widget:
 					                size_hint:(0.1,0.1)
 					            Button:
-					                text:'IFR Cat 1\n\n\nVisibility: ' + '804m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '67m'
+					                text:'IFR Cat 1\n\n\nVisibility: ' + '800m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '220ft'
 					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('IFRCat1')
@@ -951,14 +938,14 @@
 					            Widget:
 					                size_hint:(0.1,0.1)
                                 Button:
-					                text:'Non Precision\n\n\nVisibility: ' + '5km' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '128m'
+					                text:'Non Precision\n\n\nVisibility: ' + '5km' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '420ft'
 					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('NonPrecision')
                                 Widget:
 					                size_hint:(0.1,0.1)
 					            Button:
-					                text:'IFR Cat 2\n\n\nVisibility: ' + '321m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '36m'
+					                text:'IFR Cat 2\n\n\nVisibility: ' + '320m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '120ft'
 					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('IFRCat2')
@@ -972,7 +959,7 @@
 					            Widget:
 					                size_hint:(0.1,0.1)
 					            Button:
-					                text:'Stormy\n\n\nVisibility: ' + '804m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '67m'
+					                text:'Stormy\n\n\nVisibility: ' + '5km' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '800ft'
 					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('Stormy')
@@ -980,7 +967,7 @@
 					            Widget:
 					                size_hint:(0.1,0.1)
 					            Button:
-					                text:'IFR Cat 3\n\n\nVisibility: ' + '160m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '21m'
+					                text:'IFR Cat 3\n\n\nVisibility: ' + '160m' + '\nWind Speed: ' + 'No Wind' + '\nCloud Base: ' + '70ft'
 					                halign:'center'
 					                font_size:25
 					                on_press:root.weatherPresets('IFRCat3')
@@ -1012,11 +999,7 @@
                             value:200
                             on_value:root.sliderSystem('sim/flightmodel/weight/m_fuel1',slider_fuel.value)
                         Label:
-                            canvas:
-                                Rectangle:
-                                    source:'icons\fuel.png'
-                                    size: self.size[0],self.size[1]*0.5
-                                    pos: self.pos[0],self.pos[1]+(self.size[1]/2)
+
                             font_size:25
                             text:'Fuel Weight: ' + str(int(slider_fuel.value)) + ' Kg'
                     BoxLayout:
@@ -1024,19 +1007,16 @@
                             size_hint:(0.1,0.1)
                         Slider:
                             id:slider_cg
-                            min:-0.9
-                            max:0.18
+                            value:3.44
+                            min:3.1
+                            max:3.60
                             step:0.01
-                            on_value:root.sliderSystem('sim/flightmodel/misc/cgz_ref_to_default',slider_cg.value)
+                            on_value:root.sliderSystem('sim/flightmodel/misc/cgz_ref_to_default',(slider_cg.value-3.44))
 
                         Label:
-                            canvas:
-                                Rectangle:
-                                    source:'icons\Gravity.png'
-                                    size: self.size[0]*0.5,self.size[1]*0.5
-                                    pos: self.pos[0],self.pos[1]+(self.size[1]/3)
+
                             font_size:25
-                            text:'Center of Gravity: ' + str(float(slider_cg.value)) + ' cm'
+                            text:'Center of Gravity: ' + str(float(slider_cg.value)) + ' m'
                     BoxLayout:
                         Widget:
                             size_hint:(0.1,0.1)
@@ -1046,11 +1026,7 @@
                             max:2500
                             on_value:root.sliderSystem('sim/flightmodel/weight/m_fixed',slider_payload_weight.value)
                         Label:
-                            canvas:
-                                Rectangle:
-                                    source:'icons\Payload.png'
-                                    size: self.size[0]*0.5,self.size[1]*0.5
-                                    pos: self.pos[0],self.pos[1]+(self.size[1]/2)
+
                             font_size:25
                             text:'Payload Weight: ' + str(int(slider_payload_weight.value)) + ' Kg'
                     BoxLayout:
@@ -1063,11 +1039,7 @@
                             value:1334
                             on_value:root.sliderSystem('sim/aircraft/weight/acf_m_empty',slider_zfw.value)
                         Label:
-                            canvas:
-                                Rectangle:
-                                    source:'icons\ZFW1.png'
-                                    size: self.size[0]*0.5,self.size[1]*0.5
-                                    pos: self.pos[0],self.pos[1]+(self.size[1]/2)
+
                             font_size:25
                             text:'ZFW: '+ str(int(slider_zfw.value)) + ' Kg'
 
@@ -1105,11 +1077,7 @@
 		TabbedPanelItem:
 			id:tab_failure
 			text:'Failures'
-			canvas:
-			    Rectangle:
-			        source:'icons\failures 2.png'
-                    size: 60,60
-                    pos: self.pos[0] +0.1*self.size[0], self.pos[1]
+
 			TabbedPanel:
 				id:tab_panel_failure
 				do_default_tab: False
@@ -1169,12 +1137,12 @@
                                 orientation:'vertical'
                                 BoxLayout:
                                     Label:
-                                        text:'DC Gen Offline - Cannot Set This'
+                                        text:'DC Gen Offline'
 
                                     Switch:
                                         id:fail_gen_offline_switch
-                                        text:'sim/operation/failures/rel_genera0'
-                                        on_active:root.failSystem2(self)
+                                        text:'AS350/SCU/Gene'
+                                        on_active:root.sendCommand(self.text)
 
                                 Spinner:
                                     id:fail_gen_offline_spinner
@@ -1207,43 +1175,25 @@
 
                             BoxLayout:
                                 orientation:'vertical'
-                                BoxLayout:
-                                    Label:
-
-                                        text:'Instrument Light Failure'
-                                    Switch:
-                                        id:fail_instrument_light_switch
-                                        font_size:25
-                                        text:'sim/operation/failures/rel_lites_ins'
-                                        on_active:root.failSystem2(self)
-
-                                Spinner:
-                                    id:fail_instrument_light_spinner
-                                    values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-                                    text:'Not Set'
-                                    on_text:root.setFails(self,fail_instrument_light_switch)
-
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
 
                                 BoxLayout:
                                     Label:
-                                        text:'Battery Over Temp'
+                                        text:'High GEN Voltage'
 
                                     Switch:
                                         id:fail_battery_over_temp_switch
-                                        text:'debug/missing'
+                                        text:'sim/operation/failures/rel_gen0_hi'
                                         on_active:root.failSystem2(self)
 
                                 Spinner:
                                     id:fail_battery_over_temp_spinner
-                                    values:'-'
-                                    text:'-'
+                                    values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+                                    text:'Not Set'
                                     on_text:root.setFails(self,fail_battery_over_temp_switch)
 
                                 Widget:
-                                    size_hint:(0.1,0.1)
+                                    size_hint:(2.2,2.2)
 
 
 
@@ -1253,45 +1203,13 @@
                     text:'Controls'
                     BoxLayout:
                         BoxLayout:
-                            BoxLayout:
-                                orientation:'vertical'
-
-                                BoxLayout:
-                                    Label:
-                                        text:'Rudder Trim Runaway'
-                                    Switch:
-                                        id:fail_rudder_trim_runaway_switch
-                                        text:'sim/operation/failures/rel_rud_trim_run'
-                                        on_active:root.failSystem2(self)
-                                Spinner:
-					                id:fail_rudder_trim_runaway_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_rudder_trim_runaway_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                                BoxLayout:
-                                    Label:
-                                        text:'Rudder Trim'
-                                    Switch:
-                                        id:fail_rudder_trim_switch
-                                        text:'sim/operation/failures/rel_trim_rud'
-                                        on_active:root.failSystem2(self)
-                                Spinner:
-					                id:fail_rudder_trim_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_rudder_trim_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
                             BoxLayout:
                                 orientation:'vertical'
 
                                 BoxLayout:
                                     Label:
-                                        text:'Complete Loss Tail Rotor Effect'
+                                        text:'Tail Rotor Failure'
                                     Switch:
                                         id:fail_tail_rotor_effect_loss_switch
                                         text:'sim/operation/failures/rel_trotor'
@@ -1309,7 +1227,7 @@
                                         text:'Major GOV Failure'
                                     Switch:
                                         id:fail_major_gov_switch
-                                        text:'sim/operation/failures/rel_govnr_0'
+                                        text:'sim/operation/failures/rel_fadec_0'
                                         on_active:root.failSystem2(self)
                                 Spinner:
 					                id:fail_major_gov_spinner
@@ -1357,7 +1275,7 @@
 
                                 BoxLayout:
                                     Label:
-                                        text:'Driveshaft Fail'
+                                        text:'Driveshaft Failure'
                                     Switch:
                                         id:fail_driveshaft_switch
                                         text:'sim/operation/failures/rel_pshaft0'
@@ -1368,7 +1286,40 @@
 									text:'Not Set'
 									on_text:root.setFails(self,fail_driveshaft_switch)
 							    Widget:
-							        size_hint:(2.2,2.2)
+							        size_hint:(0.1,0.1)
+
+                                BoxLayout:
+					                Label:
+					                    text:'Hydraulic Pressure Loss'
+					                Switch:
+					                    id:fail_hyd_pres_loss_switch
+					                    text:'AS350/Hydraulic/Isolation'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_hyd_pres_loss_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_hyd_pres_loss_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+                            BoxLayout:
+                                orientation:'vertical'
+                                BoxLayout:
+					                Label:
+					                    text:'Yaw Valve Seizure'
+					                Switch:
+					                    id:fail_hyd_overpressure_switch
+					                    text:'sim/operation/failures/rel_hydoverp'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_hyd_overpressure_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_hyd_overpressure_switch)
+                                Widget:
+                                    size_hint:(2.2,2.2)
 
 
 
@@ -1402,20 +1353,7 @@
                                 Widget:
                                     size_hint:(0.1,0.1)
 
-                                BoxLayout:
-                                    Label:
-                                        text:'VSI'
-                                    Switch:
-                                        id:fail_vsi_switch
-                                        text:'sim/operation/failures/rel_ss_vvi'
-                                        on_active:root.failSystem2(self)
-                                Spinner:
-					                id:fail_vsi_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_vsi_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
+
 
                                 BoxLayout:
                                     Label:
@@ -1429,6 +1367,20 @@
 					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
 									text:'Not Set'
 									on_text:root.setFails(self,fail_static_heating_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+                                BoxLayout:
+                                    Label:
+                                        text:'VSI'
+                                    Switch:
+                                        id:fail_vsi_switch
+                                        text:'sim/operation/failures/rel_ss_vvi'
+                                        on_active:root.failSystem2(self)
+                                Spinner:
+					                id:fail_vsi_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_vsi_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
 
@@ -1514,39 +1466,6 @@
 									on_text:root.setFails(self,fail_altimeter_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
-                                BoxLayout:
-                                    Label:
-                                        text:'Transponder'
-                                    Switch:
-                                        id:fail_transponder_switch
-                                        text:'sim/operation/failures/rel_xpndr'
-                                        on_active:root.failSystem2(self)
-                                Spinner:
-					                id:fail_transponder_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_transponder_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-
-                            BoxLayout:
-                                orientation:'vertical'
-
-                                BoxLayout:
-                                    Label:
-                                        text:'Turn Indicator'
-                                    Switch:
-                                        id:fail_turn_indicator_switch
-                                        text:'sim/operation/failures/rel_ss_tsi'
-                                        on_active:root.failSystem2(self)
-                                Spinner:
-					                id:fail_turn_indicator_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_turn_indicator_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
                                 BoxLayout:
                                     Label:
@@ -1563,6 +1482,10 @@
                                 Widget:
                                     size_hint:(0.1,0.1)
 
+
+
+                            BoxLayout:
+                                orientation:'vertical'
                                 BoxLayout:
                                     Label:
                                         text:'Nav / Com 1'
@@ -1577,6 +1500,40 @@
 									on_text:root.setFails(self,fail_nav_1_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
+                                BoxLayout:
+                                    Label:
+                                        text:'Turn Indicator'
+                                    Switch:
+                                        id:fail_turn_indicator_switch
+                                        text:'sim/operation/failures/rel_ss_tsi'
+                                        on_active:root.failSystem2(self)
+                                Spinner:
+					                id:fail_turn_indicator_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_turn_indicator_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+
+
+                                BoxLayout:
+                                    Label:
+                                        text:'Glide Slope'
+                                    Switch:
+                                        id:fail_glide_slope_switch
+                                        text:'sim/operation/failures/rel_gls'
+                                        on_active:root.failSystem2(self)
+                                Spinner:
+					                id:fail_glide_slope_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_glide_slope_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+
+
                             BoxLayout:
                                 orientation:'vertical'
 
@@ -1613,7 +1570,7 @@
 
                                 BoxLayout:
                                     Label:
-                                        text:'Localizer'
+                                        text:'ILS failure'
                                     Switch:
                                         id:fail_localizer_switch
                                         text:'sim/operation/failures/rel_loc'
@@ -1632,20 +1589,6 @@
                                 orientation:'vertical'
 
 
-                                BoxLayout:
-                                    Label:
-                                        text:'Glide Slope'
-                                    Switch:
-                                        id:fail_glide_slope_switch
-                                        text:'sim/operation/failures/rel_gls'
-                                        on_active:root.failSystem2(self)
-                                Spinner:
-					                id:fail_glide_slope_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_glide_slope_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
                                 BoxLayout:
                                     Label:
@@ -1662,174 +1605,16 @@
                                 Widget:
                                     size_hint:(0.1,0.1)
 
-                                BoxLayout:
-                                    Label:
-                                        text:'Auckland Navaid'
-                                    Switch:
-                                        id:fail_auckland_switch
-                                        text:'AA'
-                                        on_active:root.failNavaid(self)
+
+
 
                                 Widget:
-                                    size_hint:(0.1,0.1)
-                                Widget:
-                                    size_hint:(1.1,1.1)
+                                    size_hint:(4.2,4.2)
 
 
 
 
 
-
-
-
-
-				TabbedPanelItem:
-					id:tab_failure_vemd
-					text:'VEMD'
-
-					BoxLayout:
-					    BoxLayout:
-
-					        BoxLayout:
-					            orientation:'vertical'
-
-					            BoxLayout:
-					                Label:
-					                    text:'VEMD Screen 1'
-					                Switch:
-					                    id:fail_vemd_sc1_switch
-					                    text:'AS350/VEMD/Off1'
-					                    on_active:root.sendCommand(self.text)
-
-					            Spinner:
-					                id:fail_vemd_sc1_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_vemd_sc1_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                                BoxLayout:
-					                Label:
-					                    text:'VEMD Screen 2'
-					                Switch:
-					                    id:fail_vemd_sc2_switch
-					                    text:'AS350/VEMD/Off2'
-					                    on_active:root.sendCommand(self.text)
-
-					            Spinner:
-					                id:fail_vemd_sc1_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_vemd_sc2_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                            BoxLayout:
-                                orientation:'vertical'
-
-                                BoxLayout:
-					                Label:
-					                    text:'TRQ Indication'
-					                Switch:
-					                    id:fail_trq_indication_switch
-					                    text:'sim/operation/failures/rel_TRQind0'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_trq_indication_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_trq_indication_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-
-                                BoxLayout:
-					                Label:
-					                    text:'Ng Indication'
-					                Switch:
-					                    id:fail_ng_indication_switch
-					                    text:'sim/operation/failures/rel_N1_ind0'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_ng_indication_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_ng_indication_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                            BoxLayout:
-                                orientation:'vertical'
-
-                                BoxLayout:
-					                Label:
-					                    text:'Crosstalk'
-					                Switch:
-					                    id:fail_crosstalk_switch
-					                    text:'Dataref Missing'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_crosstalk_spinner
-					                values:'-'
-									text:'-'
-									on_text:root.setFails(self,fail_crosstalk_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                                BoxLayout:
-					                Label:
-					                    text:'FLI'
-					                Switch:
-					                    id:fail_fli_switch
-					                    text:'Dataref Missing'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_fli_spinner
-					                values:'-'
-									text:'-'
-									on_text:root.setFails(self,fail_fli_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                            BoxLayout:
-                                orientation:'vertical'
-
-                                BoxLayout:
-					                Label:
-					                    text:'Gen param Overlimit'
-					                Switch:
-					                    id:fail_gen_param_overlimit_switch
-					                    text:'Dataref Missing'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_gen_param_overlimit_spinner
-					                values:'-'
-									text:'-'
-									on_text:root.setFails(self,fail_gen_param_overlimit_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                                BoxLayout:
-					                Label:
-					                    text:'Bat param Overlimit'
-					                Switch:
-					                    id:fail_bat_param_overlimit_switch
-					                    text:'Dataref Missing'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_bat_param_overlimit_spinner
-					                values:'-'
-									text:'-'
-									on_text:root.setFails(self,fail_bat_param_overlimit_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
 
 
@@ -1856,7 +1641,7 @@
 					                    text:'Engine Flameout'
 					                Switch:
 					                    id:fail_engine_flameout_switch
-					                    text:'sim/operation/failures/rel_engfla0'
+					                    text:'sim/operation/failures/rel_engfai0'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
@@ -1870,10 +1655,10 @@
 
 					            BoxLayout:
 					                Label:
-					                    text:'Engine Lost Power'
+					                    text:'Loss of Collective Control'
 					                Switch:
 					                    id:fail_engine_lost_power_switch
-					                    text:'sim/operation/failures/rel_engfai0'
+					                    text:'enginepower'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
@@ -1887,7 +1672,7 @@
 
 					            BoxLayout:
 					                Label:
-					                    text:'Engine Seize'
+					                    text:'Engine Seizure'
 					                Switch:
 					                    id:fail_engine_seize_switch
 					                    text:'sim/operation/failures/rel_seize_0'
@@ -1901,21 +1686,7 @@
                                 Widget:
                                     size_hint:(0.1,0.1)
 
-                                BoxLayout:
-					                Label:
-					                    text:'Runway ITT'
-					                Switch:
-					                    id:fail_runway_itt_switch
-					                    text:'sim/operation/failures/rel_runITT0'
-					                    on_active:root.failSystem2(self)
 
-					            Spinner:
-					                id:fail_runway_itt_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_runway_itt_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
                             BoxLayout:
                                 orientation:'vertical'
@@ -1954,58 +1725,28 @@
                                 Widget:
                                     size_hint:(0.1,0.1)
 
-					            BoxLayout:
-					                Label:
-					                    text:'GOV - Minor FADEC failure'
-					                Switch:
-					                    id:fail_eng_fadec_switch
-					                    text:'sim/operation/failures/rel_fadec_0'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_eng_fadec_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_eng_fadec_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
                                 BoxLayout:
-					                Label:
-					                    text:'Hot Start'
-					                Switch:
-					                    id:fail_hot_start_switch
-					                    text:'sim/operation/failures/rel_hotsta0'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_hot_start_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+                                    Label:
+                                        text:'MGB Low Pressure'
+                                    Switch:
+                                        id:fail_mgb_low_pres_switch
+                                        text:'sim/operation/failures/rel_oilpmp2'
+                                        on_active:root.failSystem2(self)
+                                Spinner:
+                                    id:fail_mgb_low_pres_spinner
+                                    values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
 									text:'Not Set'
-									on_text:root.setFails(self,fail_hot_start_switch)
+									on_text:root.setFails(self,fail_mgb_low_pres_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
+
+
 
 
 
                             BoxLayout:
                                 orientation:'vertical'
-
-					            BoxLayout:
-					                Label:
-					                    text:'Compressor Stall'
-					                Switch:
-					                    id:fail_compressor_stall_switch
-					                    text:'sim/operation/failures/rel_comsta0'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_compressor_stall_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_compressor_stall_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
 
 
@@ -2025,29 +1766,222 @@
                                 Widget:
                                     size_hint:(0.1,0.1)
 
-
-					            BoxLayout:
+                                BoxLayout:
 					                Label:
-					                    text:'Engine Fuel Pump'
+					                    text:'TRQ Indication'
 					                Switch:
-					                    id:fail_engine_fuel_pump_switch
-					                    text:'sim/operation/failures/rel_fuepmp0'
+					                    id:fail_trq_indication_switch
+					                    text:'sim/operation/failures/rel_TRQind0'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
-					                id:fail_engine_fuel_pump_spinner
+					                id:fail_trq_indication_spinner
 					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
 									text:'Not Set'
-									on_text:root.setFails(self,fail_engine_fuel_pump_switch)
+									on_text:root.setFails(self,fail_trq_indication_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+
+                                BoxLayout:
+                                    Label:
+                                        text:'MGB High Oil Temp'
+                                    Switch:
+                                        id:fail_mgb_hi_oil_temp_switch
+                                        text:'sim/operation/failures/rel_oilpmp1'
+                                        on_active:root.failSystem2(self)
+                                Spinner:
+                                    id:fail_mgb_hi_oil_temp_spinner
+                                    values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_mgb_hi_oil_temp_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+
+
+
+
+
+                            BoxLayout:
+                                orientation:'vertical'
+
+
+
+
+
+
+                                BoxLayout:
+					                Label:
+					                    text:'VEMD Screen 1'
+					                Switch:
+					                    id:fail_vemd_sc1_switch
+					                    text:'AS350/VEMD/Off1'
+					                    on_active:root.sendCommand(self.text)
+
+					            Spinner:
+					                id:fail_vemd_sc1_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_vemd_sc1_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
 
                                 BoxLayout:
 					                Label:
+					                    text:'VEMD Screen 2'
+					                Switch:
+					                    id:fail_vemd_sc2_switch
+					                    text:'AS350/VEMD/Off2'
+					                    on_active:root.sendCommand(self.text)
+
+					            Spinner:
+					                id:fail_vemd_sc2_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_vemd_sc2_switch)
+                                Widget:
+                                    size_hint:(2.2,2.2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                TabbedPanelItem:
+                    id:tab_aircraft_failures_fuel
+                    text:'Fuel'
+                    BoxLayout:
+                        BoxLayout:
+                            BoxLayout:
+                                orientation:'vertical'
+                                BoxLayout:
+					                Label:
+					                    text:'Fuel Low Pressure'
+					                Switch:
+					                    id:fail_fuel_lo_pres_switch
+					                    text:'sim/operation/failures/rel_eng_lo0'
+					                    on_active:root.failSystem2(self)
+					                    on_active:fail_fuel_lo_pres_switch2.active=self.active
+					                    Switch:
+					                        id:fail_fuel_lo_pres_switch2
+					                        text:'sim/operation/failures/rel_ele_fuepmp0'
+					                        on_active:root.failSystem2(self)
+
+
+					            Spinner:
+					                id:fail_fuel_lo_pres_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_fuel_lo_pres_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                                BoxLayout:
+					                Label:
+					                    text:'Fuel Filter Clogged'
+					                Switch:
+					                    id:fail_fuel_filter_clog_switch
+					                    text:'sim/operation/failures/rel_fuel_block1'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_fuel_filter_clog_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_fuel_filter_clog_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+
+
+
+                            BoxLayout:
+                                orientation:'vertical'
+
+                                BoxLayout:
+                                    Label:
+                                        text:'Fuel Leak'
+                                    Switch:
+                                        id:fuel_leak_switch
+                                        text:'fuel_leak'
+
+                                Spinner:
+                                    id:fuel_leak_spinner
+                                    values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fuel_leak_switch)
+
+
+
+
+
+                                Widget:
+                                    size_hint:(2.2,2.2)
+
+
+
+
+
+                TabbedPanelItem:
+                    id:tab_aircraft_failures_startup
+                    text:'Startup'
+                    BoxLayout:
+                        BoxLayout:
+                            BoxLayout:
+                                orientation:'vertical'
+                                BoxLayout:
+					                Label:
+					                    text:'Ignition'
+					                Switch:
+					                    id:fail_ignitor_switch
+					                    text:'sim/operation/failures/rel_ignitr0'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_ignitor_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_ignitor_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                                BoxLayout:
+					                Label:
+					                    text:'Runaway ITT'
+					                Switch:
+					                    id:fail_runway_itt_switch
+					                    text:'sim/operation/failures/rel_hunsta0'
+					                    on_active:root.failSystem2(self)
+
+					            Spinner:
+					                id:fail_runway_itt_spinner
+					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_runway_itt_switch)
+                                Widget:
+                                    size_hint:(0.1,0.1)
+
+                            BoxLayout:
+                                orientation:'vertical'
+                                BoxLayout:
+					                Label:
 					                    text:'Hung Start'
 					                Switch:
 					                    id:fail_hung_start_switch
-					                    text:'sim/operation/failures/rel_hunsta0'
+					                    text:'sim/operation/failures/rel_clonoz0'
 					                    on_active:root.failSystem2(self)
 
 					            Spinner:
@@ -2058,11 +1992,7 @@
                                 Widget:
                                     size_hint:(0.1,0.1)
 
-
-                            BoxLayout:
-                                orientation:'vertical'
-
-					            BoxLayout:
+                                BoxLayout:
 					                Label:
 					                    text:'Starter'
 
@@ -2078,72 +2008,29 @@
 									on_text:root.setFails(self,fail_engine_starter_switch)
                                 Widget:
                                     size_hint:(0.1,0.1)
-
-
-
-					            BoxLayout:
-					                Label:
-					                    text:'Bleed Valve Failure'
-					                Switch:
-					                    id:fail_bleed_valve_switch
-					                    text:'sim/operation/failures/rel_bleed_air_lft'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_bleed_valve_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_bleed_valve_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-					            BoxLayout:
-					                Label:
-					                    text:'Fuel Flow Fluctuation'
-					                Switch:
-					                    id:fail_fuel_flow_fluctuation_switch
-					                    text:'sim/operation/failures/rel_fuelfl0'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_fuel_flow_fluctuation_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_fuel_flow_fluctuation_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
+                            BoxLayout:
+                                orientation:'vertical'
                                 BoxLayout:
 					                Label:
-					                    text:'Ignitor'
+					                    text:'Engine Fire on Startup'
 					                Switch:
-					                    id:fail_ignitor_switch
-					                    text:'sim/operation/failures/rel_ignitr0'
+					                    id:fail_engine_fire_startup_switch
+					                    text:'sim/operation/failures/rel_engfir0'
 					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_ignitor_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+                                Spinner:
+                                    id:fail_engine_fire_startup_spinner
+                                    values:'Not Set','30% NG','40% NG','50% NG'
 									text:'Not Set'
-									on_text:root.setFails(self,fail_ignitor_switch)
+									on_text:root.setFails(self,fail_engine_fire_startup_switch)
                                 Widget:
-                                    size_hint:(0.1,0.1)
-
-
-
-
-
-
-
-
-
+                                    size_hint:(2.2,2.2)
 
 
 
 
                 TabbedPanelItem:
-                    id:tab_aircraft_failures_misc
-                    text:'Misc'
+                    id:tab_aircraft_failures_environ
+                    text:'Environment'
                     BoxLayout:
                         BoxLayout:
 
@@ -2157,12 +2044,13 @@
                                     Slider:
                                         id:fail_pitot_ice_slider
                                         min:0
-                                        max:10
-                                        step:0.1
+                                        max:1
+                                        step:0.05
                                         text:'sim/flightmodel/failures/pitot_ice'
                                         on_value:root.sliderSystem(self.text,int(self.value))
                                     Label:
-                                        text:'Pitot Ice Ratio : ' + str(float(fail_pitot_ice_slider.value)) + '    NEEDS TESTING'
+                                        text:'Pitot Ice Ratio : ' + str(float(fail_pitot_ice_slider.value))
+                                        font_size:25
 
                                 Widget:
                                     size_hint:(1.1,1.1)
@@ -2173,119 +2061,208 @@
                                     Slider:
                                         id:fail_prop_ice_slider
                                         min:0
-                                        max:10
-                                        step:0.1
+                                        max:1
+                                        step:0.05
                                         text:'sim/flightmodel/failures/prop_ice'
                                         on_value:root.sliderSystem(self.text,int(self.value))
                                     Label:
                                         text:'Prop Ice Ratio : ' + str(float(fail_prop_ice_slider.value))
+                                        font_size:25
                                 Widget:
                                     size_hint:(1.1,1.1)
 
+
+                                Widget:
+                                    size_hint:(1.1,1.1)
                                 BoxLayout:
                                     Widget:
 				                        size_hint:(0.1,0.1)
                                     Slider:
                                         id:fail_inlet_ice_slider
                                         min:0
-                                        max:10
-                                        step:0.1
+                                        max:1
+                                        step:0.05
                                         text:'sim/flightmodel/failures/inlet_ice'
                                         on_value:root.sliderSystem(self.text,int(self.value))
                                     Label:
                                         text:'Inlet Ice Ratio : ' + str(float(fail_inlet_ice_slider.value))
+                                        font_size:25
                                 Widget:
-                                    size_hint:(0.1,0.1)
-
-                                BoxLayout:
-					                Label:
-					                    text:'Fuel Low Pres'
-					                Switch:
-					                    id:fail_fuel_lo_pres_switch
-					                    text:'sim/operation/failures/rel_eng_lo0'
-					                    on_active:root.failSystem2(self)
+                                    size_hint:(1.1,1.1)
 
 
-					            Spinner:
-					                id:fail_fuel_lo_pres_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_fuel_lo_pres_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
+
+
+
+
+
+
+
+
+
+                TabbedPanelItem
+                    id:tab_failure_navaids
+                    text:'Navaids'
+                    BoxLayout:
+                        orientation:'vertical'
+                        BoxLayout:
+
+                            BoxLayout
+                                orientation:'vertical'
+                                ScrollView:
+
+                                    BoxLayout:
+                                        orientation:'vertical'
+                                        size_hint_y:None
+                                        height: self.minimum_height
+                                        id:results_scrollview_navaids
+
+
+                                TextInput:
+                                    id:navaid_input
+                                    hint_text:'search navaids..'
+                                    size_hint:(1,0.2)
+                                    font_size:search_input.height-search_input.height/3
+
+
+                        BoxLayout:
+                            orientation:'vertical'
+                            BoxLayout:
+                                id:keyboard_numrow
+                                Button:
+                                    text:'1'
+                                    on_press:root.keypressNavaid('1')
+                                Button:
+                                    text:'2'
+                                    on_press:root.keypressNavaid('2')
+                                Button:
+                                    text:'3'
+                                    on_press:root.keypressNavaid('3')
+                                Button:
+                                    text:'4'
+                                    on_press:root.keypressNavaid('4')
+                                Button:
+                                    text:'5'
+                                    on_press:root.keypressNavaid('5')
+                                Button:
+                                    text:'6'
+                                    on_press:root.keypressNavaid('6')
+                                Button:
+                                    text:'7'
+                                    on_press:root.keypressNavaid('7')
+                                Button:
+                                    text:'8'
+                                    on_press:root.keypressNavaid('8')
+                                Button:
+                                    text:'9'
+                                    on_press:root.keypressNavaid('9')
+                                Button:
+                                    text:'0'
+                                    on_press:root.keypressNavaid('0')
+                                Button:
+                                    text:'Backspace'
+                                    size_hint:(1.5,1)
+                                    on_press:root.keypressNavaid('backspace')
+
+
 
                             BoxLayout:
-                                orientation:'vertical'
+                                id:keyboard_topletters
 
-                                BoxLayout:
-					                Label:
-					                    text:'Fuel Filter Clogged'
-					                Switch:
-					                    id:fail_fuel_filter_clog_switch
-					                    text:'sim/operation/failures/rel_fuel_block0'
-					                    on_active:root.failSystem2(self)
+                                Button:
+                                    text:'Q'
+                                    on_press:root.keypressNavaid('Q')
+                                Button:
+                                    text:'W'
+                                    on_press:root.keypressNavaid('W')
+                                Button:
+                                    text:'E'
+                                    on_press:root.keypressNavaid('E')
+                                Button:
+                                    text:'R'
+                                    on_press:root.keypressNavaid('R')
+                                Button:
+                                    text:'T'
+                                    on_press:root.keypressNavaid('T')
+                                Button:
+                                    text:'Y'
+                                    on_press:root.keypressNavaid('Y')
+                                Button:
+                                    text:'U'
+                                    on_press:root.keypressNavaid('U')
+                                Button:
+                                    text:'I'
+                                    on_press:root.keypressNavaid('I')
+                                Button:
+                                    text:'O'
+                                    on_press:root.keypressNavaid('O')
+                                Button:
+                                    text:'P'
+                                    on_press:root.keypressNavaid('P')
 
-					            Spinner:
-					                id:fail_fuel_filter_clog_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_fuel_filter_clog_switch)
+
+                            BoxLayout:
+                                id:keyboard_midletters
+
+                                Button:
+                                    text:'A'
+                                    on_press:root.keypressNavaid('A')
+                                Button:
+                                    text:'S'
+                                    on_press:root.keypressNavaid('S')
+                                Button:
+                                    text:'D'
+                                    on_press:root.keypressNavaid('D')
+                                Button:
+                                    text:'F'
+                                    on_press:root.keypressNavaid('F')
+                                Button:
+                                    text:'G'
+                                    on_press:root.keypressNavaid('G')
+                                Button:
+                                    text:'H'
+                                    on_press:root.keypressNavaid('H')
+                                Button:
+                                    text:'J'
+                                    on_press:root.keypressNavaid('J')
+                                Button:
+                                    text:'K'
+                                    on_press:root.keypressNavaid('K')
+                                Button:
+                                    text:'L'
+                                    on_press:root.keypressNavaid('L')
+                                #Button:
+                                #	text:'Submit'
+                                #	size_hint:(1.5,1)
+                                #	on_press:root.searchAirports(search_input.text)
+
+
+
+                            BoxLayout:
+                                id:keyboard_botletters
                                 Widget:
-                                    size_hint:(0.1,0.1)
-
-
-                                BoxLayout:
-					                Label:
-					                    text:'Hydraulic Pressure Loss'
-					                Switch:
-					                    id:fail_hyd_pres_loss_switch
-					                    text:'sim/operation/failures/rel_hydpmp'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_hyd_pres_loss_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_hyd_pres_loss_switch)
+                                Button:
+                                    text:'Z'
+                                    on_press:root.keypressNavaid('Z')
+                                Button:
+                                    text:'X'
+                                    on_press:root.keypressNavaid('X')
+                                Button:
+                                    text:'C'
+                                    on_press:root.keypressNavaid('C')
+                                Button:
+                                    text:'V'
+                                    on_press:root.keypressNavaid('V')
+                                Button:
+                                    text:'B'
+                                    on_press:root.keypressNavaid('B')
+                                Button:
+                                    text:'N'
+                                    on_press:root.keypressNavaid('N')
+                                Button:
+                                    text:'M'
+                                    on_press:root.keypressNavaid('M')
                                 Widget:
-                                    size_hint:(0.1,0.1)
-
-                                BoxLayout:
-					                Label:
-					                    text:'Yaw Damper'
-					                Switch:
-					                    id:fail_yaw_damper_switch
-					                    text:'sim/cockpit/warnings/annunciators/yaw_damper'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_yaw_damper_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_yaw_damper_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                                BoxLayout:
-					                Label:
-					                    text:'Hydraulics Overpressure'
-					                Switch:
-					                    id:fail_hyd_overpressure_switch
-					                    text:'sim/operation/failures/rel_hydoverp'
-					                    on_active:root.failSystem2(self)
-
-					            Spinner:
-					                id:fail_hyd_overpressure_spinner
-					                values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_hyd_overpressure_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-
-
-
-
 
 
 
@@ -2294,8 +2271,8 @@
 
 
 				TabbedPanelItem
-					id:tab_failure_world
-					text:'World'
+					id:tab_failure_general
+					text:'General'
 					BoxLayout:
 						BoxLayout:
 
@@ -2318,67 +2295,7 @@
 
                                 Widget:
                                     size_hint:(0.1,0.1)
-
-
-								BoxLayout:
-									Label:
-										text:'Door Open - Clarify'
-									Switch:
-										id:fail_door_open_switch
-										text:'sim/operation/failures/rel_door_open'
-										on_active:root.failSystem2(self)
-
-								Spinner:
-									id:fail_door_open_spinner
-									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_door_open_switch)
-
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-								BoxLayout:
-									Label:
-										text:'External Power'
-									Switch:
-										id:fail_external_power_switch
-										text:'sim/operation/failures/rel_ex_power_on'
-										on_active:root.failSystem2(self)
-
-								Spinner:
-									id:fail_external_power_spinner
-									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_external_power_switch)
-
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                            BoxLayout:
-                                orientation:'vertical'
-
-								BoxLayout:
-									Label:
-										text:'Passenger 02'
-									Switch:
-										id:fail_passenger02_switch
-										text:'sim/operation/failures/rel_pass_o2_on'
-										on_active:root.failSystem2(self)
-
-								Spinner:
-									id:fail_passenger02_spinner
-									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_passenger02_switch)
-
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-
-
-
-
-								BoxLayout:
+                                BoxLayout:
 									Label:
 										text:'Wind Shear/MicroBurst'
 									Switch:
@@ -2397,85 +2314,14 @@
                                 Widget:
                                     size_hint:(0.1,0.1)
 
-								BoxLayout:
-									Label:
-										text:'Pilot Vertigo'
-									Switch:
-										id:fail_vertigo_switch
-										text:'sim/operation/failures/rel_make_vertigo'
-										on_active:root.failSystem2(self)
 
-								Spinner:
-									id:fail_vertigo_spinner
-									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_vertigo_switch)
-
-
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
                             BoxLayout:
                                 orientation:'vertical'
 
 								BoxLayout:
 									Label:
-										text:'Water in Fuel'
-									Switch:
-										id:fail_water_fuel_switch
-										text:'sim/operation/failures/rel_fuel_water'
-										on_active:root.failSystem2(self)
-
-								Spinner:
-									id:fail_water_fuel_spinner
-									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_water_fuel_switch)
-
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-
-								BoxLayout:
-									Label:
-										text:'Wrong Fuel Type'
-									Switch:
-										id:fail_wrong_fuel_switch
-										text:'sim/operation/failures/rel_fuel_type'
-										on_active:root.failSystem2(self)
-
-								Spinner:
-									id:fail_wrong_fuel_spinner
-									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_wrong_fuel_switch)
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-								BoxLayout:
-									Label:
-										text:'Fuel Tank Filter Block'
-									Switch:
-										id:fail_fuel_filter_switch
-										text:'sim/operation/failures/rel_fuel_block0'
-										on_active:root.failSystem2(self)
-
-								Spinner:
-									id:fail_fuel_filter_spinner
-									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_fuel_filter_switch)
-
-
-                                Widget:
-                                    size_hint:(0.1,0.1)
-
-                            BoxLayout:
-                                orientation:'vertical'
-
-								BoxLayout:
-									Label:
-										text:'VASI Inoperative'
+										text:'PAPI/VASI Inoperative'
 									Switch:
 										id:fail_vasi_switch
 										text:'sim/operation/failures/rel_vasi'
@@ -2492,23 +2338,8 @@
                                     size_hint:(0.1,0.1)
 
 
-								BoxLayout:
-									Label:
-										text:'Runway Lights Out'
-									Switch:
-										id:fail_runway_lights_switch
-										text:'sim/operation/failures/rel_rwy_lites'
-										on_active:root.failSystem2(self)
-
-								Spinner:
-									id:fail_runway_lights_spinner
-									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
-									text:'Not Set'
-									on_text:root.setFails(self,fail_runway_lights_switch)
 
 
-                                Widget:
-                                    size_hint:(0.1,0.1)
 
 								BoxLayout:
 									Label:
@@ -2527,6 +2358,25 @@
                                 Widget:
                                     size_hint:(0.1,0.1)
 
+                            BoxLayout:
+                                orientation:'vertical'
+
+                                BoxLayout:
+									Label:
+										text:'Runway Lights Inoperative'
+									Switch:
+										id:fail_runway_lights_switch
+										text:'sim/operation/failures/rel_rwy_lites'
+										on_active:root.failSystem2(self)
+
+								Spinner:
+									id:fail_runway_lights_spinner
+									values:'Not Set','Fail at Speed','Fail at Altitude','Fail at Time'
+									text:'Not Set'
+									on_text:root.setFails(self,fail_runway_lights_switch)
+                                Widget:
+                                    size_hint:(2.2,2.2)
+
 				TabbedPanelItem
 					id:tab_failure_repairall
 					text:'Repair All'
@@ -2541,6 +2391,11 @@
 			text:'Sim Rate'
 			BoxLayout:
 			    orientation:'vertical'
+                BoxLayout:
+                    size_hint:(1,0.2)
+                    Button:
+                        text:'Print Map'
+                        on_press:root.printMap
                 BoxLayout:
                     Widget:
                         size_hint:(0.1,0.1)
@@ -2591,12 +2446,16 @@
 
 
 
+
+
+
 		TabbedPanelItem
 			id:tab_freeze
 			text:'Freeze'
 			AnchorLayout:
 				ToggleButton:
 					text:'Pause'
+					font_size:50
 					size_hint: (.5,.5)
 					on_press:root.pause()
 
