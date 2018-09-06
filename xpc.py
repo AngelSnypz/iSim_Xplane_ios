@@ -7,7 +7,7 @@ class XPlaneConnect(object):
     systemIP = '0'
 
     # Basic Functions
-    def __init__(self, xpHost, xpPort = 49009, port = 49010, timeout = 20000):
+    def __init__(self, xpHost, xpPort = 49009, port = 49010, timeout = 50000):
         global systemIP
         #def __init__(self, xpHost='localhost', xpPort=49009, port=49010, timeout=30000):
         '''Sets up a new connection to an X-Plane Connect plugin running in X-Plane.
@@ -98,8 +98,9 @@ class XPlaneConnect(object):
         global systemIP
         udpport = 49000
         buffer = struct.pack('<4sx', "NFAL")
-        fmt="2c"
-        buffer+=struct.pack(fmt,'A','A')
+        navaids=list(navaid)
+        for x in navaids:
+            buffer+=struct.pack('c',x)
         #while (len(buffer) < 64 + 5):
         #   buffer += struct.pack('x')
         self.socket.sendto(buffer, (systemIP, udpport))
